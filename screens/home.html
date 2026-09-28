@@ -53,6 +53,7 @@
     ::-webkit-scrollbar { display: none; }
   </style>
   <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/nav.js"></script>
   <script src="/js/maps.js"></script>
 </head>
@@ -79,10 +80,11 @@
         <span class="material-symbols-outlined text-[14px]">my_location</span>
         <span class="hidden sm:inline">Maisammaguda GPS</span>
       </button>
-      <!-- Right Profile Avatar -->
-      <div class="flex items-center gap-2 shrink-0">
-        <button data-nav="account" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors overflow-hidden">
-          <img alt="Patron" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXK-nwSjXwQz3PUGZfrl5lGaXGf0ZRfQijBwB3fDVzUBolGHw6OIT5xkzrb8SV6wxwEwluuX0vhv4-xd7gHzp0153653eTjwa9hWZ6mD-J7wUdWcc8ArcqO57SYPUjV1Q801XZhmqS9SYbWyeVrs4dESvUdlsUl-wGVdYUHu__Z11r73f1jf2oDywX0im4XEe8dUbiDIOHG11kUWVe-xxnXX6Mi4jyY3t3uVTb4Pa3Ox8EYXejy6sN"/>
+      <!-- Right Profile / Sign In Area -->
+      <div id="homeAuthContainer" class="flex items-center gap-2 shrink-0">
+        <button data-nav="login" title="Sign In / Register" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-white text-xs font-bold shadow-sm hover:opacity-95 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-[16px]">login</span>
+          <span>Sign In</span>
         </button>
       </div>
     </div>
@@ -830,13 +832,40 @@
       }
     }
 
+    function syncHomeAuth() {
+      const container = document.getElementById('homeAuthContainer');
+      if (!container) return;
+      const u = (window.Auth ? Auth.user() : null);
+      if (u) {
+        container.innerHTML = `
+          <button data-nav="account" title="Account (${u.name || 'Patron'})" class="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors overflow-hidden border-2 border-primary/20 active:scale-95">
+            <img alt="${u.name || 'Patron'}" class="w-full h-full object-cover" src="${u.picture || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80'}"/>
+          </button>
+        `;
+      } else {
+        container.innerHTML = `
+          <button data-nav="login" title="Sign In / Register" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary text-white text-xs font-bold shadow-sm hover:opacity-95 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[16px]">login</span>
+            <span>Sign In</span>
+          </button>
+        `;
+      }
+      container.querySelectorAll('[data-nav]').forEach(el => {
+        el.addEventListener('click', () => {
+          if (window.navigateTo) window.navigateTo(el.getAttribute('data-nav'));
+        });
+      });
+    }
+
     function syncAll() {
       renderDishes(activeFilter || 'all');
       updateCartBar();
+      syncHomeAuth();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       syncAll();
+      window.addEventListener('auth:change', syncAll);
       window.addEventListener('cart:update', syncAll);
       window.addEventListener('pageshow', syncAll);
       window.addEventListener('focus', syncAll);

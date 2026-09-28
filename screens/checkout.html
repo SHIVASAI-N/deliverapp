@@ -50,6 +50,7 @@
   </style>
   <script src="/js/config.js"></script>
   <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
   <script src="/js/nav.js"></script>
 </head>
 <body class="min-h-full flex flex-col bg-surface text-on-surface antialiased pb-36 selection:bg-primary-fixed selection:text-on-primary-fixed">
@@ -72,6 +73,11 @@
 
   <!-- Vertical Clear Hierarchy Main Section (Section 8) -->
   <main class="flex-1 flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
+
+    <!-- Patron Sign-In / Account Status Strip -->
+    <div id="checkoutAuthBanner" class="bg-surface-container-lowest rounded-2xl p-3 border border-[#e0d8d5] shadow-xs flex items-center justify-between gap-3 text-xs">
+      <!-- Injected via renderCheckoutPage() -->
+    </div>
 
     <!-- 1. Delivery Address Card (Section 8) -->
     <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-2.5">
@@ -461,6 +467,44 @@
       const bill = window.Cart ? window.Cart.bill() : { sub: 0, discount: 0, delivery: 0, platform: 0, tax: 0, total: 0 };
       const selAddr = window.SavedAddresses ? window.SavedAddresses.selected() : null;
 
+      // Update Patron / Auth Banner
+      const authBanner = document.getElementById('checkoutAuthBanner');
+      if (authBanner) {
+        const u = window.Auth ? window.Auth.user() : null;
+        if (u) {
+          authBanner.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[16px]">person</span>
+              </span>
+              <div class="flex flex-col min-w-0">
+                <span class="font-bold text-on-surface truncate">Ordering as ${u.name || 'Patron'}</span>
+                <span class="text-[11px] text-on-surface-variant truncate">${u.phone || u.email || 'Verified Patron'} • Free Delivery Active</span>
+              </div>
+            </div>
+            <button onclick="window.navigateTo('login')" class="text-primary font-bold text-xs hover:underline shrink-0">
+              Switch
+            </button>
+          `;
+        } else {
+          authBanner.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="w-7 h-7 rounded-full bg-secondary-container/40 text-secondary flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[16px]">account_circle</span>
+              </span>
+              <div class="flex flex-col min-w-0">
+                <span class="font-bold text-on-surface">Ordering as Guest</span>
+                <span class="text-[11px] text-on-surface-variant">Sign in for saved cards, past orders &amp; gold perks</span>
+              </div>
+            </div>
+            <button onclick="window.navigateTo('login')" class="px-3 py-1 rounded-full bg-primary text-white text-xs font-bold shadow-xs active:scale-95 transition-all shrink-0 flex items-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">login</span>
+              <span>Sign In</span>
+            </button>
+          `;
+        }
+      }
+
       // Update Delivery Address Card
       if (selAddr) {
         document.getElementById('activeAddrTag').textContent = selAddr.tag || 'HOME';
@@ -719,6 +763,7 @@
       renderCheckoutPage();
       window.addEventListener('cart:update', renderCheckoutPage);
       window.addEventListener('address:change', renderCheckoutPage);
+      window.addEventListener('auth:change', renderCheckoutPage);
     });
   </script>
 </body>

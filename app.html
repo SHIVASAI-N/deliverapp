@@ -84,25 +84,29 @@ tailwind.config = {
 
   <!-- App Header -->
   <header class="pt-[env(safe-area-inset-top)] bg-surface/95 backdrop-blur border-b border-[#e0d8d5] z-20 shrink-0">
-    <div class="h-14 px-4 flex items-center justify-between gap-2">
-      <button data-go="#/home" class="flex items-center gap-2 min-w-0">
-        <span class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center shrink-0 shadow-sm">
-          <span class="material-symbols-outlined text-[20px]">restaurant</span>
+    <div class="h-14 px-3 sm:px-4 flex items-center justify-between gap-1.5">
+      <button data-go="#/home" class="flex items-center gap-1.5 min-w-0 cursor-pointer text-left">
+        <span class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+          <span class="material-symbols-outlined text-[18px]">restaurant</span>
         </span>
         <div class="flex flex-col text-left min-w-0">
-          <span class="font-headline font-bold text-[16px] text-on-surface tracking-tight truncate leading-tight">Epicurean</span>
-          <span class="text-[10px] font-semibold text-primary uppercase tracking-wider">Curations</span>
+          <span class="font-headline font-bold text-[15px] text-on-surface tracking-tight truncate leading-tight">Epicurean</span>
+          <span class="text-[9px] font-semibold text-primary uppercase tracking-wider">Curations</span>
         </div>
       </button>
-      <div class="flex items-center gap-1.5 min-w-0">
-        <button data-go="#/ai" class="flex items-center gap-1.5 text-xs font-bold bg-gradient-to-r from-[#af2900] via-[#e8481c] to-[#f5a524] text-white rounded-full px-3 py-1.5 shadow-[0_2px_12px_rgba(232,72,28,0.32)] hover:opacity-95 active:scale-95 transition-all cursor-pointer shrink-0">
-          <span class="material-symbols-outlined text-[16px] text-amber-200" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
-          <span class="font-medium tracking-tight">Fleet AI</span>
+      <div class="flex items-center gap-1.5 min-w-0 shrink-0">
+        <button data-go="#/ai" class="flex items-center gap-1 text-xs font-bold bg-gradient-to-r from-[#af2900] via-[#e8481c] to-[#f5a524] text-white rounded-full px-2 sm:px-2.5 py-1.5 shadow-[0_2px_10px_rgba(232,72,28,0.28)] hover:opacity-95 active:scale-95 transition-all cursor-pointer shrink-0">
+          <span class="material-symbols-outlined text-[15px] text-amber-200" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+          <span class="font-medium tracking-tight hidden xs:inline">Fleet AI</span>
         </button>
-        <button data-go="#/checkout" id="addrPill" class="flex items-center gap-1.5 text-xs font-semibold bg-[#f4ece8] hover:bg-[#eee7e3] text-on-surface rounded-full pl-2.5 pr-3 py-1.5 min-w-0 transition-colors">
-          <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
-          <span id="addrText" class="truncate max-w-[110px]">Kompally, Hyderabad</span>
-          <span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+        <button data-go="#/checkout" id="addrPill" class="flex items-center gap-1 text-xs font-semibold bg-[#f4ece8] hover:bg-[#eee7e3] text-on-surface rounded-full pl-2 pr-2 py-1.5 min-w-0 transition-colors">
+          <span class="material-symbols-outlined text-primary text-[15px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
+          <span id="addrText" class="truncate max-w-[70px] sm:max-w-[100px]">Kompally</span>
+          <span class="material-symbols-outlined text-[13px] text-on-surface-variant">expand_more</span>
+        </button>
+        <button id="authHeaderBtn" data-go="#/login" class="flex items-center gap-1 text-xs font-bold bg-primary text-white hover:opacity-95 rounded-full px-2.5 py-1.5 shadow-sm active:scale-95 transition-all cursor-pointer shrink-0">
+          <span id="authHeaderIcon" class="material-symbols-outlined text-[15px]">login</span>
+          <span id="authHeaderText" class="tracking-tight">Sign In</span>
         </button>
       </div>
     </div>
@@ -164,7 +168,7 @@ tailwind.config = {
             <span id="acctIcon" class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">person</span>
             <span id="acctDot" class="absolute top-0 right-0 w-2 h-2 rounded-full bg-[#00873a] border border-[#0c0a09] hidden z-20"></span>
           </div>
-          <span class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Account</span>
+          <span id="acctLabel" class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Account</span>
         </div>
       </button>
 
@@ -343,8 +347,28 @@ tailwind.config = {
       const u = (window.Auth ? Auth.user() : null);
       const dot = document.getElementById('acctDot');
       const lbl = document.getElementById('acctLabel');
+      const authBtn = document.getElementById('authHeaderBtn');
+      const authText = document.getElementById('authHeaderText');
+      const authIcon = document.getElementById('authHeaderIcon');
+
       if (dot) dot.classList.toggle('hidden', !u);
-      if (lbl) lbl.textContent = u ? (u.name || 'Account').split(' ')[0].slice(0, 9) : 'Account';
+      if (lbl) lbl.textContent = u ? (u.name || 'Account').split(' ')[0].slice(0, 9) : 'Sign In';
+
+      if (authBtn && authText && authIcon) {
+        if (u) {
+          authText.textContent = (u.name || 'Account').split(' ')[0].slice(0, 8);
+          authIcon.textContent = 'person';
+          authBtn.className = 'flex items-center gap-1 text-xs font-semibold bg-[#f4ece8] text-on-surface hover:bg-[#eee7e3] rounded-full px-2.5 py-1.5 transition-all cursor-pointer shrink-0';
+          authBtn.setAttribute('data-go', '#/account');
+          authBtn.title = 'Account (' + (u.name || u.email || 'Patron') + ')';
+        } else {
+          authText.textContent = 'Sign In';
+          authIcon.textContent = 'login';
+          authBtn.className = 'flex items-center gap-1 text-xs font-bold bg-primary text-white hover:opacity-95 rounded-full px-2.5 py-1.5 shadow-sm active:scale-95 transition-all cursor-pointer shrink-0';
+          authBtn.setAttribute('data-go', '#/login');
+          authBtn.title = 'Sign In / Register';
+        }
+      }
     } catch(e){}
   }
 

@@ -67,7 +67,11 @@ tailwind.config = {
 
     <!-- Right Action Buttons -->
     <div class="flex items-center gap-2 shrink-0">
-      <a href="/screens/account.html" class="px-3.5 py-2 rounded-full bg-[#f4ece8] text-xs sm:text-sm font-bold text-on-surface hover:bg-[#eee7e3] transition-colors hidden sm:flex items-center gap-1.5">
+      <a href="/screens/login.html" class="px-3.5 py-2 rounded-full bg-primary/10 text-xs sm:text-sm font-bold text-primary hover:bg-primary/20 transition-colors flex items-center gap-1.5">
+        <span class="material-symbols-outlined text-[18px]">login</span>
+        <span>Sign In</span>
+      </a>
+      <a href="/screens/account.html" class="px-3.5 py-2 rounded-full bg-[#f4ece8] text-xs sm:text-sm font-bold text-on-surface hover:bg-[#eee7e3] transition-colors hidden md:flex items-center gap-1.5">
         <span class="material-symbols-outlined text-[18px]">person</span>
         <span>Patron Account</span>
       </a>
@@ -86,6 +90,15 @@ tailwind.config = {
   <div id="mobileMenuDropdown" class="hidden md:hidden border-t border-[#e0d8d5] bg-surface/98 backdrop-blur-xl shadow-2xl transition-all duration-300">
     <div class="px-4 py-3 space-y-1.5 max-h-[calc(100dvh-4.5rem)] overflow-y-auto">
       <div class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider px-3 py-1">Quick Navigation</div>
+      <a href="/screens/login.html" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-primary/10 hover:bg-primary/15 active:bg-primary/20 transition-colors text-primary font-bold">
+        <span class="w-8 h-8 rounded-lg bg-primary text-white flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[18px]">login</span>
+        </span>
+        <div class="flex flex-col">
+          <span class="font-bold text-[14px] leading-tight">Sign In / Register</span>
+          <span class="text-[11px] text-primary/80">OTP, Google &amp; Apple Passcode</span>
+        </div>
+      </a>
       <a href="#top" onclick="closeMobileMenu()" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl hover:bg-surface-container active:bg-surface-container-high transition-colors text-on-surface">
         <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
           <span class="material-symbols-outlined text-[18px]">home</span>
@@ -218,6 +231,7 @@ tailwind.config = {
       <button onclick="switchScreen('/screens/success.html', this)" class="px-3 py-1 rounded-full hover:bg-surface-container-high transition-colors shrink-0">Confirmed</button>
       <button onclick="switchScreen('/screens/tracking.html', this)" class="px-3 py-1 rounded-full hover:bg-surface-container-high transition-colors shrink-0">Live Track</button>
       <button onclick="switchScreen('/screens/account.html', this)" class="px-3 py-1 rounded-full hover:bg-surface-container-high transition-colors shrink-0">Account</button>
+      <button onclick="switchScreen('/screens/login.html', this)" class="px-3 py-1 rounded-full hover:bg-surface-container-high transition-colors shrink-0 text-primary">Sign In</button>
       <a href="/app.html" class="px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed hover:opacity-90 transition-opacity shrink-0 flex items-center gap-1 font-bold">
         <span>App</span>
         <span class="material-symbols-outlined text-[14px]">open_in_new</span>
@@ -404,6 +418,18 @@ tailwind.config = {
       <h3 class="font-headline text-lg font-bold text-on-surface">9. Rider &amp; Kitchen Portals</h3>
       <p class="text-xs text-on-surface-variant mt-1">Delivery partner portal (Rahul: ₹850 earnings, 12 trips, mark delivered) &amp; kitchen orders manager (New, Preparing, Ready).</p>
     </a>
+
+    <!-- Screen 10: Sign In & OTP Login -->
+    <a href="/screens/login.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">login</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">10. Sign In &amp; OTP Login</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Epicurean OTP verification, Google &amp; Apple ID social sign-in, guest access, and WhatsApp code dispatch.</p>
+    </a>
   </div>
 </section>
 
@@ -437,6 +463,10 @@ tailwind.config = {
     <span class="material-symbols-outlined text-[22px]">smartphone</span>
     <span class="text-[10px] font-semibold mt-0.5">Simulator</span>
   </a>
+  <a href="/screens/login.html" class="flex flex-col items-center justify-center py-1 px-2 text-primary active:scale-90 transition-all">
+    <span class="material-symbols-outlined text-[22px]">login</span>
+    <span class="text-[10px] font-bold mt-0.5">Sign In</span>
+  </a>
   <a href="/app.html" class="flex flex-col items-center justify-center py-1 px-3 rounded-full bg-primary text-white shadow-sm active:scale-90 transition-all">
     <span class="material-symbols-outlined text-[20px]">rocket_launch</span>
     <span class="text-[10px] font-bold">Live App</span>
@@ -451,7 +481,8 @@ tailwind.config = {
     '/screens/checkout.html': '#/checkout',
     '/screens/success.html': '#/success',
     '/screens/tracking.html': '#/tracking',
-    '/screens/account.html': '#/account'
+    '/screens/account.html': '#/account',
+    '/screens/login.html': '#/login'
   };
 
   function switchScreen(url, btn) {

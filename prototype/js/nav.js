@@ -144,6 +144,105 @@
 
       document.body.appendChild(nav);
       document.body.style.paddingBottom = '88px';
+
+      // Drag-to-select options on standalone navbar
+      let isNavPointerDown = false;
+      let isNavDragging = false;
+      let navStartX = 0;
+      let navStartY = 0;
+      let lastNavHighlightIdx = -1;
+      let navJustDragged = false;
+      const navLinks = Array.from(nav.querySelectorAll('a'));
+
+      function getNavLinkFromX(clientX) {
+        let closestIdx = 0;
+        let minDist = Infinity;
+        navLinks.forEach((a, i) => {
+          const r = a.getBoundingClientRect();
+          if (clientX >= r.left && clientX <= r.right) {
+            closestIdx = i;
+            minDist = 0;
+            return;
+          }
+          const center = r.left + r.width / 2;
+          const dist = Math.abs(clientX - center);
+          if (dist < minDist) {
+            minDist = dist;
+            closestIdx = i;
+          }
+        });
+        return { index: closestIdx, link: navLinks[closestIdx] };
+      }
+
+      function highlightNavIndex(targetIdx) {
+        navLinks.forEach((a, i) => {
+          const box = a.querySelector('div');
+          const txt = a.querySelector('span:last-child');
+          const isCurr = (i === targetIdx);
+          a.style.color = isCurr ? '#fff' : 'rgba(255,255,255,0.6)';
+          if (box) box.style.background = isCurr ? '#f04e23' : 'transparent';
+          if (txt) txt.style.fontWeight = isCurr ? '700' : '500';
+        });
+      }
+
+      nav.addEventListener('pointerdown', (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        isNavPointerDown = true;
+        isNavDragging = false;
+        navStartX = e.clientX;
+        navStartY = e.clientY;
+        lastNavHighlightIdx = -1;
+        try { nav.setPointerCapture(e.pointerId); } catch(err){}
+      });
+
+      nav.addEventListener('pointermove', (e) => {
+        if (!isNavPointerDown) return;
+        const dx = e.clientX - navStartX;
+        const dy = e.clientY - navStartY;
+        if (!isNavDragging && (Math.abs(dx) > 5 || Math.hypot(dx, dy) > 6)) {
+          isNavDragging = true;
+          nav.style.cursor = 'grabbing';
+        }
+        if (isNavDragging) {
+          if (e.cancelable) e.preventDefault();
+          const { index } = getNavLinkFromX(e.clientX);
+          if (index !== lastNavHighlightIdx) {
+            lastNavHighlightIdx = index;
+            highlightNavIndex(index);
+            if (navigator.vibrate) try { navigator.vibrate(8); } catch(err){}
+          }
+        }
+      });
+
+      const onNavPointerEnd = (e) => {
+        if (!isNavPointerDown) return;
+        isNavPointerDown = false;
+        nav.style.cursor = 'grab';
+        try {
+          if (nav.hasPointerCapture(e.pointerId)) nav.releasePointerCapture(e.pointerId);
+        } catch(err){}
+
+        if (isNavDragging) {
+          isNavDragging = false;
+          navJustDragged = true;
+          setTimeout(() => { navJustDragged = false; }, 300);
+          const { link } = getNavLinkFromX(e.clientX);
+          if (link && link.getAttribute('href')) {
+            window.location.href = link.getAttribute('href');
+          }
+        }
+      };
+
+      nav.addEventListener('pointerup', onNavPointerEnd);
+      nav.addEventListener('pointercancel', onNavPointerEnd);
+
+      navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          if (navJustDragged) {
+            e.preventDefault();
+          }
+        });
+      });
     }
 
     injectStandaloneNavbar();

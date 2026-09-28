@@ -355,7 +355,7 @@
                     Reorder
                   </button>
                 ` : `
-                  <button data-nav="tracking" class="px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold shadow-sm active:scale-95 transition-all flex items-center gap-1">
+                  <button onclick="trackOrder('${o.id}')" data-nav="tracking" class="px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold shadow-sm active:scale-95 transition-all flex items-center gap-1">
                     <span class="material-symbols-outlined text-[13px]">electric_moped</span>
                     <span>TRACK ORDER</span>
                   </button>
@@ -366,6 +366,13 @@
         `;
       }).join('');
     }
+
+    window.trackOrder = function(orderId) {
+      if (window.Orders && typeof window.Orders.setActive === 'function') {
+        window.Orders.setActive(orderId);
+      }
+      window.navigateTo('tracking');
+    };
 
     function reorderItems(orderId) {
       if (window.Orders && window.Orders.reorder(orderId)) {

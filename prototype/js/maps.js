@@ -10,8 +10,13 @@
       if (window.L) return resolve(window.L);
       const existing = document.querySelector(`script[src="${src}"]`);
       if (existing) {
+        if (window.L) return resolve(window.L);
         existing.addEventListener('load', () => resolve(window.L));
         existing.addEventListener('error', reject);
+        setTimeout(() => {
+          if (window.L) resolve(window.L);
+          else reject(new Error('Leaflet load timeout'));
+        }, 1500);
         return;
       }
       const s = document.createElement('script');
@@ -20,6 +25,10 @@
       s.onload = () => resolve(window.L);
       s.onerror = reject;
       document.head.appendChild(s);
+      setTimeout(() => {
+        if (window.L) resolve(window.L);
+        else reject(new Error('Leaflet load timeout'));
+      }, 3000);
     });
   }
 
@@ -132,11 +141,24 @@
     opts = opts || {};
     const mountId = opts.mountId || 'liveMap';
     const mount = document.getElementById(mountId);
-    if (!mount) return;
+    if (!mount) return null;
 
-    if (mount.dataset.loaded && mount._map) {
-      try { mount._map.invalidateSize(); } catch(e) {}
-      return mount._map;
+    if (mount._map) {
+      try {
+        mount._map.invalidateSize();
+        return mount._map;
+      } catch(e) {
+        try { mount._map.remove(); } catch(err){}
+        mount._map = null;
+      }
+    }
+
+    if (mount._leaflet_id) {
+      try {
+        delete mount._leaflet_id;
+      } catch(e) {
+        mount._leaflet_id = null;
+      }
     }
 
     // Determine user coordinates: prioritize user's Kompally Hyderabad location
@@ -171,28 +193,38 @@
     } catch (err) {
       console.warn('[Leaflet] CDN load failed, rendering fallback canvas', err);
       renderFallbackMap(mount, customerPos, restaurantPos);
-      return;
+      return null;
     }
 
-    mount.innerHTML = '';
+    let map;
+    try {
+      mount.innerHTML = '';
 
-    // Initialize Leaflet Map centered on user's Maisammaguda location with Zoom 14
-    // scrollWheelZoom: false prevents scroll trap when user tries to scroll page!
-    const map = L.map(mountId, {
-      zoomControl: false,
-      attributionControl: true,
-      scrollWheelZoom: false,
-      touchZoom: true
-    }).setView([customerPos.lat, customerPos.lng], 14);
+      // Initialize Leaflet Map centered on user's Maisammaguda location with Zoom 14
+      // scrollWheelZoom: false prevents scroll trap when user tries to scroll page!
+      map = L.map(mountId, {
+        zoomControl: false,
+        attributionControl: true,
+        scrollWheelZoom: false,
+        touchZoom: true
+      }).setView([customerPos.lat, customerPos.lng], 14);
 
-    // Zoom control at bottom right
-    L.control.zoom({ position: 'bottomright' }).addTo(map);
+      mount._map = map;
+      mount.dataset.loaded = '1';
 
-    // OpenStreetMap Standard Tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
-    }).addTo(map);
+      // Zoom control at bottom right
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      // OpenStreetMap Standard Tiles
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+      }).addTo(map);
+    } catch (mapErr) {
+      console.warn('[Leaflet] L.map init error, rendering fallback canvas:', mapErr);
+      renderFallbackMap(mount, customerPos, restaurantPos);
+      return null;
+    }
 
     // --- Custom Markers ---
 

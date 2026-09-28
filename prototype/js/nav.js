@@ -50,19 +50,21 @@
   };
 
   function initNavHandlers(){
-    document.querySelectorAll('[data-path], [data-nav], [data-go]').forEach(el => {
-      const path = el.getAttribute('data-path') || el.getAttribute('data-nav') || el.getAttribute('data-go');
-      if (path && !el.dataset.navBound) {
-        el.dataset.navBound = 'true';
-        el.style.cursor = 'pointer';
-        el.addEventListener('click', (e) => {
-          if (el.tagName === 'A' && el.getAttribute('href') && !el.getAttribute('href').startsWith('#')) {
-            return; // Let standard links handle if needed
-          }
-          e.preventDefault();
-          window.navigateTo(path);
-        });
+    document.addEventListener('click', (e) => {
+      const el = e.target.closest('[data-path], [data-nav], [data-go]');
+      if (!el) return;
+      if (el.tagName === 'A' && el.getAttribute('href') && !el.getAttribute('href').startsWith('#')) {
+        return; // Let standard links handle if needed
       }
+      const path = el.getAttribute('data-path') || el.getAttribute('data-nav') || el.getAttribute('data-go');
+      if (path) {
+        e.preventDefault();
+        window.navigateTo(path);
+      }
+    });
+
+    document.querySelectorAll('[data-path], [data-nav], [data-go]').forEach(el => {
+      el.style.cursor = 'pointer';
     });
 
     function syncBadges(){
@@ -147,7 +149,6 @@
     }
 
     injectStandaloneNavbar();
-  }
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initNavHandlers);

@@ -57,6 +57,7 @@
     }
   </style>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="/js/config.js"></script>
   <script src="/js/store.js"></script>
   <script src="/js/nav.js"></script>
@@ -377,21 +378,64 @@
     let driverRating = 5;
     let selectedReviewTags = [];
 
+    const money = window.money || (n => '₹' + Math.round(+n || 0).toLocaleString('en-IN'));
+
+    const DEFAULT_TRACKING_STATES = [
+      { id: 1, key: 'placed', title: 'Order Placed', sub: 'Your order has been sent to the restaurant.', icon: 'receipt', eta: '30–35 min' },
+      { id: 2, key: 'confirmed', title: 'Restaurant Confirmed', sub: 'The restaurant has accepted your order.', icon: 'thumb_up', eta: '25–28 min' },
+      { id: 3, key: 'preparing', title: 'Kitchen Preparing', sub: 'Chef is handcrafting your gourmet dishes.', icon: 'soup_kitchen', eta: '20–25 min' },
+      { id: 4, key: 'ready', title: 'Food Ready & Packed', sub: 'Sealed with tamper-proof security tape.', icon: 'package_2', eta: '18–20 min' },
+      { id: 5, key: 'assigned', title: 'Delivery Partner Assigned', sub: 'Rahul V. has reached the restaurant.', icon: 'two_wheeler', eta: '15–18 min' },
+      { id: 6, key: 'out_for_delivery', title: 'Out for Delivery', sub: 'Rahul is en route navigating Kompally.', icon: 'electric_moped', eta: '10–15 min' },
+      { id: 7, key: 'delivered', title: 'Order Delivered 🎉', sub: 'Handed over safely with contactless delivery.', icon: 'done_all', eta: '0 min' }
+    ];
+
     function renderTrackingScreen() {
       const orders = window.Orders ? window.Orders.all() : [];
-      currentOrder = (window.Orders ? window.Orders.active() : null) || orders[0];
+      let active = (window.Orders ? window.Orders.active() : null) || orders[0];
 
-      if (currentOrder) {
-        document.getElementById('trackingHeaderSubtitle').textContent = `Order #${currentOrder.id} • ${currentOrder.restaurant?.name || "Royal Dawat & Forno d'Oro"}`;
-        currentStep = currentOrder.stateStep || 6;
+      if (!active) {
+        // Fallback default order so the user always sees a functional tracking screen
+        active = {
+          id: '12345',
+          restaurant: {
+            name: "Royal Dawat & Forno d'Oro",
+            address: "Maisammaguda, Dulapally, Hyderabad 500100"
+          },
+          items: [
+            { name: "Juicy Mutton Mandi", qty: 1, price: 380 },
+            { name: "Truffle Burrata Pizza", qty: 1, price: 390 }
+          ],
+          bill: { total: 434, subtotal: 380, delivery: 30, platform: 5, tax: 19 },
+          status: 'out_for_delivery',
+          stateStep: 6,
+          rider: {
+            name: 'Rahul V.',
+            phone: '+91 98470 12345',
+            vehicle: 'Electric Vespa • TS-08-EK-5012'
+          },
+          address: {
+            tag: 'LIVE GPS',
+            house: 'Flat 302, Green Meadows',
+            area: 'Kompally',
+            city: 'Hyderabad 500100'
+          }
+        };
       }
+      currentOrder = active;
+
+      const titleEl = document.getElementById('trackingHeaderSubtitle');
+      if (titleEl) {
+        titleEl.textContent = `Order #${currentOrder.id} • ${currentOrder.restaurant?.name || "Royal Dawat & Forno d'Oro"}`;
+      }
+      currentStep = currentOrder.stateStep || 6;
 
       applyTrackingStep(currentStep);
     }
 
     function setTrackingState(step) {
       currentStep = step;
-      if (currentOrder) {
+      if (currentOrder && window.Orders && typeof window.Orders.updateState === 'function') {
         window.Orders.updateState(currentOrder.id, step);
       }
       applyTrackingStep(step);
@@ -404,7 +448,10 @@
     }
 
     function applyTrackingStep(step) {
-      const stepData = (window.TRACKING_STATES || []).find(s => s.id === step) || window.TRACKING_STATES[5];
+      const allStates = (window.TRACKING_STATES && window.TRACKING_STATES.length > 0)
+        ? window.TRACKING_STATES
+        : DEFAULT_TRACKING_STATES;
+      const stepData = allStates.find(s => s.id === step) || allStates[5] || allStates[0];
 
       // Update simulator pills
       document.querySelectorAll('.state-pill').forEach(btn => {
@@ -417,38 +464,57 @@
       });
 
       // Update ETA Big Card
-      document.getElementById('etaStatusBadge').textContent = stepData.title;
-      document.getElementById('etaMinutesText').textContent = step === 7 ? 'Delivered 🎉' : `Arriving in ${stepData.eta}`;
-      document.getElementById('etaSubText').textContent = stepData.sub;
-      document.getElementById('etaIcon').textContent = stepData.icon;
-      document.getElementById('currentStepLabel').textContent = `Step ${step} of 7`;
+      const etaBadge = document.getElementById('etaStatusBadge');
+      if (etaBadge) etaBadge.textContent = stepData.title;
+
+      const etaMins = document.getElementById('etaMinutesText');
+      if (etaMins) etaMins.textContent = step === 7 ? 'Delivered 🎉' : `Arriving in ${stepData.eta}`;
+
+      const etaSub = document.getElementById('etaSubText');
+      if (etaSub) etaSub.textContent = stepData.sub;
+
+      const etaIcon = document.getElementById('etaIcon');
+      if (etaIcon) etaIcon.textContent = stepData.icon;
+
+      const stepLbl = document.getElementById('currentStepLabel');
+      if (stepLbl) stepLbl.textContent = `Step ${step} of 7`;
 
       // Update Header Badge
-      document.getElementById('liveStatusBadge').textContent = step === 7 ? 'COMPLETED' : 'LIVE GPS';
+      const liveBadge = document.getElementById('liveStatusBadge');
+      if (liveBadge) liveBadge.textContent = step === 7 ? 'COMPLETED' : 'LIVE GPS';
 
       // Toggle Rating Trigger Card
       const ratingCard = document.getElementById('ratingTriggerCard');
-      if (step === 7) {
-        ratingCard.classList.remove('hidden');
-        ratingCard.classList.add('flex');
-      } else {
-        ratingCard.classList.add('hidden');
-        ratingCard.classList.remove('flex');
+      if (ratingCard) {
+        if (step === 7) {
+          ratingCard.classList.remove('hidden');
+          ratingCard.classList.add('flex');
+        } else {
+          ratingCard.classList.add('hidden');
+          ratingCard.classList.remove('flex');
+        }
       }
 
       // Render timeline list
       renderTimeline(step);
 
       // Render items summary
-      if (currentOrder && currentOrder.items) {
-        document.getElementById('summaryHeaderItems').textContent = `${currentOrder.items.length} Items`;
-        document.getElementById('summaryHeaderTotal').textContent = money(currentOrder.bill?.total || 434);
+      if (currentOrder) {
+        const count = currentOrder.items ? currentOrder.items.length : 2;
+        const total = currentOrder.bill?.total || 434;
+        const itemsEl = document.getElementById('summaryHeaderItems');
+        if (itemsEl) itemsEl.textContent = `${count} Items`;
+        const totalEl = document.getElementById('summaryHeaderTotal');
+        if (totalEl) totalEl.textContent = money(total);
       }
     }
 
     function renderTimeline(activeStep) {
       const list = document.getElementById('timelineList');
-      const allStates = window.TRACKING_STATES || [];
+      if (!list) return;
+      const allStates = (window.TRACKING_STATES && window.TRACKING_STATES.length > 0)
+        ? window.TRACKING_STATES
+        : DEFAULT_TRACKING_STATES;
 
       list.innerHTML = allStates.map(s => {
         const isDone = s.id < activeStep;
@@ -590,10 +656,30 @@
       a.click();
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    function initTracking() {
       renderTrackingScreen();
       if (window.initTrackingMap) {
-        window.initTrackingMap({ mountId: 'liveMap' });
+        try {
+          window.initTrackingMap({ mountId: 'liveMap' });
+        } catch(err) {
+          console.warn('[Tracking] Map init error:', err);
+        }
+      }
+    }
+
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      initTracking();
+    } else {
+      document.addEventListener('DOMContentLoaded', initTracking);
+    }
+
+    window.addEventListener('pageshow', renderTrackingScreen);
+    window.addEventListener('focus', renderTrackingScreen);
+    window.addEventListener('orders:updated', renderTrackingScreen);
+    window.addEventListener('orders:state_changed', renderTrackingScreen);
+    window.addEventListener('message', (e) => {
+      if (e.data && (e.data.type === 'orders:update' || e.data.type === 'route:tracking')) {
+        renderTrackingScreen();
       }
     });
   </script>

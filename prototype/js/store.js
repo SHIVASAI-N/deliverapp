@@ -1021,8 +1021,17 @@
     get(id) {
       return this.all().find(o => o.id === id);
     },
+    setActive(id) {
+      writeStorage('deliverapp_active_order_id', id);
+      window.dispatchEvent(new CustomEvent('orders:updated', { detail: { activeId: id } }));
+    },
     active() {
       const all = this.all();
+      const activeId = readStorage('deliverapp_active_order_id', null);
+      if (activeId) {
+        const found = all.find(o => o.id === activeId);
+        if (found) return found;
+      }
       const activeOrder = all.find(o => o.status !== 'delivered');
       if (activeOrder) return activeOrder;
       const last = all[0];

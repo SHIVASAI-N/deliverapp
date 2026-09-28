@@ -383,6 +383,10 @@ tailwind.config = {
       const cur = frame.contentWindow.location.pathname;
       if (cur !== r.src && !cur.endsWith(r.src)) {
         frame.src = r.src;
+      } else {
+        try {
+          frame.contentWindow.postMessage({ type: 'orders:update', route: h }, '*');
+        } catch(err) {}
       }
     } catch(e) {
       frame.src = r.src;

@@ -100,49 +100,58 @@ tailwind.config = {
     <iframe id="appFrame" title="Epicurean Curations App" src="/screens/home.html"></iframe>
   </main>
 
-  <!-- Floating Capsule Navigation Bar (5 tabs with Tap & Drag Option Selector) -->
-  <div id="navContainer" class="pointer-events-none absolute bottom-0 inset-x-0 pb-[max(env(safe-area-inset-bottom),14px)] pt-2 px-3.5 flex justify-center z-30 select-none transition-all duration-300 ease-in-out">
+  <!-- Floating Capsule Navigation Bar (5 tabs with reliable Mobile Touch Buttons) -->
+  <div id="navContainer" class="pointer-events-none absolute bottom-0 inset-x-0 pb-[max(env(safe-area-inset-bottom),12px)] pt-1.5 px-3 flex justify-center z-40 select-none transition-all duration-300 ease-in-out">
     <!-- Stationary Floating Capsule Navbar -->
-    <nav id="floatingNav" class="pointer-events-auto relative w-full max-w-[390px] h-[64px] bg-[#0c0a09] border border-white/[0.12] rounded-full px-2 py-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center justify-between touch-none select-none backdrop-blur-xl transition-all duration-300">
+    <nav id="floatingNav" class="pointer-events-auto relative w-full max-w-[400px] h-[66px] bg-[#0c0a09]/95 backdrop-blur-xl border border-white/[0.12] rounded-full px-1.5 py-1 shadow-[0_16px_36px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center justify-between touch-manipulation select-none transition-all duration-300">
 
-      <!-- Sliding Active Selection Pill (Drags smoothly across the 5 options) -->
-      <div id="navActivePill" class="absolute top-[8px] left-0 w-[48px] h-[48px] rounded-full bg-[#f04e23] shadow-[0_4px_18px_rgba(240,78,35,0.55)] pointer-events-none z-0 will-change-transform" style="transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+      <!-- Sliding Active Selection Pill -->
+      <div id="navActivePill" class="absolute top-[6px] left-0 w-[56px] h-[54px] rounded-2xl bg-gradient-to-b from-[#f04e23] to-[#c73812] shadow-[0_4px_18px_rgba(240,78,35,0.45)] pointer-events-none z-0 will-change-transform" style="transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
 
       <!-- Option 1: Explore -->
-      <button data-go="#/home" data-tab="home" data-index="0" aria-label="Explore" title="Explore" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
-        <div class="tab-indicator w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
-          <span class="tab-icon material-symbols-outlined text-[24px] text-white transition-colors duration-200">restaurant</span>
+      <button data-go="#/home" data-tab="home" data-index="0" aria-label="Explore" title="Explore" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+        <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
+          <span class="tab-icon material-symbols-outlined text-[22px] text-white transition-all duration-200">restaurant</span>
+          <span class="tab-label text-[10px] font-semibold text-white/90 tracking-tight mt-0.5 transition-colors">Explore</span>
         </div>
       </button>
 
       <!-- Option 2: Kitchen -->
-      <button data-go="#/restaurant" data-tab="restaurant" data-index="1" aria-label="Kitchen" title="Kitchen" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
-        <div class="tab-indicator w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
-          <span class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">storefront</span>
+      <button data-go="#/restaurant" data-tab="restaurant" data-index="1" aria-label="Kitchen" title="Kitchen" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+        <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
+          <span class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">storefront</span>
+          <span class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Kitchen</span>
         </div>
       </button>
 
       <!-- Option 3: Bag -->
-      <button data-go="#/cart" data-tab="cart" data-index="2" aria-label="Bag" title="Bag" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
-        <div class="tab-indicator relative w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
-          <span class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">shopping_bag</span>
-          <!-- Bag Count Badge -->
-          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[10px] shadow-sm hidden items-center justify-center z-20">0</span>
+      <button data-go="#/cart" data-tab="cart" data-index="2" aria-label="Bag" title="Bag" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+        <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
+          <div class="relative">
+            <span class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">shopping_bag</span>
+            <!-- Bag Count Badge -->
+            <span id="cartBadge" class="absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[9px] shadow-sm hidden items-center justify-center z-20">0</span>
+          </div>
+          <span class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Bag</span>
         </div>
       </button>
 
       <!-- Option 4: Orders -->
-      <button data-go="#/tracking" data-tab="orders" data-index="3" aria-label="Orders" title="Orders" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
-        <div class="tab-indicator w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
-          <span class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">receipt_long</span>
+      <button data-go="#/tracking" data-tab="orders" data-index="3" aria-label="Orders" title="Orders" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+        <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
+          <span class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">receipt_long</span>
+          <span class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Orders</span>
         </div>
       </button>
 
       <!-- Option 5: Account -->
-      <button data-go="#/account" data-tab="account" data-index="4" aria-label="Account" title="Account" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
-        <div class="tab-indicator relative w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
-          <span id="acctIcon" class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">person</span>
-          <span id="acctDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#00873a] border border-[#0c0a09] hidden z-20"></span>
+      <button data-go="#/account" data-tab="account" data-index="4" aria-label="Account" title="Account" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+        <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
+          <div class="relative">
+            <span id="acctIcon" class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">person</span>
+            <span id="acctDot" class="absolute top-0 right-0 w-2 h-2 rounded-full bg-[#00873a] border border-[#0c0a09] hidden z-20"></span>
+          </div>
+          <span class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Account</span>
         </div>
       </button>
 
@@ -235,25 +244,34 @@ tailwind.config = {
     }
     if (!targetBtn) return;
 
-    const pillWidth = navActivePill.offsetWidth || 48;
+    const pillWidth = targetBtn.offsetWidth > 40 ? Math.min(targetBtn.offsetWidth - 4, 64) : 56;
+    navActivePill.style.width = `${pillWidth}px`;
     const targetX = targetBtn.offsetLeft + (targetBtn.offsetWidth - pillWidth) / 2;
 
     if (animate) {
-      navActivePill.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+      navActivePill.style.transition = 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.3s ease';
     } else {
       navActivePill.style.transition = 'none';
     }
     navActivePill.style.transform = `translate3d(${Math.round(targetX)}px, 0, 0)`;
 
-    // Update icons and cart badge style
+    // Update icons and labels
     floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
       const isCurrent = (btn === targetBtn);
       const icon = btn.querySelector('.tab-icon');
+      const label = btn.querySelector('.tab-label');
       if (icon) {
         if (isCurrent) {
-          icon.className = 'tab-icon material-symbols-outlined text-[24px] text-white scale-105 transition-all duration-200';
+          icon.className = 'tab-icon material-symbols-outlined text-[22px] text-white scale-110 transition-all duration-200';
         } else {
-          icon.className = 'tab-icon material-symbols-outlined text-[24px] text-white/60 hover:text-white scale-100 transition-all duration-200';
+          icon.className = 'tab-icon material-symbols-outlined text-[22px] text-white/60 hover:text-white scale-100 transition-all duration-200';
+        }
+      }
+      if (label) {
+        if (isCurrent) {
+          label.className = 'tab-label text-[10px] font-bold text-white transition-colors duration-200';
+        } else {
+          label.className = 'tab-label text-[10px] font-medium text-white/50 transition-colors duration-200';
         }
       }
     });
@@ -262,9 +280,9 @@ tailwind.config = {
     const badge = document.getElementById('cartBadge');
     if (badge) {
       if (isCartActive) {
-        badge.className = 'absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-white text-[#f04e23] font-black text-[10px] shadow-sm flex items-center justify-center z-20';
+        badge.className = 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-white text-[#f04e23] font-black text-[9px] shadow-sm flex items-center justify-center z-20';
       } else {
-        badge.className = 'absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[10px] shadow-sm flex items-center justify-center z-20';
+        badge.className = 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[9px] shadow-sm flex items-center justify-center z-20';
       }
     }
   }
@@ -381,24 +399,6 @@ tailwind.config = {
     }
   };
 
-  // Direct Click listener for all tab buttons (instant click-to-access)
-  if (floatingNav) {
-    floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        if (justDragged) {
-          e.preventDefault();
-          return;
-        }
-        const targetTab = btn.getAttribute('data-tab');
-        if (targetTab && TABS_TO_HASH[targetTab]) {
-          currentActiveTab = targetTab;
-          positionActivePill(targetTab, true);
-          window.go(TABS_TO_HASH[targetTab]);
-        }
-      });
-    });
-  }
-
   // Click listener for header / address pill and other [data-go] elements
   document.querySelectorAll('header [data-go]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -406,94 +406,30 @@ tailwind.config = {
     });
   });
 
-  // Dual Choice Interaction Engine: Click to Access OR Drag Option Pill
-  let isPointerDown = false;
-  let startX = 0;
-  let hasDragged = false;
-  let navRect = null;
+  // Direct Click & Touch handlers for all tab buttons (instant 0ms responsive tap on mobile)
+  function handleTabSelect(targetTab) {
+    if (!targetTab || !TABS_TO_HASH[targetTab]) return;
+    currentActiveTab = targetTab;
+    positionActivePill(targetTab, true);
+    window.go(TABS_TO_HASH[targetTab]);
+  }
 
   if (floatingNav) {
-    floatingNav.addEventListener('pointerdown', (e) => {
-      if (e.button !== undefined && e.button !== 0) return;
+    floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
+      const targetTab = btn.getAttribute('data-tab');
 
-      isPointerDown = true;
-      startX = e.clientX;
-      hasDragged = false;
-      navRect = floatingNav.getBoundingClientRect();
+      // Native mobile touch handling (instant 0ms response)
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        handleTabSelect(targetTab);
+      }, { passive: false });
 
-      try {
-        floatingNav.setPointerCapture(e.pointerId);
-      } catch(err) {}
+      // Standard click handling
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleTabSelect(targetTab);
+      });
     });
-
-    floatingNav.addEventListener('pointermove', (e) => {
-      if (!isPointerDown || !navRect) return;
-
-      const dx = e.clientX - startX;
-      if (Math.abs(dx) > 6) {
-        hasDragged = true;
-      }
-
-      if (hasDragged) {
-        // Drag active pill smoothly across options
-        const pillWidth = navActivePill.offsetWidth || 48;
-        const relX = e.clientX - navRect.left;
-        const minX = 6;
-        const maxX = navRect.width - pillWidth - 6;
-        const clampedX = Math.max(minX, Math.min(maxX, relX - pillWidth / 2));
-
-        navActivePill.style.transition = 'none';
-        navActivePill.style.transform = `translate3d(${clampedX}px, 0, 0)`;
-
-        // Highlight option under current drag position
-        const hoverIdx = Math.max(0, Math.min(4, Math.floor((clampedX + pillWidth / 2) / (navRect.width / 5))));
-        highlightTemporaryTab(hoverIdx);
-      }
-    });
-
-    const finishPointer = (e) => {
-      if (!isPointerDown) return;
-      isPointerDown = false;
-
-      try {
-        floatingNav.releasePointerCapture(e.pointerId);
-      } catch(err) {}
-
-      if (hasDragged) {
-        // USER CHOSE TO DRAG: Snap active pill to nearest tab and access screen!
-        justDragged = true;
-        setTimeout(() => { justDragged = false; }, 250);
-
-        const pillWidth = navActivePill.offsetWidth || 48;
-        const transformMatch = navActivePill.style.transform.match(/translate3d\(([-0-9.]+)px/);
-        const finalPillX = transformMatch ? parseFloat(transformMatch[1]) : 0;
-        const pillCenter = finalPillX + pillWidth / 2;
-        const targetIdx = Math.max(0, Math.min(4, Math.floor(pillCenter / (navRect.width / 5))));
-        const targetTab = TABS_ORDER[targetIdx];
-
-        if (targetTab && TABS_TO_HASH[targetTab]) {
-          currentActiveTab = targetTab;
-          positionActivePill(targetTab, true);
-          window.go(TABS_TO_HASH[targetTab]);
-        }
-      } else {
-        // USER CHOSE TO TAP / CLICK: Calculate clicked option from pointer X and access instantly!
-        if (navRect) {
-          const relX = e.clientX - navRect.left;
-          const targetIdx = Math.max(0, Math.min(4, Math.floor(relX / (navRect.width / 5))));
-          const targetTab = TABS_ORDER[targetIdx];
-
-          if (targetTab && TABS_TO_HASH[targetTab]) {
-            currentActiveTab = targetTab;
-            positionActivePill(targetTab, true);
-            window.go(TABS_TO_HASH[targetTab]);
-          }
-        }
-      }
-    };
-
-    floatingNav.addEventListener('pointerup', finishPointer);
-    floatingNav.addEventListener('pointercancel', finishPointer);
 
     // Window resize keeps active pill precisely centered
     window.addEventListener('resize', () => {
@@ -504,6 +440,9 @@ tailwind.config = {
     requestAnimationFrame(() => {
       positionActivePill(ROUTES[getActiveHash()].tab, false);
     });
+    setTimeout(() => {
+      positionActivePill(ROUTES[getActiveHash()].tab, false);
+    }, 150);
   }
 
   window.addEventListener('hashchange', render);

@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@deliverapp/types": "workspace:*",
+    "@deliverapp/types": "*",
     "@vis.gl/react-google-maps": "^1.1.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.395.0",

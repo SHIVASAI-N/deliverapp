@@ -8,7 +8,7 @@
     "dev": "node build.js && node dist/main.js"
   },
   "dependencies": {
-    "@deliverapp/types": "workspace:*"
+    "@deliverapp/types": "*"
   },
   "devDependencies": {
     "typescript": "^5.4.0"

@@ -205,7 +205,7 @@ tailwind.config = {
       </div>
       <!-- Screen Viewport -->
       <div class="flex-1 rounded-[1.5rem] sm:rounded-[1.8rem] overflow-hidden bg-surface relative">
-        <iframe id="heroFrame" src="/screens/home.html" title="DeliverApp Simulator" class="w-full h-full border-0"></iframe>
+        <iframe id="heroFrame" src="/app.html" title="DeliverApp Simulator" class="w-full h-full border-0"></iframe>
       </div>
     </div>
 
@@ -444,13 +444,58 @@ tailwind.config = {
 </nav>
 
 <script>
+  const SCREEN_HASH_MAP = {
+    '/screens/home.html': '#/home',
+    '/screens/restaurant.html': '#/restaurant',
+    '/screens/cart.html': '#/cart',
+    '/screens/checkout.html': '#/checkout',
+    '/screens/success.html': '#/success',
+    '/screens/tracking.html': '#/tracking',
+    '/screens/account.html': '#/account'
+  };
+
   function switchScreen(url, btn) {
-    document.getElementById('heroFrame').src = url;
-    btn.parentElement.querySelectorAll('button').forEach(b => {
-      b.classList.remove('bg-primary', 'text-white', 'shadow-sm');
-    });
-    btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
+    const frame = document.getElementById('heroFrame');
+    const targetHash = SCREEN_HASH_MAP[url] || '#/home';
+    if (frame && frame.contentWindow && typeof frame.contentWindow.go === 'function') {
+      frame.contentWindow.go(targetHash);
+    } else if (frame) {
+      frame.src = '/app.html' + targetHash;
+    }
+    if (btn && btn.parentElement) {
+      btn.parentElement.querySelectorAll('button').forEach(b => {
+        b.classList.remove('bg-primary', 'text-white', 'shadow-sm');
+      });
+      btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
+    }
   }
+
+  // Synchronize pill switcher buttons when user interacts inside the simulator app
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'deliverapp:route') {
+      const hash = e.data.route;
+      const switcher = document.querySelector('#app .overflow-x-auto');
+      if (!switcher) return;
+      const btns = switcher.querySelectorAll('button');
+      const hashToText = {
+        '#/home': 'Home',
+        '#/restaurant': 'Restaurant',
+        '#/cart': 'Cart',
+        '#/checkout': 'Checkout',
+        '#/success': 'Confirmed',
+        '#/tracking': 'Live Track',
+        '#/account': 'Account'
+      };
+      const text = hashToText[hash];
+      btns.forEach(b => {
+        if (text && b.textContent.trim() === text) {
+          b.classList.add('bg-primary', 'text-white', 'shadow-sm');
+        } else {
+          b.classList.remove('bg-primary', 'text-white', 'shadow-sm');
+        }
+      });
+    }
+  });
 
   function toggleMobileMenu() {
     const menu = document.getElementById('mobileMenuDropdown');

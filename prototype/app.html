@@ -41,20 +41,33 @@ tailwind.config = {
 <script src="/js/auth.js"></script>
 <script src="/js/nav.js"></script>
 <style>
-  html, body { height: 100%; margin: 0; }
-  body { font-family: "Plus Jakarta Sans", sans-serif; background: #171311; }
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    background: #171311;
+  }
   h1, h2, h3 { font-family: Epilogue, sans-serif; }
-  #shell { height: 100dvh; }
+  #shell {
+    height: 100%;
+    max-height: 100%;
+    width: 100%;
+  }
   @media (min-width: 480px) {
-    body {
+    body.is-standalone {
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 16px;
       background: radial-gradient(1000px 500px at 20% 0%, #3a1c12 0%, #171311 55%, #0d0b0a 100%);
     }
-    #shell {
-      height: min(890px, calc(100dvh - 32px));
+    body.is-standalone #shell {
+      height: min(890px, calc(100% - 32px));
       border-radius: 2rem;
       overflow: hidden;
       border: 1px solid #3a332f;
@@ -347,6 +360,10 @@ tailwind.config = {
     } catch(e){}
   }
 
+  if (window.self === window.top) {
+    document.body.classList.add('is-standalone');
+  }
+
   function render(){
     const h = getActiveHash();
     const r = ROUTES[h];
@@ -367,6 +384,12 @@ tailwind.config = {
     syncBadge();
     syncAddress();
     syncUser();
+
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'deliverapp:route', route: h, tab: r.tab }, '*');
+      }
+    } catch(e) {}
   }
 
   let lastGoTime = 0;
@@ -418,13 +441,22 @@ tailwind.config = {
     floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
       const targetTab = btn.getAttribute('data-tab');
 
-      // Native mobile touch handling (instant 0ms response)
+      let touchMoved = false;
+      btn.addEventListener('touchstart', () => {
+        touchMoved = false;
+      }, { passive: true });
+
+      btn.addEventListener('touchmove', () => {
+        touchMoved = true;
+      }, { passive: true });
+
       btn.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        handleTabSelect(targetTab);
+        if (!touchMoved) {
+          e.preventDefault();
+          handleTabSelect(targetTab);
+        }
       }, { passive: false });
 
-      // Standard click handling
       btn.addEventListener('click', (e) => {
         e.preventDefault();
         handleTabSelect(targetTab);

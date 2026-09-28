@@ -90,8 +90,8 @@
   }
 
     function injectStandaloneNavbar(){
-      // Only inject if opened directly as a standalone page (outside the app.html iframe)
-      if (window.parent !== window) return;
+      // Only suppress injection if enclosed in an app shell coordinator that provides window.parent.go
+      if (window.parent && window.parent !== window && typeof window.parent.go === 'function') return;
       const path = window.location.pathname;
       if (!path.includes('/screens/') || path.includes('login.html')) return;
       if (document.getElementById('standaloneBottomNav')) return;

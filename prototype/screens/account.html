@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html class="h-full bg-surface" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>Account, Orders &amp; Dashboards — DeliverApp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a83211",
+            "primary-container": "#ca4a28",
+            "primary-fixed": "#ffdbd1",
+            "primary-fixed-dim": "#ffb4a1",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#3c0800",
+            "surface": "#fff8f5",
+            "surface-dim": "#e0d8d5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#faf2ee",
+            "surface-container": "#f4ece8",
+            "surface-container-high": "#eee7e3",
+            "on-surface": "#1e1b19",
+            "on-surface-variant": "#59413b",
+            "secondary": "#835500",
+            "secondary-container": "#feae2c",
+            "tertiary": "#006b2c",
+            "tertiary-container": "#00873a",
+            "error": "#ba1a1a"
+          },
+          fontFamily: {
+            headline: ["Epilogue", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: "Plus Jakarta Sans", sans-serif; -webkit-tap-highlight-color: transparent; }
+    h1, h2, h3, h4 { font-family: "Epilogue", sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+  <script src="/js/config.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/nav.js"></script>
+</head>
+<body class="min-h-full flex flex-col bg-surface text-on-surface antialiased pb-28 selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-surface/95 backdrop-blur-md pt-[env(safe-area-inset-top)] border-b border-[#e0d8d5] shadow-sm">
+    <div class="h-14 px-4 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <button data-nav="home" aria-label="Go back" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all -ml-1">
+          <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+        </button>
+        <h1 class="font-headline text-[16px] font-bold text-on-surface">Account &amp; Dashboards</h1>
+      </div>
+      <div id="authHeaderBtnContainer">
+        <button onclick="handleAuthAction()" id="authHeaderBtn" class="text-xs font-bold text-primary hover:underline px-2 py-1">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
+
+    <!-- Patron Profile Card / Auth State Container -->
+    <div id="userProfileContainer" class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex items-center gap-3.5">
+      <!-- Injected via renderUserProfile() -->
+    </div>
+
+    <!-- App Role Switcher Hub (Sections 13 & 14) -->
+    <div class="bg-surface-container-low rounded-2xl p-3.5 border border-[#e0d8d5] flex flex-col gap-2 shadow-sm">
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] font-black uppercase tracking-wider text-primary">Role Portals &amp; Operations</span>
+        <button onclick="window.navigateTo('login')" class="text-[11px] font-bold text-secondary flex items-center gap-0.5 hover:underline">
+          <span>Stitch Login</span>
+          <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+        </button>
+      </div>
+      <div class="grid grid-cols-3 gap-2">
+        <button onclick="window.navigateTo('login')" class="p-2.5 rounded-xl bg-white border border-[#e0d8d5] hover:border-secondary flex flex-col items-center text-center gap-1 active:scale-95 transition-all shadow-sm">
+          <div class="w-9 h-9 rounded-full bg-secondary-container/30 text-secondary flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">login</span>
+          </div>
+          <span class="font-bold text-[11px] text-on-surface">FreshFleet Login</span>
+          <span class="text-[9px] text-on-surface-variant font-medium">Warm Epicurean OTP</span>
+        </button>
+        <button onclick="openDeliveryPartnerPortal()" class="p-2.5 rounded-xl bg-white border border-[#e0d8d5] hover:border-primary flex flex-col items-center text-center gap-1 active:scale-95 transition-all shadow-sm">
+          <div class="w-9 h-9 rounded-full bg-primary-fixed/40 text-primary flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">electric_moped</span>
+          </div>
+          <span class="font-bold text-[11px] text-on-surface">Rider Portal</span>
+          <span class="text-[9px] text-on-surface-variant font-medium">Rahul (Delivery)</span>
+        </button>
+        <button onclick="openRestaurantDashboard()" class="p-2.5 rounded-xl bg-white border border-[#e0d8d5] hover:border-primary flex flex-col items-center text-center gap-1 active:scale-95 transition-all shadow-sm">
+          <div class="w-9 h-9 rounded-full bg-secondary-container/40 text-secondary flex items-center justify-center">
+            <span class="material-symbols-outlined text-[18px]">restaurant</span>
+          </div>
+          <span class="font-bold text-[11px] text-on-surface">Kitchen UI</span>
+          <span class="text-[9px] text-on-surface-variant font-medium">Order Board</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Section 15: My Orders (Order History) -->
+    <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-3">
+      <div class="flex items-center justify-between pb-1 border-b border-[#e0d8d5]">
+        <h3 class="font-headline text-sm font-bold text-on-surface uppercase tracking-wider">My Orders</h3>
+        <!-- Tabs: ACTIVE and PAST -->
+        <div class="flex items-center gap-1 bg-surface-container rounded-full p-0.5 text-xs font-bold">
+          <button id="tabActiveBtn" onclick="switchOrderTab('ACTIVE')" class="px-3 py-1 rounded-full bg-white text-primary shadow-sm transition-all">
+            ACTIVE
+          </button>
+          <button id="tabPastBtn" onclick="switchOrderTab('PAST')" class="px-3 py-1 rounded-full text-on-surface-variant hover:text-on-surface transition-all">
+            PAST
+          </button>
+        </div>
+      </div>
+
+      <!-- Orders Container -->
+      <div id="ordersListContainer" class="flex flex-col gap-3">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+    <!-- Section 6: Saved Delivery Addresses -->
+    <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-3">
+      <div class="flex items-center justify-between pb-1 border-b border-[#e0d8d5]">
+        <h3 class="font-headline text-sm font-bold text-on-surface uppercase tracking-wider">Saved Addresses</h3>
+        <button onclick="openAddAddressModal()" class="text-xs font-bold text-primary hover:underline">+ Add New</button>
+      </div>
+
+      <div id="accountAddressesList" class="flex flex-col gap-2">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Section 13: Delivery Partner UI Portal Modal -->
+  <div id="riderPortalModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-3 sm:p-4">
+    <div class="bg-surface-container-lowest max-w-lg w-full rounded-3xl p-5 shadow-2xl flex flex-col gap-4 max-h-[92vh] overflow-y-auto border border-[#e0d8d5]">
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/30">
+            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Rahul"/>
+          </div>
+          <div>
+            <h3 class="font-headline text-base font-bold text-on-surface">Good evening, Rahul</h3>
+            <span class="text-[11px] font-bold text-tertiary flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span> On-Duty • Electric Vespa
+            </span>
+          </div>
+        </div>
+        <button onclick="closeDeliveryPartnerPortal()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Stats Bar (Section 13) -->
+      <div class="grid grid-cols-2 gap-3 text-center">
+        <div class="bg-surface-container-low p-3 rounded-2xl border border-[#e0d8d5]">
+          <span class="text-[10px] uppercase font-bold text-on-surface-variant">Today's Earnings</span>
+          <p class="font-headline text-xl font-black text-primary mt-0.5">₹850</p>
+        </div>
+        <div class="bg-surface-container-low p-3 rounded-2xl border border-[#e0d8d5]">
+          <span class="text-[10px] uppercase font-bold text-on-surface-variant">Deliveries Done</span>
+          <p class="font-headline text-xl font-black text-on-surface mt-0.5">12 Orders</p>
+        </div>
+      </div>
+
+      <!-- Active Delivery Workflow (Section 13) -->
+      <div class="bg-surface-container-low rounded-2xl p-4 border-2 border-primary/40 flex flex-col gap-3 text-xs">
+        <div class="flex items-center justify-between">
+          <span class="font-headline font-bold text-xs uppercase tracking-wider text-primary">Active Delivery Handover</span>
+          <span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-bold text-[10px]" id="riderOrderStatusBadge">OUT FOR DELIVERY</span>
+        </div>
+
+        <!-- Pickup Info -->
+        <div class="bg-white p-3 rounded-xl border border-[#e0d8d5] flex flex-col gap-2">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[10px] font-bold text-on-surface-variant uppercase">Pickup Kitchen</span>
+              <p class="font-bold text-xs text-on-surface">Royal Dawat &amp; Forno d'Oro</p>
+              <p class="text-[11px] text-on-surface-variant">Kompally Culinary Hub, Medchal Highway</p>
+            </div>
+            <span class="text-[11px] font-bold text-secondary">1.2 km</span>
+          </div>
+          <div class="flex gap-2 pt-1 border-t border-[#e0d8d5]">
+            <button onclick="alert('Opening Google Maps navigation to kitchen...')" class="flex-1 py-1.5 rounded-lg bg-surface-container text-on-surface font-bold text-[11px] flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">navigation</span>
+              <span>NAVIGATE</span>
+            </button>
+            <button onclick="alert('Status updated: Arrived at kitchen')" class="flex-1 py-1.5 rounded-lg bg-surface-container text-on-surface font-bold text-[11px]">
+              ARRIVED
+            </button>
+          </div>
+        </div>
+
+        <!-- Dropoff Info -->
+        <div class="bg-white p-3 rounded-xl border border-[#e0d8d5] flex flex-col gap-2">
+          <div class="flex justify-between items-start">
+            <div>
+              <span class="text-[10px] font-bold text-on-surface-variant uppercase">Customer Delivery</span>
+              <p class="font-bold text-xs text-on-surface">Aarav Mehta</p>
+              <p class="text-[11px] text-on-surface-variant">Flat 302, Green Meadows Apts, Kompally</p>
+            </div>
+            <span class="text-xs font-bold text-primary">₹434 (Paid)</span>
+          </div>
+          <div class="flex gap-2 pt-1 border-t border-[#e0d8d5]">
+            <a href="tel:+919847088990" class="flex-1 py-1.5 rounded-lg bg-surface-container text-on-surface font-bold text-[11px] flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">call</span>
+              <span>CALL</span>
+            </a>
+            <button onclick="alert('Opening customer chat drawer...')" class="flex-1 py-1.5 rounded-lg bg-surface-container text-on-surface font-bold text-[11px] flex items-center justify-center gap-1">
+              <span class="material-symbols-outlined text-[14px]">chat</span>
+              <span>CHAT</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mark as Delivered CTA (Section 13) -->
+        <button onclick="riderMarkAsDelivered()" class="w-full py-3 rounded-full bg-tertiary hover:bg-tertiary-container text-white font-bold text-xs shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">task_alt</span>
+          <span>MARK AS DELIVERED</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 14: Restaurant Kitchen Order Dashboard Modal -->
+  <div id="kitchenModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-md p-3 sm:p-4">
+    <div class="bg-surface-container-lowest max-w-lg w-full rounded-3xl p-5 shadow-2xl flex flex-col gap-3.5 max-h-[92vh] overflow-y-auto border border-[#e0d8d5]">
+      <!-- Header -->
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <div>
+          <h3 class="font-headline text-base font-bold text-on-surface">Kitchen Live Dashboard</h3>
+          <p class="text-[11px] text-on-surface-variant">Royal Dawat &amp; Forno d'Oro • Kompally Hub</p>
+        </div>
+        <button onclick="closeRestaurantDashboard()" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Dashboard Status Tabs (Section 14: NEW, PREPARING, READY, COMPLETED) -->
+      <div class="grid grid-cols-4 gap-1 p-1 bg-surface-container rounded-2xl text-[10px] font-bold text-center">
+        <button onclick="switchKitchenTab('NEW')" id="ktTabNew" class="py-1.5 rounded-xl bg-white text-primary shadow-sm transition-all">
+          NEW (1)
+        </button>
+        <button onclick="switchKitchenTab('PREPARING')" id="ktTabPrep" class="py-1.5 rounded-xl text-on-surface-variant transition-all">
+          PREPARING
+        </button>
+        <button onclick="switchKitchenTab('READY')" id="ktTabReady" class="py-1.5 rounded-xl text-on-surface-variant transition-all">
+          READY
+        </button>
+        <button onclick="switchKitchenTab('COMPLETED')" id="ktTabDone" class="py-1.5 rounded-xl text-on-surface-variant transition-all">
+          DONE (8)
+        </button>
+      </div>
+
+      <!-- Kitchen Order Cards List (Section 14) -->
+      <div id="kitchenOrdersList" class="flex flex-col gap-3">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentOrderTab = 'ACTIVE';
+    let currentKitchenTab = 'NEW';
+
+    function renderAccountScreen() {
+      renderUserProfile();
+      renderOrdersList();
+      renderSavedAddresses();
+    }
+
+    function switchOrderTab(tab) {
+      currentOrderTab = tab;
+      const activeBtn = document.getElementById('tabActiveBtn');
+      const pastBtn = document.getElementById('tabPastBtn');
+
+      if (tab === 'ACTIVE') {
+        activeBtn.classList.add('bg-white', 'text-primary', 'shadow-sm');
+        activeBtn.classList.remove('text-on-surface-variant');
+        pastBtn.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+        pastBtn.classList.add('text-on-surface-variant');
+      } else {
+        pastBtn.classList.add('bg-white', 'text-primary', 'shadow-sm');
+        pastBtn.classList.remove('text-on-surface-variant');
+        activeBtn.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+        activeBtn.classList.add('text-on-surface-variant');
+      }
+
+      renderOrdersList();
+    }
+
+    function renderOrdersList() {
+      const container = document.getElementById('ordersListContainer');
+      const orders = window.Orders ? window.Orders.all() : [];
+
+      const filtered = orders.filter(o => {
+        if (currentOrderTab === 'ACTIVE') return o.status !== 'delivered';
+        return o.status === 'delivered';
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="py-8 text-center text-xs text-on-surface-variant bg-surface-container-low rounded-xl">
+            No ${currentOrderTab.toLowerCase()} orders at the moment.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(o => {
+        const isDelivered = o.status === 'delivered';
+        const itemsSummary = (o.items || []).map(i => `${i.qty}× ${i.name}`).join(', ');
+
+        return `
+          <div class="p-3.5 rounded-2xl bg-surface-container-low border border-[#e0d8d5] flex flex-col gap-2.5 text-xs">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-10 h-10 rounded-xl overflow-hidden bg-surface-container shrink-0">
+                  <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&auto=format&fit=crop&q=80" alt="Restaurant" class="w-full h-full object-cover"/>
+                </div>
+                <div class="flex flex-col min-w-0">
+                  <span class="font-headline font-bold text-xs text-on-surface truncate">${o.restaurant?.name || "Royal Dawat & Forno d'Oro"}</span>
+                  <span class="text-[11px] text-on-surface-variant truncate">Order #${o.id} • ${new Date(o.placedAt || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                </div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full font-bold text-[10px] ${isDelivered ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-primary-fixed text-on-primary-fixed'}">
+                ${isDelivered ? '✓ Delivered' : '● Live GPS Tracking'}
+              </span>
+            </div>
+
+            <p class="text-[11px] text-on-surface line-clamp-1">${itemsSummary}</p>
+            <div class="flex items-center justify-between font-bold pt-1 border-t border-[#e0d8d5]/60">
+              <span class="text-primary font-black text-sm">${money(o.bill?.total || 434)}</span>
+              <div class="flex gap-2">
+                ${isDelivered ? `
+                  <button onclick="reorderItems('${o.id}')" class="px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold shadow-sm active:scale-95 transition-all">
+                    Reorder
+                  </button>
+                ` : `
+                  <button data-nav="tracking" class="px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold shadow-sm active:scale-95 transition-all flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">electric_moped</span>
+                    <span>TRACK ORDER</span>
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function reorderItems(orderId) {
+      if (window.Orders && window.Orders.reorder(orderId)) {
+        alert("Dishes added to bag! Redirecting to cart...");
+        if (window.parent && window.parent !== window && typeof window.parent.go === 'function') {
+          window.parent.go('#/cart');
+        } else {
+          location.href = '/screens/cart.html';
+        }
+      }
+    }
+
+    function renderSavedAddresses() {
+      const container = document.getElementById('accountAddressesList');
+      const list = window.SavedAddresses ? window.SavedAddresses.all() : [];
+
+      container.innerHTML = list.map(a => `
+        <div class="p-3 rounded-xl bg-surface-container-low border border-[#e0d8d5] flex items-center justify-between gap-3 text-xs">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="material-symbols-outlined text-primary text-[20px]">${a.tag === 'WORK' ? 'domain' : 'home'}</span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-bold text-on-surface">${a.tag} • ${a.house}</span>
+              <span class="text-[11px] text-on-surface-variant truncate">${a.street}, ${a.area}</span>
+            </div>
+          </div>
+          <button onclick="alert('Address editing enabled in checkout flow')" class="text-primary font-bold text-xs hover:underline shrink-0">
+            Edit
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Role Modals: Delivery Partner & Restaurant
+    function openDeliveryPartnerPortal() {
+      document.getElementById('riderPortalModal').classList.remove('hidden');
+    }
+    function closeDeliveryPartnerPortal() {
+      document.getElementById('riderPortalModal').classList.add('hidden');
+    }
+
+    function riderMarkAsDelivered() {
+      const orders = window.Orders ? window.Orders.all() : [];
+      if (orders.length > 0) {
+        window.Orders.updateState(orders[0].id, 7);
+      }
+      document.getElementById('riderOrderStatusBadge').textContent = 'DELIVERED ✓';
+      alert("✅ Order marked as DELIVERED! Customer live tracking has updated.");
+      closeDeliveryPartnerPortal();
+      renderOrdersList();
+    }
+
+    function openRestaurantDashboard() {
+      switchKitchenTab('NEW');
+      document.getElementById('kitchenModal').classList.remove('hidden');
+    }
+    function closeRestaurantDashboard() {
+      document.getElementById('kitchenModal').classList.add('hidden');
+    }
+
+    function switchKitchenTab(tab) {
+      currentKitchenTab = tab;
+      ['NEW', 'PREPARING', 'READY', 'COMPLETED'].forEach(t => {
+        const btn = document.getElementById(t === 'NEW' ? 'ktTabNew' : (t === 'PREPARING' ? 'ktTabPrep' : (t === 'READY' ? 'ktTabReady' : 'ktTabDone')));
+        const match = t === tab;
+        btn.classList.toggle('bg-white', match);
+        btn.classList.toggle('text-primary', match);
+        btn.classList.toggle('shadow-sm', match);
+        btn.classList.toggle('text-on-surface-variant', !match);
+      });
+      renderKitchenOrders();
+    }
+
+    function renderKitchenOrders() {
+      const listEl = document.getElementById('kitchenOrdersList');
+      const orders = window.Orders ? window.Orders.all() : [];
+      const order = orders[0];
+
+      if (!order) {
+        listEl.innerHTML = '<p class="text-xs text-center py-4 text-on-surface-variant">No orders in this state.</p>';
+        return;
+      }
+
+      let actionsHtml = '';
+      if (currentKitchenTab === 'NEW') {
+        actionsHtml = `
+          <div class="flex gap-2 pt-2 border-t border-[#e0d8d5]">
+            <button onclick="alert('Order rejected')" class="flex-1 py-2.5 rounded-xl bg-surface-container text-error font-bold text-xs">
+              REJECT
+            </button>
+            <button onclick="advanceKitchenOrder(3, 'PREPARING')" class="flex-1 py-2.5 rounded-xl bg-primary text-white font-bold text-xs shadow-md">
+              ACCEPT &amp; PREPARE
+            </button>
+          </div>
+        `;
+      } else if (currentKitchenTab === 'PREPARING') {
+        actionsHtml = `
+          <div class="pt-2 border-t border-[#e0d8d5]">
+            <button onclick="advanceKitchenOrder(4, 'READY')" class="w-full py-2.5 rounded-xl bg-primary text-white font-bold text-xs shadow-md">
+              MARK READY FOR PICKUP
+            </button>
+          </div>
+        `;
+      } else if (currentKitchenTab === 'READY') {
+        actionsHtml = `
+          <div class="pt-2 border-t border-[#e0d8d5]">
+            <button onclick="advanceKitchenOrder(5, 'COMPLETED')" class="w-full py-2.5 rounded-xl bg-tertiary text-white font-bold text-xs shadow-md">
+              HANDOVER TO COURIER (RAHUL)
+            </button>
+          </div>
+        `;
+      } else {
+        actionsHtml = `<p class="text-[11px] text-tertiary font-bold text-center pt-1">✓ Order handed over &amp; completed</p>`;
+      }
+
+      listEl.innerHTML = `
+        <div class="p-4 rounded-2xl bg-surface-container-low border border-[#e0d8d5] flex flex-col gap-2.5 text-xs">
+          <div class="flex justify-between items-center pb-1 border-b border-[#e0d8d5]">
+            <span class="font-headline font-black text-sm text-primary">ORDER #${order.id}</span>
+            <span class="text-on-surface-variant font-medium">5 min ago</span>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <span class="font-bold text-[11px] text-on-surface-variant uppercase">${(order.items || []).length} Items</span>
+            ${(order.items || []).map(i => `
+              <div class="flex justify-between font-semibold">
+                <span>${i.qty}× ${i.name}</span>
+                <span>${money(i.qty * i.price)}</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="flex justify-between items-center font-black text-sm pt-1">
+            <span>Bill Total</span>
+            <span class="text-primary">${money(order.bill?.total || 434)}</span>
+          </div>
+
+          ${actionsHtml}
+        </div>
+      `;
+    }
+
+    function advanceKitchenOrder(newStep, nextTab) {
+      const orders = window.Orders ? window.Orders.all() : [];
+      if (orders.length > 0) {
+        window.Orders.updateState(orders[0].id, newStep);
+      }
+      switchKitchenTab(nextTab);
+      alert(`Kitchen status updated! Customer tracking synchronized to Step ${newStep}.`);
+    }
+
+    function renderUserProfile() {
+      const user = window.Auth ? window.Auth.user() : null;
+      const container = document.getElementById('userProfileContainer');
+      const authHeaderBtn = document.getElementById('authHeaderBtn');
+      if (!container) return;
+
+      if (user) {
+        if (authHeaderBtn) authHeaderBtn.textContent = 'Sign Out';
+        const isFarmer = user.role === 'farmer';
+        container.innerHTML = `
+          <div class="relative shrink-0">
+            <img class="w-14 h-14 rounded-full object-cover border-2 border-primary/20" src="${user.picture || (isFarmer ? 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=200&auto=format&fit=crop&q=80' : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&auto=format&fit=crop&q=80')}" alt="${user.name || 'User'}"/>
+            <span class="absolute bottom-0 right-0 w-4 h-4 rounded-full ${isFarmer ? 'bg-tertiary' : 'bg-secondary-container'} border-2 border-white flex items-center justify-center text-[10px] text-white">★</span>
+          </div>
+          <div class="flex flex-col min-w-0 flex-1">
+            <div class="flex items-center gap-2">
+              <h2 class="font-headline text-[16px] font-bold text-on-surface truncate">${user.name || 'Patron'}</h2>
+              <span class="text-[10px] font-bold uppercase tracking-wider ${isFarmer ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-secondary-fixed text-on-secondary-fixed'} px-2 py-0.5 rounded-full shrink-0">${user.tier || (isFarmer ? 'Kisan Partner' : 'Epicure Gold')}</span>
+            </div>
+            <p class="text-xs text-on-surface-variant mt-0.5 truncate">${user.phone || user.email || '+91 98470 88990'} • ${user.address || 'Kompally, Hyderabad'}</p>
+            <div class="flex items-center justify-between mt-1 pt-1 border-t border-[#e0d8d5]">
+              <span class="text-[11px] text-tertiary font-semibold flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">verified</span>
+                ${isFarmer ? 'Kisan Verified Partner' : 'Free delivery active across all kitchens'}
+              </span>
+              <button onclick="window.navigateTo('login')" class="text-[11px] font-bold text-primary hover:underline">
+                Switch
+              </button>
+            </div>
+          </div>
+        `;
+      } else {
+        if (authHeaderBtn) authHeaderBtn.textContent = 'Sign In';
+        container.innerHTML = `
+          <div class="w-12 h-12 rounded-full bg-primary-fixed/40 text-primary flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[26px]">account_circle</span>
+          </div>
+          <div class="flex flex-col min-w-0 flex-1">
+            <h2 class="font-headline text-[15px] font-bold text-on-surface">Sign in to FreshFleet</h2>
+            <p class="text-xs text-on-surface-variant mt-0.5">Access curated dining, table orders, &amp; fast passcode login.</p>
+            <div class="mt-2 flex items-center gap-2">
+              <button onclick="window.navigateTo('login')" class="px-3.5 py-1.5 rounded-xl bg-primary text-white text-xs font-bold shadow-sm active:scale-95 transition-all">
+                Sign In with OTP
+              </button>
+              <button onclick="if(window.Auth){ window.Auth.signInDemo(); } else { localStorage.setItem('deliverapp_user_v1', JSON.stringify({ name: 'Guest Patron', provider: 'demo' })); } renderUserProfile();" class="px-3 py-1.5 rounded-xl bg-surface-container text-on-surface text-xs font-semibold hover:bg-surface-container-high transition-colors">
+                Demo
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function handleAuthAction() {
+      const user = window.Auth ? window.Auth.user() : null;
+      if (user) {
+        if (confirm("Sign out of your account?")) {
+          if (window.Auth) window.Auth.signOut();
+          else localStorage.removeItem('deliverapp_user_v1');
+          try { window.dispatchEvent(new Event('auth:change')); } catch(e){}
+          renderUserProfile();
+        }
+      } else {
+        window.navigateTo('login');
+      }
+    }
+
+    function logoutPrompt() {
+      handleAuthAction();
+    }
+
+    window.addEventListener('auth:change', renderUserProfile);
+    document.addEventListener('DOMContentLoaded', renderAccountScreen);
+  </script>
+</body>
+</html>

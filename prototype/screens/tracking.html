@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html class="h-full bg-surface" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>Live Order Tracking — Royal Dawat &amp; Forno d'Oro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a83211",
+            "primary-container": "#ca4a28",
+            "primary-fixed": "#ffdbd1",
+            "primary-fixed-dim": "#ffb4a1",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#3c0800",
+            "surface": "#fff8f5",
+            "surface-dim": "#e0d8d5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#faf2ee",
+            "surface-container": "#f4ece8",
+            "surface-container-high": "#eee7e3",
+            "on-surface": "#1e1b19",
+            "on-surface-variant": "#59413b",
+            "secondary": "#835500",
+            "secondary-container": "#feae2c",
+            "tertiary": "#006b2c",
+            "tertiary-container": "#00873a",
+            "error": "#ba1a1a"
+          },
+          fontFamily: {
+            headline: ["Epilogue", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: "Plus Jakarta Sans", sans-serif; -webkit-tap-highlight-color: transparent; }
+    h1, h2, h3, h4 { font-family: "Epilogue", sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(168, 50, 17, 0.4); }
+      70% { transform: scale(1.02); box-shadow: 0 0 0 12px rgba(168, 50, 17, 0); }
+      100% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(168, 50, 17, 0); }
+    }
+  </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="/js/config.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/nav.js"></script>
+  <script src="/js/maps.js"></script>
+</head>
+<body class="min-h-full flex flex-col bg-surface text-on-surface antialiased pb-28 selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <!-- Header (Section 11) -->
+  <header class="sticky top-0 z-40 bg-surface/95 backdrop-blur-md pt-[env(safe-area-inset-top)] border-b border-[#e0d8d5] shadow-sm">
+    <div class="h-14 px-4 flex items-center justify-between">
+      <div class="flex items-center gap-2 min-w-0">
+        <button data-nav="home" aria-label="Go back" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all -ml-1">
+          <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+        </button>
+        <div class="flex flex-col min-w-0">
+          <h1 class="font-headline text-[15px] font-bold text-on-surface truncate">Order Tracking</h1>
+          <p id="trackingHeaderSubtitle" class="text-[11px] font-medium text-on-surface-variant truncate">Order #12345 • Royal Dawat &amp; Forno d'Oro</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-[11px] font-bold shrink-0">
+        <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+        <span id="liveStatusBadge">LIVE GPS</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 flex flex-col pt-1">
+
+    <!-- Interactive 7-State Simulation Bar (Section 12: Tracking States) -->
+    <div class="px-4 py-2 max-w-lg mx-auto w-full">
+      <div class="bg-surface-container-low rounded-2xl p-2.5 border border-[#e0d8d5] flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[10px] font-black uppercase tracking-wider text-primary flex items-center gap-1">
+            <span class="material-symbols-outlined text-[13px]">tune</span> State Simulator (1–7)
+          </span>
+          <button onclick="autoAdvanceState()" class="text-[10px] font-bold bg-primary text-white px-2 py-0.5 rounded-full hover:bg-primary-container active:scale-95 transition-all">
+            Next Step →
+          </button>
+        </div>
+        <!-- 7 clickable step pills -->
+        <div class="grid grid-cols-7 gap-1 text-center">
+          <button onclick="setTrackingState(1)" class="state-pill py-1 rounded-lg text-[9px] font-bold border border-[#e0d8d5] bg-white transition-all" data-step="1">1</button>
+          <button onclick="setTrackingState(2)" class="state-pill py-1 rounded-lg text-[9px] font-bold border border-[#e0d8d5] bg-white transition-all" data-step="2">2</button>
+          <button onclick="setTrackingState(3)" class="state-pill py-1 rounded-lg text-[9px] font-bold border border-[#e0d8d5] bg-white transition-all" data-step="3">3</button>
+          <button onclick="setTrackingState(4)" class="state-pill py-1 rounded-lg text-[9px] font-bold border border-[#e0d8d5] bg-white transition-all" data-step="4">4</button>
+          <button onclick="setTrackingState(5)" class="state-pill py-1 rounded-lg text-[9px] font-bold border border-[#e0d8d5] bg-white transition-all" data-step="5">5</button>
+          <button onclick="setTrackingState(6)" class="state-pill py-1 rounded-lg text-[9px] font-bold border border-[#e0d8d5] bg-white transition-all" data-step="6">6</button>
+          <button onclick="setTrackingState(7)" class="state-pill py-1 rounded-lg text-[9px] font-bold border border-[#e0d8d5] bg-white transition-all" data-step="7">7</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Map Container with Border Box Card & Exit Controls (Section 11) -->
+    <div class="px-4 pt-1 pb-2 max-w-lg mx-auto w-full">
+      <div id="mapBorderBox" class="bg-surface-container-lowest rounded-2xl border-2 border-[#e0d8d5] shadow-md overflow-hidden flex flex-col transition-all duration-300">
+        <!-- Border Box Header Bar -->
+        <div class="bg-surface-container-low px-3.5 py-2.5 border-b border-[#e0d8d5] flex items-center justify-between text-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse shrink-0"></span>
+            <div class="flex flex-col min-w-0">
+              <span class="font-headline font-bold text-on-surface text-[12px] truncate">Live Delivery Radar (45–55%)</span>
+              <span class="text-[10px] font-medium text-on-surface-variant truncate">Maisammaguda, Dulapally 500100 • Live GPS Active</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button id="btnKeepSurroundings" type="button" title="Center Surrounding Location" class="px-2 py-1 rounded-lg bg-surface hover:bg-surface-container text-on-surface text-[11px] font-semibold flex items-center gap-1 border border-[#e0d8d5] active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-[14px]">my_location</span>
+              <span class="hidden sm:inline">Center</span>
+            </button>
+            <button id="btnToggleMapHeight" type="button" title="Minimize / Expand Map" class="px-2 py-1 rounded-lg bg-surface hover:bg-surface-container text-on-surface text-[11px] font-semibold flex items-center gap-1 border border-[#e0d8d5] active:scale-95 transition-all">
+              <span id="mapToggleIcon" class="material-symbols-outlined text-[14px]">expand_less</span>
+            </button>
+            <button id="btnExitMap" type="button" class="px-2.5 py-1 rounded-lg bg-primary text-white text-[11px] font-bold flex items-center gap-1 shadow-sm hover:bg-primary-container active:scale-95 transition-all">
+              <span class="material-symbols-outlined text-[13px]">arrow_downward</span>
+              <span>Exit Map</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Map Viewport -->
+        <div id="mapViewport" class="relative w-full h-80 sm:h-96 bg-[#eee7e3] transition-[height] duration-300">
+          <div id="liveMap" class="w-full h-full"></div>
+
+          <!-- Floating Exit Map Overlay Badge -->
+          <button id="btnFloatingExitMap" type="button" class="absolute top-2.5 right-2.5 z-[400] px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-on-surface text-[11px] font-bold shadow-lg border border-[#e0d8d5] flex items-center gap-1.5 hover:bg-white active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[14px] text-primary">south</span>
+            <span>Exit Map</span>
+          </button>
+
+          <!-- Floating Surroundings Indicator -->
+          <div class="absolute bottom-2.5 left-2.5 z-[400] px-2.5 py-1 rounded-lg bg-surface/90 backdrop-blur-md text-[10px] font-bold text-on-surface border border-[#e0d8d5] flex items-center gap-1.5 shadow">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+            <span>1.5 km Delivery Radius</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Telemetry Info Section (Section 11) -->
+    <div id="orderDetailsSection" class="px-4 pt-1 relative z-10 max-w-lg mx-auto w-full flex flex-col gap-4">
+
+      <!-- Dynamic ETA & Status Big Card (Section 11 & 12) -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0_8px_24px_-4px_rgba(28,25,23,0.1)] border border-[#e0d8d5] flex items-center justify-between">
+        <div class="flex flex-col min-w-0 pr-2">
+          <span id="etaStatusBadge" class="text-[11px] font-black uppercase tracking-wider text-primary">Out for delivery</span>
+          <h2 id="etaMinutesText" class="font-headline text-[26px] font-black text-on-surface leading-tight mt-0.5">Arriving in 18 min</h2>
+          <p id="etaSubText" class="text-xs text-on-surface-variant mt-0.5 leading-snug">Delivery partner is on the way heading towards Kompally</p>
+        </div>
+        <div id="etaIconBox" class="w-14 h-14 rounded-2xl bg-primary-fixed/50 flex flex-col items-center justify-center text-primary font-bold shrink-0">
+          <span id="etaIcon" class="material-symbols-outlined text-[26px]">electric_moped</span>
+          <span id="etaIconLabel" class="text-[9px] uppercase tracking-wider font-extrabold mt-0.5">On Way</span>
+        </div>
+      </div>
+
+      <!-- 7-Stage Order Status Stepper (Section 11 & 12) -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-3">
+        <div class="flex items-center justify-between pb-1 border-b border-[#e0d8d5]/80">
+          <span class="font-headline text-xs font-bold text-on-surface uppercase tracking-wider">Order Status Timeline</span>
+          <span id="currentStepLabel" class="text-[11px] font-bold text-primary">Step 6 of 7</span>
+        </div>
+
+        <div id="timelineList" class="flex flex-col gap-3 pl-1 text-xs">
+          <!-- Injected dynamically via renderTimeline() -->
+        </div>
+      </div>
+
+      <!-- Delivery Partner Card (Section 11) -->
+      <div id="deliveryPartnerCard" class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="relative shrink-0">
+            <img class="w-12 h-12 rounded-full object-cover border-2 border-primary/20" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Rahul"/>
+            <span class="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-tertiary border-2 border-white"></span>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="font-headline text-sm font-bold text-on-surface">Rahul V.</span>
+              <span class="text-[10px] font-bold bg-secondary-fixed text-on-secondary-fixed px-1.5 py-0.2 rounded-full flex items-center gap-0.5">
+                <span class="material-symbols-outlined text-[11px]" style="font-variation-settings: 'FILL' 1;">star</span> 4.8
+              </span>
+            </div>
+            <p class="text-[11px] text-on-surface-variant truncate">Electric Vespa • TS-08-EK-5012</p>
+            <p class="text-[10px] font-bold text-tertiary">Gold Courier (1,420+ deliveries)</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2 shrink-0">
+          <!-- Call Button -->
+          <a href="tel:+919847012345" class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-md hover:bg-primary-container active:scale-95 transition-all" title="Call Rahul">
+            <span class="material-symbols-outlined text-[18px]">call</span>
+          </a>
+          <!-- Chat Button -->
+          <button onclick="openChatDrawer()" class="w-10 h-10 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high flex items-center justify-center shadow-sm active:scale-95 transition-all" title="Chat with Rahul">
+            <span class="material-symbols-outlined text-[18px]">chat</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Order Details Summary Card (Section 11) -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-2.5 text-xs">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="font-headline font-bold text-on-surface" id="summaryHeaderItems">2 Items</span>
+            <span class="font-bold text-primary" id="summaryHeaderTotal">₹434</span>
+          </div>
+          <button onclick="openReceiptModal()" class="text-xs font-bold text-primary hover:underline flex items-center gap-0.5">
+            <span>View Details</span>
+            <span class="material-symbols-outlined text-[14px]">receipt</span>
+          </button>
+        </div>
+        <p class="text-[11px] text-on-surface-variant truncate">Delivering to: Flat 302, Green Meadows, Kompally, Hyderabad</p>
+      </div>
+
+      <!-- Rating Prompt Card (Triggered upon State 7: Delivered) -->
+      <div id="ratingTriggerCard" class="hidden bg-surface-container-lowest rounded-2xl p-4 border-2 border-primary/40 shadow-md flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <span class="font-headline font-bold text-sm text-on-surface">Order Delivered! 🎉</span>
+          <span class="text-xs font-bold text-tertiary">Enjoy your meal</span>
+        </div>
+        <p class="text-xs text-on-surface-variant">How was your culinary experience with Royal Dawat &amp; Rahul?</p>
+        <button onclick="openRatingModal()" class="w-full py-2.5 rounded-full bg-primary text-white font-bold text-xs shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">grade</span>
+          <span>Rate Your Order</span>
+        </button>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- In-App Courier Live Chat Drawer -->
+  <div id="chatDrawer" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl flex flex-col gap-3 h-[70vh]">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full overflow-hidden">
+            <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80" alt="Rahul"/>
+          </div>
+          <div>
+            <h4 class="font-bold text-xs text-on-surface">Rahul V. (Courier)</h4>
+            <span class="text-[10px] text-tertiary font-bold">Online • En Route</span>
+          </div>
+        </div>
+        <button onclick="closeChatDrawer()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+
+      <div id="chatMessages" class="flex-1 overflow-y-auto flex flex-col gap-2 p-1 text-xs">
+        <div class="self-start max-w-[80%] bg-surface-container p-2.5 rounded-2xl text-on-surface">
+          Hi Aarav! I have safely collected your order from Royal Dawat &amp; Forno d'Oro. I'm currently on Medchal Highway.
+        </div>
+        <div class="self-start max-w-[80%] bg-surface-container p-2.5 rounded-2xl text-on-surface">
+          Will reach Flat 302 in approximately 12–15 minutes!
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 pt-2 border-t border-[#e0d8d5]">
+        <input id="chatInput" placeholder="Type a message to Rahul..." class="flex-1 bg-surface-container-low border border-[#e0d8d5] rounded-full px-3 py-2 text-xs text-on-surface outline-none focus:border-primary"/>
+        <button onclick="sendChatMessage()" class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center shadow-sm">
+          <span class="material-symbols-outlined text-[16px]">send</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Rating UI Modal (Section 17: Rating UI) -->
+  <div id="ratingModal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-3xl p-5 shadow-2xl flex flex-col gap-4 max-h-[90vh] overflow-y-auto border border-[#e0d8d5]">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <h3 class="font-headline text-base font-bold text-on-surface">How was your order?</h3>
+        <button onclick="closeRatingModal()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+
+      <!-- Restaurant Rating Stars -->
+      <div class="flex flex-col gap-1.5 text-center bg-surface-container-low p-3.5 rounded-2xl">
+        <span class="font-headline font-bold text-xs text-on-surface">Rate Restaurant (Royal Dawat &amp; Forno d'Oro)</span>
+        <div class="flex justify-center gap-2 text-2xl cursor-pointer text-[#e0d8d5] py-1" id="restStars">
+          <span onclick="setStars('rest', 1)" class="star">★</span>
+          <span onclick="setStars('rest', 2)" class="star">★</span>
+          <span onclick="setStars('rest', 3)" class="star">★</span>
+          <span onclick="setStars('rest', 4)" class="star">★</span>
+          <span onclick="setStars('rest', 5)" class="star">★</span>
+        </div>
+      </div>
+
+      <!-- Delivery Partner Rating Stars -->
+      <div class="flex flex-col gap-1.5 text-center bg-surface-container-low p-3.5 rounded-2xl">
+        <span class="font-headline font-bold text-xs text-on-surface">Rate Delivery Partner (Rahul V.)</span>
+        <div class="flex justify-center gap-2 text-2xl cursor-pointer text-[#e0d8d5] py-1" id="driverStars">
+          <span onclick="setStars('driver', 1)" class="star">★</span>
+          <span onclick="setStars('driver', 2)" class="star">★</span>
+          <span onclick="setStars('driver', 3)" class="star">★</span>
+          <span onclick="setStars('driver', 4)" class="star">★</span>
+          <span onclick="setStars('driver', 5)" class="star">★</span>
+        </div>
+      </div>
+
+      <!-- Optional Tag Badges (Section 17) -->
+      <div class="flex flex-col gap-1.5">
+        <span class="font-bold text-[11px] text-on-surface-variant">What went well? (Select tags)</span>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <button type="button" onclick="toggleReviewTag(this, 'Food Quality')" class="rev-tag px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface">
+            Food Quality
+          </button>
+          <button type="button" onclick="toggleReviewTag(this, 'Packaging')" class="rev-tag px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface">
+            Packaging
+          </button>
+          <button type="button" onclick="toggleReviewTag(this, 'Delivery')" class="rev-tag px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface">
+            Fast Delivery
+          </button>
+          <button type="button" onclick="toggleReviewTag(this, 'Taste')" class="rev-tag px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface">
+            Authentic Taste
+          </button>
+          <button type="button" onclick="toggleReviewTag(this, 'Value for Money')" class="rev-tag px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface">
+            Value for Money
+          </button>
+        </div>
+      </div>
+
+      <!-- Textarea Review -->
+      <div class="flex flex-col gap-1">
+        <label class="font-bold text-[11px] text-on-surface-variant">Write a review</label>
+        <textarea id="reviewTextInput" rows="3" placeholder="Tell us about your culinary experience..." class="w-full bg-surface-container-low border border-[#e0d8d5] rounded-xl p-2.5 text-xs text-on-surface outline-none focus:border-primary resize-none"></textarea>
+      </div>
+
+      <!-- Submit Review CTA -->
+      <button onclick="submitReviewFeedback()" class="w-full py-3.5 rounded-full bg-primary text-white font-bold text-xs shadow-md active:scale-95 transition-all">
+        SUBMIT REVIEW
+      </button>
+    </div>
+  </div>
+
+  <!-- Receipt & Tax Invoice Modal -->
+  <div id="receiptModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-3xl p-5 shadow-2xl flex flex-col gap-3 max-h-[90vh] overflow-y-auto border border-[#e0d8d5]">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <h3 class="font-headline text-base font-bold text-on-surface">Tax Invoice &amp; Receipt</h3>
+        <button onclick="closeReceiptModal()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+      <div id="receiptContent" class="text-xs flex flex-col gap-2 text-on-surface">
+        <!-- Injected via JS -->
+      </div>
+      <div class="flex gap-2 pt-2 border-t border-[#e0d8d5]">
+        <button onclick="window.print()" class="flex-1 py-2.5 rounded-xl bg-surface-container text-on-surface font-bold text-xs">Print</button>
+        <button onclick="downloadReceiptTxt()" class="flex-1 py-2.5 rounded-xl bg-primary text-white font-bold text-xs">Download</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentOrder = null;
+    let currentStep = 6; // Default to 'Out for Delivery' (State 6)
+    let restRating = 5;
+    let driverRating = 5;
+    let selectedReviewTags = [];
+
+    function renderTrackingScreen() {
+      const orders = window.Orders ? window.Orders.all() : [];
+      currentOrder = (window.Orders ? window.Orders.active() : null) || orders[0];
+
+      if (currentOrder) {
+        document.getElementById('trackingHeaderSubtitle').textContent = `Order #${currentOrder.id} • ${currentOrder.restaurant?.name || "Royal Dawat & Forno d'Oro"}`;
+        currentStep = currentOrder.stateStep || 6;
+      }
+
+      applyTrackingStep(currentStep);
+    }
+
+    function setTrackingState(step) {
+      currentStep = step;
+      if (currentOrder) {
+        window.Orders.updateState(currentOrder.id, step);
+      }
+      applyTrackingStep(step);
+    }
+
+    function autoAdvanceState() {
+      let next = currentStep + 1;
+      if (next > 7) next = 1;
+      setTrackingState(next);
+    }
+
+    function applyTrackingStep(step) {
+      const stepData = (window.TRACKING_STATES || []).find(s => s.id === step) || window.TRACKING_STATES[5];
+
+      // Update simulator pills
+      document.querySelectorAll('.state-pill').forEach(btn => {
+        const s = parseInt(btn.getAttribute('data-step'), 10);
+        btn.classList.toggle('bg-primary', s === step);
+        btn.classList.toggle('text-white', s === step);
+        btn.classList.toggle('border-primary', s === step);
+        btn.classList.toggle('bg-white', s !== step);
+        btn.classList.toggle('text-on-surface', s !== step);
+      });
+
+      // Update ETA Big Card
+      document.getElementById('etaStatusBadge').textContent = stepData.title;
+      document.getElementById('etaMinutesText').textContent = step === 7 ? 'Delivered 🎉' : `Arriving in ${stepData.eta}`;
+      document.getElementById('etaSubText').textContent = stepData.sub;
+      document.getElementById('etaIcon').textContent = stepData.icon;
+      document.getElementById('currentStepLabel').textContent = `Step ${step} of 7`;
+
+      // Update Header Badge
+      document.getElementById('liveStatusBadge').textContent = step === 7 ? 'COMPLETED' : 'LIVE GPS';
+
+      // Toggle Rating Trigger Card
+      const ratingCard = document.getElementById('ratingTriggerCard');
+      if (step === 7) {
+        ratingCard.classList.remove('hidden');
+        ratingCard.classList.add('flex');
+      } else {
+        ratingCard.classList.add('hidden');
+        ratingCard.classList.remove('flex');
+      }
+
+      // Render timeline list
+      renderTimeline(step);
+
+      // Render items summary
+      if (currentOrder && currentOrder.items) {
+        document.getElementById('summaryHeaderItems').textContent = `${currentOrder.items.length} Items`;
+        document.getElementById('summaryHeaderTotal').textContent = money(currentOrder.bill?.total || 434);
+      }
+    }
+
+    function renderTimeline(activeStep) {
+      const list = document.getElementById('timelineList');
+      const allStates = window.TRACKING_STATES || [];
+
+      list.innerHTML = allStates.map(s => {
+        const isDone = s.id < activeStep;
+        const isCurrent = s.id === activeStep;
+        const isPending = s.id > activeStep;
+
+        let iconBg = 'bg-surface-container text-on-surface-variant';
+        let iconName = s.icon;
+        if (isDone) {
+          iconBg = 'bg-tertiary text-white';
+          iconName = 'check';
+        } else if (isCurrent) {
+          iconBg = 'bg-primary text-white pulse-glow';
+        }
+
+        return `
+          <div class="flex items-start gap-3 relative ${isPending ? 'opacity-40' : ''}">
+            <div class="w-6 h-6 rounded-full ${iconBg} flex items-center justify-center shrink-0 z-10 text-xs">
+              <span class="material-symbols-outlined text-[14px]">${iconName}</span>
+            </div>
+            <div class="flex flex-col min-w-0">
+              <span class="font-bold text-[13px] ${isCurrent ? 'text-primary' : 'text-on-surface'}">${s.title}</span>
+              <span class="text-[11px] text-on-surface-variant">${s.sub}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Chat Drawer
+    function openChatDrawer() {
+      document.getElementById('chatDrawer').classList.remove('hidden');
+    }
+    function closeChatDrawer() {
+      document.getElementById('chatDrawer').classList.add('hidden');
+    }
+    function sendChatMessage() {
+      const inp = document.getElementById('chatInput');
+      const val = inp.value.trim();
+      if (!val) return;
+      const msgs = document.getElementById('chatMessages');
+      msgs.innerHTML += `
+        <div class="self-end max-w-[80%] bg-primary text-white p-2.5 rounded-2xl">${val}</div>
+      `;
+      inp.value = '';
+      msgs.scrollTop = msgs.scrollHeight;
+      setTimeout(() => {
+        msgs.innerHTML += `
+          <div class="self-start max-w-[80%] bg-surface-container p-2.5 rounded-2xl text-on-surface">Got it! Taking the flyover towards Kompally now.</div>
+        `;
+        msgs.scrollTop = msgs.scrollHeight;
+      }, 900);
+    }
+
+    // Rating UI
+    function openRatingModal() {
+      setStars('rest', 5);
+      setStars('driver', 5);
+      document.getElementById('ratingModal').classList.remove('hidden');
+    }
+    function closeRatingModal() {
+      document.getElementById('ratingModal').classList.add('hidden');
+    }
+
+    function setStars(type, rating) {
+      if (type === 'rest') restRating = rating;
+      if (type === 'driver') driverRating = rating;
+
+      const container = document.getElementById(type === 'rest' ? 'restStars' : 'driverStars');
+      const stars = container.querySelectorAll('.star');
+      stars.forEach((s, idx) => {
+        if (idx < rating) {
+          s.classList.add('text-secondary');
+          s.classList.remove('text-[#e0d8d5]');
+        } else {
+          s.classList.remove('text-secondary');
+          s.classList.add('text-[#e0d8d5]');
+        }
+      });
+    }
+
+    function toggleReviewTag(btn, tag) {
+      btn.classList.toggle('border-primary');
+      btn.classList.toggle('bg-primary-fixed/30');
+      btn.classList.toggle('text-primary');
+      const idx = selectedReviewTags.indexOf(tag);
+      if (idx >= 0) selectedReviewTags.splice(idx, 1);
+      else selectedReviewTags.push(tag);
+    }
+
+    function submitReviewFeedback() {
+      const text = document.getElementById('reviewTextInput').value.trim();
+      if (currentOrder) {
+        window.Orders.submitReview(currentOrder.id, {
+          restaurantRating: restRating,
+          deliveryRating: driverRating,
+          reviewText: text,
+          tags: selectedReviewTags
+        });
+      }
+      closeRatingModal();
+      alert("🎉 Thank you! Your review for Royal Dawat & Rahul has been submitted.");
+    }
+
+    // Receipt Modal
+    function openReceiptModal() {
+      if (!currentOrder) return;
+      const content = document.getElementById('receiptContent');
+      content.innerHTML = `
+        <div class="flex justify-between items-center bg-surface-container-low p-2 rounded-xl">
+          <span class="font-bold">Order #${currentOrder.id}</span>
+          <span class="text-tertiary font-bold">${currentOrder.statusText || 'In Transit'}</span>
+        </div>
+        <div class="font-bold uppercase tracking-wider text-[11px] pt-1">Items</div>
+        ${(currentOrder.items || []).map(i => `
+          <div class="flex justify-between">
+            <span>${i.qty}× ${i.name}</span>
+            <span class="font-bold">${money(i.qty * i.price)}</span>
+          </div>
+        `).join('')}
+        <div class="border-t border-[#e0d8d5] pt-1 mt-1 flex justify-between font-black text-sm">
+          <span>Total Paid</span>
+          <span class="text-primary">${money(currentOrder.bill?.total || 434)}</span>
+        </div>
+      `;
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.add('hidden');
+    }
+
+    function downloadReceiptTxt() {
+      if (!currentOrder) return;
+      const txt = `DeliverApp Receipt - Order #${currentOrder.id}\nTotal: ${money(currentOrder.bill?.total || 434)}\nKompally, Hyderabad`;
+      const blob = new Blob([txt], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Receipt_${currentOrder.id}.txt`;
+      a.click();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderTrackingScreen();
+      if (window.initTrackingMap) {
+        window.initTrackingMap({ mountId: 'liveMap' });
+      }
+    });
+  </script>
+</body>
+</html>

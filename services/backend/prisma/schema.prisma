@@ -1,0 +1,251 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  CUSTOMER
+  RESTAURANT_STAFF
+  RIDER
+  ADMIN
+}
+
+enum OrderStatus {
+  PLACED
+  ACCEPTED
+  PREPARING
+  READY_FOR_PICKUP
+  PICKED_UP
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentGateway {
+  RAZORPAY
+  STRIPE
+  COD
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+enum RiderStatus {
+  OFFLINE
+  IDLE
+  BUSY
+}
+
+model User {
+  id           String      @id @default(uuid())
+  phone        String      @unique
+  name         String?
+  email        String?     @unique
+  role         UserRole    @default(CUSTOMER)
+  isGoldMember Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  addresses    Address[]
+  orders       Order[]
+  payments     PaymentIntent[]
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tag        String   @default("HOME") // HOME | WORK | OTHER
+  label      String
+  street     String
+  area       String
+  city       String
+  postalCode String
+  latitude   Float
+  longitude  Float
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Restaurant {
+  id                     String         @id @default(uuid())
+  name                   String
+  tagline                String
+  cuisine                String[]
+  rating                 Float          @default(4.8)
+  totalReviews           Int            @default(0)
+  avgPreparationMinutes  Int            @default(25)
+  deliveryTimeEstimate   String         @default("25-30 mins")
+  distanceKm             Float          @default(1.2)
+  pureVeg                Boolean        @default(false)
+  isOpen                 Boolean        @default(true)
+  heroImageUrl           String
+  logoUrl                String?
+  street                 String
+  area                   String
+  city                   String
+  latitude               Float
+  longitude              Float
+  contactPhone           String
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+
+  categories             MenuCategory[]
+  orders                 Order[]
+}
+
+model MenuCategory {
+  id           String     @id @default(uuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  name         String
+  sortOrder    Int        @default(0)
+
+  items        MenuItem[]
+}
+
+model MenuItem {
+  id           String       @id @default(uuid())
+  restaurantId String
+  categoryId   String
+  category     MenuCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  name         String
+  description  String
+  price        Float
+  isVeg        Boolean      @default(true)
+  isAvailable  Boolean      @default(true)
+  imageUrl     String?
+  tag          String?      // Bestseller, Chef Pick
+  optionGroups Json?        // Stored customization options
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  orderItems   OrderItem[]
+}
+
+model Order {
+  id                       String          @id @default(uuid())
+  customerId               String
+  customer                 User            @relation(fields: [customerId], references: [id])
+  customerName             String
+  customerPhone            String
+  restaurantId             String
+  restaurant               Restaurant      @relation(fields: [restaurantId], references: [id])
+  restaurantName           String
+  riderId                  String?
+  rider                    Rider?          @relation(fields: [riderId], references: [id])
+
+  status                   OrderStatus     @default(PLACED)
+  subtotal                 Float
+  tax                      Float
+  deliveryFee              Float
+  riderTip                 Float           @default(0)
+  discount                 Float           @default(0)
+  couponCode               String?
+  total                    Float
+
+  deliveryAddressLabel     String
+  deliveryStreet           String
+  deliveryArea             String
+  deliveryCity             String
+  deliveryLatitude         Float
+  deliveryLongitude        Float
+  deliveryInstructions     String?
+
+  paymentId                String?
+  paymentMode              PaymentGateway  @default(RAZORPAY)
+  idempotencyKey           String?         @unique
+  estimatedDeliveryMinutes Int             @default(30)
+  createdAt                DateTime        @default(now())
+  updatedAt                DateTime        @updatedAt
+
+  items                    OrderItem[]
+  auditLogs                OrderAuditLog[]
+  payments                 PaymentIntent[]
+
+  @@index([status])
+  @@index([customerId])
+  @@index([restaurantId])
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  name       String
+  unitPrice  Float
+  quantity   Int
+  totalPrice Float
+  options    Json?
+  notes      String?
+}
+
+model OrderAuditLog {
+  id             String      @id @default(uuid())
+  orderId        String
+  order          Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  previousStatus OrderStatus
+  newStatus      OrderStatus
+  changedBy      String      // CUSTOMER | RESTAURANT | RIDER | SYSTEM
+  reason         String?
+  metadata       Json?
+  timestamp      DateTime    @default(now())
+
+  @@index([orderId])
+}
+
+model PaymentIntent {
+  id               String         @id @default(uuid())
+  orderId          String
+  order            Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User           @relation(fields: [userId], references: [id])
+  gateway          PaymentGateway
+  amount           Int            // In paise or cents
+  currency         String         @default("INR")
+  status           PaymentStatus  @default(PENDING)
+  gatewayOrderId   String?
+  gatewayPaymentId String?
+  idempotencyKey   String         @unique
+  createdAt        DateTime       @default(now())
+  capturedAt       DateTime?
+}
+
+model Rider {
+  id              String         @id @default(uuid())
+  name            String
+  phone           String         @unique
+  avatarUrl       String?
+  vehicleType     String         @default("ELECTRIC_VESPA")
+  vehiclePlate    String
+  rating          Float          @default(4.9)
+  totalDeliveries Int            @default(0)
+  status          RiderStatus    @default(IDLE)
+  latitude        Float          @default(9.9312)
+  longitude       Float          @default(76.2673)
+  updatedAt       DateTime       @updatedAt
+
+  orders          Order[]
+}
+
+model IdempotencyKey {
+  key          String   @id
+  method       String
+  endpoint     String
+  statusCode   Int
+  responseBody Json
+  createdAt    DateTime @default(now())
+
+  @@index([createdAt])
+}

@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "Epicurean — DeliverApp",
+    "slug": "deliverapp-customer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0c0a09"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.epicurean.deliverapp.customer"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0c0a09"
+      },
+      "package": "com.epicurean.deliverapp.customer"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}

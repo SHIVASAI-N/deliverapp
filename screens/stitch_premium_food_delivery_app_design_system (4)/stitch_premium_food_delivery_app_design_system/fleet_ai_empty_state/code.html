@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#fff8f5;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-tint": "#b32a00", "inverse-surface": "#342f2c", "surface": "#fff8f5", "on-background": "#1f1b18", "primary-fixed-dim": "#ffb4a1", "inverse-on-surface": "#f8efea", "surface-dim": "#e1d8d3", "surface-container-high": "#f0e6e1", "secondary-fixed-dim": "#cec5bf", "outline": "#8f7068", "on-tertiary": "#ffffff", "inverse-primary": "#ffb4a1", "on-surface-variant": "#5b403a", "surface-variant": "#eae1db", "on-secondary-fixed-variant": "#4c4641", "primary": "#af2900", "tertiary": "#615b54", "outline-variant": "#e4beb5", "surface-container": "#f6ece7", "surface-bright": "#fff8f5", "on-error": "#ffffff", "on-tertiary-fixed": "#1f1b16", "surface-container-lowest": "#ffffff", "error-container": "#ffdad6", "on-surface": "#1f1b18", "primary-container": "#d63c0f", "surface-container-low": "#fbf2ec", "on-tertiary-fixed-variant": "#4b4640", "on-primary-container": "#fffbff", "primary-fixed": "#ffdbd2", "background": "#fff8f5", "on-secondary-container": "#6a635e", "tertiary-fixed-dim": "#cdc5bd", "on-secondary": "#ffffff", "error": "#ba1a1a", "on-primary-fixed": "#3c0800", "on-tertiary-container": "#fffbff", "on-secondary-fixed": "#1f1b17", "secondary": "#645d58", "on-primary": "#ffffff", "on-error-container": "#93000a", "secondary-container": "#ebe1da", "on-primary-fixed-variant": "#891e00", "tertiary-fixed": "#eae1d8", "surface-container-highest": "#eae1db", "secondary-fixed": "#ebe1da", "tertiary-container": "#7a746c" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-lg": "1.5rem", "gutter-desktop": "2rem", "margin-desktop": "3rem", "margin-tablet": "2rem", "space-xs": "0.25rem", "gutter-tablet": "1.5rem", "space-xl": "2.5rem", "margin": "1.25rem", "gutter": "1rem", "space-sm": "0.5rem", "space-md": "1rem" }, fontFamily: { "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-md": ["Playfair Display"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "display-lg-mobile": ["Playfair Display"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Playfair Display"], "display-lg": ["Playfair Display"], "body-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Playfair Display"], "label-sm": ["Plus Jakarta Sans"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600" }], "label-lg": ["15px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0", "fontWeight": "400" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "0", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center"><button aria-label="Go back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:bg-surface-variant/40 transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[22px]">arrow_back</span></button></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[20px]">auto_awesome</span><h1 class="font-headline-sm text-headline-sm text-on-surface">Fleet Ai</h1></div><div class="flex items-center gap-space-xs"><button aria-label="Chat History" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors"><span class="material-symbols-outlined text-[22px]">history</span></button><button aria-label="New Chat" class="w-11 h-11 flex items-center justify-center rounded-full text-primary hover:bg-primary-fixed/30 transition-colors"><span class="material-symbols-outlined text-[22px]">edit_square</span></button><div class="w-8 h-8 ml-space-xs rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface"><div class="flex flex-col w-full relative pb-safe">
+<!-- Warm Radial Ambient Background Glow -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-80 bg-gradient-to-b from-primary-fixed/40 via-surface-container/20 to-transparent blur-3xl pointer-events-none rounded-full -z-10"></div>
+<!-- Editorial Greeting Section -->
+<section class="px-margin pt-space-md pb-space-lg flex flex-col items-start relative">
+<div class="inline-flex items-center gap-space-xs px-space-sm py-1 bg-surface-container-high rounded-full shadow-sm mb-space-sm">
+<span class="material-symbols-outlined text-primary text-[14px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Curated Culinary Intelligence</span>
+</div>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface">
+      Good evening, Rahul.
+    </h2>
+<p class="font-display-lg-mobile text-display-lg-mobile text-primary mt-space-xs">
+      What are you craving?
+    </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-space-xs flex items-center gap-1">
+<span class="material-symbols-outlined text-outline text-[16px]">verified</span>
+      Trained on 400+ Michelin &amp; artisan kitchens in Bangalore.
+    </p>
+</section>
+<!-- Visual Epicurean Inspiration Carousel Strip -->
+<section class="mb-space-lg">
+<div class="px-margin flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">local_fire_department</span>
+        Chef's Evening Highlights
+      </span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Live Menus</span>
+</div>
+<div class="flex gap-space-md overflow-x-auto px-margin no-scrollbar pb-1">
+<!-- Highlight Tile 1 -->
+<div class="flex-shrink-0 w-64 bg-surface-container-lowest rounded-xl shadow-sm p-space-sm flex flex-col">
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Artisanal hand-stretched sourdough neapolitan pizza with blistered charred crust, creamy burrata cheese dollops, vibrant green basil leaves, and golden extra virgin olive oil drizzle on a rustic dark slate table under warm moody ambient restaurant lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXwDs7giFXwl5iZ38I9buAB9XxEnhY4LhsHiEf6RgZDd0VQ3OwNc9aE7NcVhgOau1KjASBUpysaFUSwP9dOGJMCRG7EWYAMGzHRttk7Ls51b7D6qkRr918Dp4iitQXffp9-_gR8yxyj4XmEn8ueAjDNFznJfZjhturY1kjoMMGiEnGxHrRjaMo5vtgYth-tgR5akp2u9b4Gcj0BkzzxrMat7L3TN_6isiTYWD16I7ynfqcu2bvkdzd"/>
+<span class="absolute top-2 right-2 bg-inverse-surface/80 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm px-2 py-0.5 rounded-full">
+            Indiranagar
+          </span>
+</div>
+<div class="mt-space-sm flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Forno Antico</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Woodfired Truffle Pies</p>
+</div>
+<span class="font-label-md text-label-md text-primary bg-primary-fixed/40 px-2 py-1 rounded-full">₹₹₹</span>
+</div>
+</div>
+<!-- Highlight Tile 2 -->
+<div class="flex-shrink-0 w-64 bg-surface-container-lowest rounded-xl shadow-sm p-space-sm flex flex-col">
+<div class="relative w-full h-32 rounded-lg overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Plated gourmet hand-rolled salmon sashimi and truffle nigiri on delicate ceramic dish with microgreens, gold leaf accents, and soy reduction in high-end luxury Japanese omakase setting with warm dramatic lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDO6ePb2H3RNP1z3ZodHD_nTSLyIaQaPtfV0IcR1wi620Ui8ydUGIPJyhkMzTWizVUxuadwX3vsR28A17jcH7Orz4sM3Cto6FWppDo0JM74x6J0tdAIMdP9j78VmuhSq_43WJLb9n02u5hgpcxvhlsrvX_Gr15b0W7tV4VPkY5htr2M0827-JZcl981-l2nUIfpjMpg629LnBAMGthOivmVRJFbHhPZLwwuCBOn_uWppqAoVH6Iedcr"/>
+<span class="absolute top-2 right-2 bg-inverse-surface/80 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm px-2 py-0.5 rounded-full">
+            Lavelle Rd
+          </span>
+</div>
+<div class="mt-space-sm flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface leading-tight">Yūgen Omakase</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Wild Bluefin &amp; Toro</p>
+</div>
+<span class="font-label-md text-label-md text-primary bg-primary-fixed/40 px-2 py-1 rounded-full">₹₹₹₹</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Suggestion Cards Grid (2x2) -->
+<section class="px-margin mb-space-lg">
+<div class="grid grid-cols-2 gap-space-md">
+<!-- Card 1: Budget -->
+<button class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm text-left flex flex-col justify-between hover:bg-surface-container transition-all active:scale-[0.98]" onclick="fillPrompt('Best dinner options under ₹300 near me')">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[22px]">currency_rupee</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Best under ₹300</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Artisan bites &amp; hearty grain bowls</p>
+</div>
+</button>
+<!-- Card 2: Offers -->
+<button class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm text-left flex flex-col justify-between hover:bg-surface-container transition-all active:scale-[0.98]" onclick="fillPrompt('What active dining privileges and 20% club discounts can I use right now?')">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[22px]" style="font-variation-settings: 'FILL' 1;">redeem</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Any offers now?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Privilege Club 20% &amp; free delivery</p>
+</div>
+</button>
+<!-- Card 3: Healthy -->
+<button class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm text-left flex flex-col justify-between hover:bg-surface-container transition-all active:scale-[0.98]" onclick="fillPrompt('Show me light, high-protein healthy suppers with sourdough or clean salads')">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant mb-space-md">
+<span class="material-symbols-outlined text-[22px]">eco</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Light &amp; healthy</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Salads, sourdough &amp; high protein</p>
+</div>
+</button>
+<!-- Card 4: Reorder -->
+<button class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm text-left flex flex-col justify-between hover:bg-surface-container transition-all active:scale-[0.98]" onclick="fillPrompt('Reorder Truffle Burrata Pasta from Forno Antico')">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[22px]">history_toggle_off</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Reorder last dish</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1 line-clamp-2">Truffle Burrata Pasta from Forno</p>
+</div>
+</button>
+</div>
+</section>
+<!-- Horizontal Quick Filter Chips -->
+<section class="mb-space-xl">
+<div class="px-margin mb-space-xs">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Quick Inquiries</span>
+</div>
+<div class="flex gap-space-xs overflow-x-auto px-margin no-scrollbar py-1">
+<button class="flex-shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest shadow-sm text-on-surface hover:bg-surface-container transition-all active:scale-95 flex items-center gap-1.5 font-label-md text-label-md" onclick="fillPrompt('Find fiery, bold and spicy artisanal curries and appetizers')">
+<span>🌶️</span>
+<span>Spicy cravings</span>
+</button>
+<button class="flex-shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest shadow-sm text-on-surface hover:bg-surface-container transition-all active:scale-95 flex items-center gap-1.5 font-label-md text-label-md" onclick="fillPrompt('Show 100% pure vegetarian gourmet dining in my area')">
+<span>🟢</span>
+<span>Pure veg</span>
+</button>
+<button class="flex-shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest shadow-sm text-on-surface hover:bg-surface-container transition-all active:scale-95 flex items-center gap-1.5 font-label-md text-label-md" onclick="fillPrompt('What exquisite meals can arrive in under 30 minutes?')">
+<span>⚡</span>
+<span>Under 30 min</span>
+</button>
+<button class="flex-shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest shadow-sm text-on-surface hover:bg-surface-container transition-all active:scale-95 flex items-center gap-1.5 font-label-md text-label-md" onclick="fillPrompt('Recommend chef-crafted high protein dinners with macro breakdowns')">
+<span>💪</span>
+<span>High protein</span>
+</button>
+<button class="flex-shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest shadow-sm text-on-surface hover:bg-surface-container transition-all active:scale-95 flex items-center gap-1.5 font-label-md text-label-md" onclick="fillPrompt('Show me artisanal French patisserie, gelato, and warm desserts')">
+<span>🍰</span>
+<span>Desserts</span>
+</button>
+<button class="flex-shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest shadow-sm text-on-surface hover:bg-surface-container transition-all active:scale-95 flex items-center gap-1.5 font-label-md text-label-md" onclick="fillPrompt('Help me curate a group dinner for 4 people with diverse tastes')">
+<span>👥</span>
+<span>Group order</span>
+</button>
+<button class="flex-shrink-0 px-space-md py-2 rounded-full bg-surface-container-lowest shadow-sm text-on-surface hover:bg-surface-container transition-all active:scale-95 flex items-center gap-1.5 font-label-md text-label-md" onclick="fillPrompt('What natural and sommelier-selected wine pairings match pasta tonight?')">
+<span>🍷</span>
+<span>Wine pairings</span>
+</button>
+</div>
+</section>
+<!-- Interactive Floating Input Dock -->
+<section class="sticky bottom-4 px-margin z-30 mt-auto">
+<div class="bg-surface-container-lowest rounded-full shadow-xl p-1.5 flex items-center gap-space-xs transition-shadow duration-300">
+<!-- Media/Plus action -->
+<button aria-label="Add dietary requirements or photo" class="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+</button>
+<!-- Input Field -->
+<input class="w-full bg-transparent border-0 outline-none text-on-surface placeholder:text-secondary font-body-md text-body-md py-2 px-1 focus:ring-0" id="fleet-query-input" placeholder="Ask about food, offers, prices..." type="text"/>
+<!-- Voice Input -->
+<button aria-label="Voice dictation" class="w-10 h-10 flex-shrink-0 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container transition-colors" id="fleet-mic-btn">
+<span class="material-symbols-outlined text-[20px]">mic</span>
+</button>
+<!-- Submit Action -->
+<button aria-label="Send message" class="w-10 h-10 flex-shrink-0 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-md active:scale-95 transition-transform hover:opacity-95" id="fleet-send-btn">
+<span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+</button>
+</div>
+<!-- AI Disclosure Footnote -->
+<p class="text-center font-body-sm text-body-sm text-secondary mt-2 px-4 leading-tight">
+      Fleet AI combines live restaurant menus with personal taste preferences.
+    </p>
+</section>
+</div>
+<script>
+  function fillPrompt(queryText) {
+    const input = document.getElementById('fleet-query-input');
+    if (input) {
+      input.value = queryText;
+      input.focus();
+      // Visual feedback ping on the submit button
+      const sendBtn = document.getElementById('fleet-send-btn');
+      if (sendBtn) {
+        sendBtn.classList.add('scale-110');
+        setTimeout(() => sendBtn.classList.remove('scale-110'), 250);
+      }
+    }
+  }
+
+  document.getElementById('fleet-send-btn')?.addEventListener('click', () => {
+    const input = document.getElementById('fleet-query-input');
+    if (input && input.value.trim() !== '') {
+      input.value = '';
+      input.placeholder = 'Consulting kitchen intelligence...';
+      setTimeout(() => {
+        input.placeholder = 'Ask about food, offers, prices...';
+      }, 2000);
+    }
+  });
+
+  document.getElementById('fleet-mic-btn')?.addEventListener('click', function() {
+    this.classList.toggle('text-primary');
+  });
+</script></main></body></html>

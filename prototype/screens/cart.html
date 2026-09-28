@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html class="h-full bg-surface" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>Your Bag — Royal Dawat &amp; Forno d'Oro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a83211",
+            "primary-container": "#ca4a28",
+            "primary-fixed": "#ffdbd1",
+            "primary-fixed-dim": "#ffb4a1",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#3c0800",
+            "surface": "#fff8f5",
+            "surface-dim": "#e0d8d5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#faf2ee",
+            "surface-container": "#f4ece8",
+            "surface-container-high": "#eee7e3",
+            "on-surface": "#1e1b19",
+            "on-surface-variant": "#59413b",
+            "secondary": "#835500",
+            "secondary-container": "#feae2c",
+            "tertiary": "#006b2c",
+            "tertiary-container": "#00873a",
+            "error": "#ba1a1a"
+          },
+          fontFamily: {
+            headline: ["Epilogue", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: "Plus Jakarta Sans", sans-serif; -webkit-tap-highlight-color: transparent; }
+    h1, h2, h3, h4 { font-family: "Epilogue", sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+  <script src="/js/config.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/nav.js"></script>
+</head>
+<body class="min-h-full flex flex-col bg-surface text-on-surface antialiased pb-48 selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-surface/95 backdrop-blur-md pt-[env(safe-area-inset-top)] border-b border-[#e0d8d5] shadow-sm">
+    <div class="h-14 px-4 flex items-center justify-between">
+      <div class="flex items-center gap-2 min-w-0">
+        <button data-nav="restaurant" aria-label="Back to Restaurant" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all -ml-1">
+          <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+        </button>
+        <div class="flex flex-col min-w-0">
+          <h1 class="font-headline text-[15px] font-bold text-on-surface truncate">Your Cart</h1>
+          <p class="text-[11px] font-medium text-on-surface-variant truncate">Royal Dawat &amp; Forno d'Oro</p>
+        </div>
+      </div>
+      <button id="clearCartBtn" onclick="handleClearCart()" class="text-[12px] font-bold text-error hover:underline px-2 py-1">
+        Clear
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Bag Content -->
+  <main class="flex-1 flex flex-col gap-4 p-4 max-w-lg mx-auto w-full">
+
+    <!-- Active Delivery Address Quick Bar -->
+    <div class="bg-surface-container-low rounded-2xl p-3.5 border border-[#e0d8d5] flex items-center justify-between gap-3 shadow-sm">
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
+        </div>
+        <div class="flex flex-col min-w-0">
+          <div class="flex items-center gap-1.5">
+            <span id="cartAddrTitle" class="font-bold text-[13px] text-on-surface truncate">HOME • Flat 302</span>
+            <span class="w-2 h-2 rounded-full bg-tertiary"></span>
+          </div>
+          <span id="cartAddrSub" class="text-[11px] text-on-surface-variant truncate">Kompally, Hyderabad (25 min ETA)</span>
+        </div>
+      </div>
+      <button data-nav="checkout" class="shrink-0 px-3 py-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-primary font-bold text-[11px] transition-colors">
+        Change
+      </button>
+    </div>
+
+    <!-- Empty Cart State Container (Section 5) -->
+    <div id="emptyCartView" class="hidden flex-col items-center justify-center py-12 px-6 text-center gap-3 bg-surface-container-lowest rounded-3xl p-6 border border-[#e0d8d5] shadow-sm my-auto">
+      <div class="w-24 h-24 rounded-full bg-primary-fixed/40 flex items-center justify-center text-primary mb-1">
+        <span class="material-symbols-outlined text-[48px]">production_quantity_limits</span>
+      </div>
+      <h3 class="font-headline text-[20px] font-black text-on-surface">Your cart is empty</h3>
+      <p class="text-xs text-on-surface-variant max-w-xs leading-relaxed">
+        Add something delicious from nearby restaurants. Try our Hyderabadi Dum Biryani or Woodfired Neapolitan Pizza!
+      </p>
+      <button data-nav="restaurant" class="mt-3 px-6 py-3 rounded-full bg-primary hover:bg-primary-container text-white font-bold text-xs shadow-md active:scale-95 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">restaurant_menu</span>
+        <span>Explore Restaurants</span>
+      </button>
+    </div>
+
+    <!-- Active Cart Items Container -->
+    <div id="cartItemsView" class="flex flex-col gap-4">
+
+      <!-- Items List Card -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-3">
+        <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+          <span class="font-headline text-[13px] font-bold text-on-surface uppercase tracking-wider">Order Items</span>
+          <span id="itemCountLabel" class="text-xs font-semibold text-on-surface-variant">2 items</span>
+        </div>
+
+        <div id="cartItemsList" class="flex flex-col divide-y divide-[#e0d8d5]/60">
+          <!-- Injected via JS -->
+        </div>
+
+        <!-- Add More Items CTA -->
+        <button data-nav="restaurant" class="mt-2 py-2 px-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-primary font-bold text-xs flex items-center justify-center gap-1.5 transition-colors border border-dashed border-[#e0d8d5]">
+          <span class="material-symbols-outlined text-[16px]">add</span>
+          <span>Add more items from menu</span>
+        </button>
+      </div>
+
+      <!-- Coupon Section Card (Section 4) -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex items-center justify-between gap-3 cursor-pointer hover:border-primary/50 transition-colors" onclick="openCouponModal()">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-secondary-container/50 text-secondary flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[20px]">local_offer</span>
+          </div>
+          <div class="flex flex-col min-w-0">
+            <span id="couponCardTitle" class="font-bold text-xs text-on-surface truncate">Apply Coupon Code</span>
+            <span id="couponCardSub" class="text-[11px] text-tertiary font-semibold truncate">Save up to ₹149 on this order</span>
+          </div>
+        </div>
+        <div class="flex items-center text-primary font-bold text-xs shrink-0">
+          <span id="couponActionLabel">View Offers</span>
+          <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+        </div>
+      </div>
+
+      <!-- Delivery Instructions Selector -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-2.5">
+        <span class="font-headline text-xs font-bold text-on-surface">Delivery Instructions</span>
+        <div class="flex flex-wrap gap-2 text-[11px]">
+          <button type="button" onclick="toggleInstruction(this, 'Leave at door')" class="inst-pill px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface active:scale-95 transition-all">
+            🚪 Leave at door
+          </button>
+          <button type="button" onclick="toggleInstruction(this, 'Avoid calling')" class="inst-pill px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface active:scale-95 transition-all">
+            🔕 Avoid calling
+          </button>
+          <button type="button" onclick="toggleInstruction(this, 'Don’t ring bell')" class="inst-pill px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low font-semibold text-on-surface active:scale-95 transition-all">
+            🌙 Don’t ring bell
+          </button>
+        </div>
+      </div>
+
+      <!-- Bill Details Card (Section 4) -->
+      <div class="bg-surface-container-lowest rounded-2xl p-4 border border-[#e0d8d5] shadow-sm flex flex-col gap-2.5 text-xs">
+        <span class="font-headline text-[13px] font-bold text-on-surface uppercase tracking-wider pb-1 border-b border-[#e0d8d5]">Bill Details</span>
+
+        <div class="flex justify-between text-on-surface-variant">
+          <span>Item Total</span>
+          <span id="billItemTotal" class="font-semibold text-on-surface">₹429</span>
+        </div>
+
+        <div id="billDiscountRow" class="flex justify-between text-tertiary font-bold">
+          <span id="billDiscountLabel">Coupon Discount (FEAST50)</span>
+          <span id="billDiscountVal">-₹50</span>
+        </div>
+
+        <div class="flex justify-between text-on-surface-variant items-center">
+          <div class="flex items-center gap-1">
+            <span>Delivery Fee</span>
+            <span class="text-[10px] text-tertiary bg-tertiary-fixed px-1.5 py-0.2 rounded-full font-bold">FREE over ₹199</span>
+          </div>
+          <span id="billDeliveryFee" class="font-semibold text-tertiary">FREE</span>
+        </div>
+
+        <div class="flex justify-between text-on-surface-variant">
+          <span>Platform Fee</span>
+          <span id="billPlatformFee" class="font-semibold text-on-surface">₹5</span>
+        </div>
+
+        <div class="flex justify-between text-on-surface-variant">
+          <span>Taxes &amp; Restaurant Charges (5% GST)</span>
+          <span id="billTax" class="font-semibold text-on-surface">₹20</span>
+        </div>
+
+        <div class="border-t border-[#e0d8d5] pt-2.5 flex justify-between text-sm font-extrabold text-on-surface">
+          <span>To Pay</span>
+          <span id="billGrandTotal" class="text-primary font-black text-lg">₹404</span>
+        </div>
+      </div>
+
+      <!-- Savings Callout -->
+      <div id="savingsBadge" class="bg-tertiary/10 border border-tertiary/30 rounded-2xl p-3 flex items-center gap-2.5 text-xs text-tertiary font-bold">
+        <span class="material-symbols-outlined text-[18px]">verified</span>
+        <span>You are saving ₹50 on this gourmet order!</span>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Checkout CTA Bar -->
+  <footer id="stickyCartFooter" class="fixed bottom-[80px] inset-x-0 bg-surface/95 backdrop-blur-xl border-t border-[#e0d8d5] p-3 z-30 shadow-[0_-6px_24px_rgba(30,27,25,0.08)]">
+    <div class="max-w-lg mx-auto flex items-center justify-between gap-3">
+      <div class="flex flex-col min-w-[90px]">
+        <span class="text-[10px] uppercase font-bold text-on-surface-variant tracking-wider">Total Amount</span>
+        <span id="stickyTotalAmount" class="font-headline text-[20px] font-black text-on-surface leading-tight">₹404</span>
+      </div>
+      <button onclick="proceedToCheckout()" class="flex-1 py-3.5 px-6 rounded-full bg-primary hover:bg-primary-container text-white font-bold text-xs shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
+        <span>PROCEED TO PAY</span>
+        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+      </button>
+    </div>
+  </footer>
+
+  <!-- Coupons Selection Drawer Modal -->
+  <div id="couponModal" onclick="if(event.target === this) closeCouponModal()" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[20px]">sell</span>
+          <h3 class="font-headline text-base font-bold text-on-surface">Apply Coupon</h3>
+        </div>
+        <button onclick="closeCouponModal()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+
+      <!-- Coupon Code Input Box -->
+      <div class="flex items-center gap-2">
+        <input id="manualCouponInput" placeholder="Enter coupon code" class="flex-1 uppercase bg-surface-container-low border border-[#e0d8d5] rounded-xl px-3 py-2 text-xs font-bold text-on-surface outline-none focus:border-primary"/>
+        <button onclick="handleManualCoupon()" class="px-4 py-2 rounded-xl bg-primary text-white font-bold text-xs">
+          APPLY
+        </button>
+      </div>
+
+      <div id="couponModalList" class="flex flex-col gap-2.5 pt-2">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-24 inset-x-4 max-w-xs mx-auto z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300 px-4 py-2.5 rounded-full bg-on-surface text-surface text-xs font-bold text-center shadow-lg">
+  </div>
+
+  <script>
+    function renderCart() {
+      const items = window.Cart ? window.Cart.get() : [];
+      const bill = window.Cart ? window.Cart.bill() : { sub: 0, discount: 0, delivery: 0, platform: 0, tax: 0, total: 0, coupon: null };
+
+      const emptyView = document.getElementById('emptyCartView');
+      const cartView = document.getElementById('cartItemsView');
+      const footer = document.getElementById('stickyCartFooter');
+      const clearBtn = document.getElementById('clearCartBtn');
+
+      if (items.length === 0) {
+        emptyView.classList.remove('hidden');
+        emptyView.classList.add('flex');
+        emptyView.style.display = 'flex';
+        cartView.classList.add('hidden');
+        cartView.style.display = 'none';
+        footer.classList.add('hidden');
+        footer.style.display = 'none';
+        if (clearBtn) clearBtn.classList.add('hidden');
+        return;
+      }
+
+      emptyView.classList.add('hidden');
+      emptyView.classList.remove('flex');
+      emptyView.style.display = 'none';
+      cartView.classList.remove('hidden');
+      cartView.style.display = 'flex';
+      footer.classList.remove('hidden');
+      footer.style.display = 'block';
+      adjustCartFooterPosition();
+      if (clearBtn) clearBtn.classList.remove('hidden');
+
+      // Update Address Bar
+      const addr = window.DeliveryAddress ? window.DeliveryAddress.get() : null;
+      if (addr) {
+        document.getElementById('cartAddrTitle').textContent = `${addr.tag || 'HOME'} • ${addr.street || 'Kompally'}`;
+        document.getElementById('cartAddrSub').textContent = `${addr.area || 'Kompally'}, ${addr.city || 'Hyderabad'} (25 min ETA)`;
+      }
+
+      // Render Items
+      document.getElementById('itemCountLabel').textContent = `${items.length} ${items.length === 1 ? 'item' : 'items'}`;
+      const list = document.getElementById('cartItemsList');
+
+      list.innerHTML = items.map(item => {
+        const vegIcon = item.veg
+          ? `<span class="w-3.5 h-3.5 border border-tertiary p-0.5 rounded flex items-center justify-center shrink-0" title="Veg"><span class="w-2 h-2 rounded-full bg-tertiary"></span></span>`
+          : `<span class="w-3.5 h-3.5 border border-primary p-0.5 rounded flex items-center justify-center shrink-0" title="Non-Veg"><span class="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-b-[6px] border-b-primary"></span></span>`;
+
+        const addonsText = (item.addons || []).map(a => a.name).join(', ');
+        const optionsText = Object.values(item.options || {}).join(', ');
+        const customText = [optionsText, addonsText].filter(Boolean).join(' • ');
+
+        return `
+          <div class="py-3 flex items-start justify-between gap-3 text-xs">
+            <div class="flex items-start gap-2.5 min-w-0 flex-1">
+              ${vegIcon}
+              <div class="flex flex-col min-w-0">
+                <span class="font-bold text-on-surface truncate">${item.name}</span>
+                <span class="text-[11px] font-black text-primary mt-0.5">${money(item.price)}</span>
+                ${customText ? `<span class="text-[10px] text-on-surface-variant font-medium mt-0.5">${customText}</span>` : ''}
+              </div>
+            </div>
+
+            <!-- Quantity Counter -->
+            <div class="flex items-center gap-2 bg-surface-container rounded-full px-2 py-0.5 border border-[#e0d8d5] shrink-0">
+              <button onclick="handleItemQty('${item.cartKey || item.id}', -1)" class="w-5 h-5 flex items-center justify-center font-bold text-primary active:scale-75 transition-transform">-</button>
+              <span class="font-bold text-xs min-w-[14px] text-center text-on-surface">${item.qty}</span>
+              <button onclick="handleItemQty('${item.cartKey || item.id}', 1)" class="w-5 h-5 flex items-center justify-center font-bold text-primary active:scale-75 transition-transform">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Update Coupon Row
+      const activeCoupon = window.Coupons ? window.Coupons.active() : null;
+      const couponCardTitle = document.getElementById('couponCardTitle');
+      const couponCardSub = document.getElementById('couponCardSub');
+      const couponActionLabel = document.getElementById('couponActionLabel');
+      const billDiscountRow = document.getElementById('billDiscountRow');
+
+      if (bill.discount > 0 && activeCoupon) {
+        couponCardTitle.textContent = `Applied: ${activeCoupon.code}`;
+        couponCardSub.textContent = `You saved ${money(bill.discount)} with this code`;
+        couponActionLabel.textContent = 'Change';
+        billDiscountRow.classList.remove('hidden');
+        document.getElementById('billDiscountLabel').textContent = `Coupon Discount (${activeCoupon.code})`;
+        document.getElementById('billDiscountVal').textContent = `-${money(bill.discount)}`;
+      } else {
+        couponCardTitle.textContent = 'Apply Coupon Code';
+        couponCardSub.textContent = 'Save up to ₹149 on this order';
+        couponActionLabel.textContent = 'View Offers';
+        billDiscountRow.classList.add('hidden');
+      }
+
+      // Bill Breakdown
+      document.getElementById('billItemTotal').textContent = money(bill.sub);
+      document.getElementById('billDeliveryFee').textContent = bill.delivery === 0 ? 'FREE' : money(bill.delivery);
+      document.getElementById('billPlatformFee').textContent = money(bill.platform);
+      document.getElementById('billTax').textContent = money(bill.tax);
+      document.getElementById('billGrandTotal').textContent = money(bill.total);
+      document.getElementById('stickyTotalAmount').textContent = money(bill.total);
+
+      // Savings Badge
+      const savingsEl = document.getElementById('savingsBadge');
+      if (bill.discount > 0) {
+        savingsEl.classList.remove('hidden');
+        savingsEl.querySelector('span:last-child').textContent = `You are saving ${money(bill.discount)} with promo code ${activeCoupon.code}!`;
+      } else {
+        savingsEl.classList.add('hidden');
+      }
+    }
+
+    function handleItemQty(cartKey, d) {
+      const items = window.Cart ? window.Cart.get() : [];
+      const item = items.find(i => i.cartKey === cartKey || i.id === cartKey);
+      if (item) {
+        window.Cart.setQty(cartKey, item.qty + d);
+        renderCart();
+      }
+    }
+
+    function handleClearCart() {
+      if (confirm("Clear all dishes from your bag?")) {
+        window.Cart.clear();
+        renderCart();
+        showToast("Cart cleared");
+      }
+    }
+
+    function toggleInstruction(btn, text) {
+      btn.classList.toggle('border-primary');
+      btn.classList.toggle('bg-primary-fixed/30');
+      btn.classList.toggle('text-primary');
+      showToast(`Note updated: "${text}"`);
+    }
+
+    function proceedToCheckout() {
+      if (window.parent && window.parent !== window && typeof window.parent.go === 'function') {
+        window.parent.go('#/checkout');
+      } else {
+        location.href = '/screens/checkout.html';
+      }
+    }
+
+    // Coupon Modal
+    function openCouponModal() {
+      const modal = document.getElementById('couponModal');
+      const list = document.getElementById('couponModalList');
+      const coupons = window.Coupons ? window.Coupons.list() : [];
+
+      list.innerHTML = coupons.map(c => `
+        <div class="p-3 rounded-2xl border border-primary/30 bg-primary-fixed/15 flex items-center justify-between gap-3">
+          <div class="flex flex-col min-w-0">
+            <span class="font-headline font-black text-xs text-primary">${c.code}</span>
+            <span class="text-xs font-bold text-on-surface mt-0.5">${c.title}</span>
+            <span class="text-[11px] text-on-surface-variant">${c.desc}</span>
+          </div>
+          <button onclick="applyCouponCode('${c.code}')" class="px-3.5 py-1.5 rounded-full bg-primary text-white font-bold text-xs shadow-sm active:scale-95 transition-all">
+            APPLY
+          </button>
+        </div>
+      `).join('');
+
+      modal.classList.remove('hidden');
+      if (window.parent && window.parent !== window) {
+        try { window.parent.postMessage({ type: 'navbar:hide' }, '*'); } catch(e){}
+      }
+    }
+
+    function closeCouponModal() {
+      document.getElementById('couponModal').classList.add('hidden');
+      if (window.parent && window.parent !== window) {
+        try { window.parent.postMessage({ type: 'navbar:show' }, '*'); } catch(e){}
+      }
+    }
+
+    function applyCouponCode(code) {
+      const res = window.Coupons.apply(code);
+      closeCouponModal();
+      if (res.success) {
+        showToast(`Coupon ${code} applied successfully!`);
+        renderCart();
+      } else {
+        showToast(res.message);
+      }
+    }
+
+    function handleManualCoupon() {
+      const inp = document.getElementById('manualCouponInput');
+      const code = inp.value.trim().toUpperCase();
+      if (!code) return;
+      applyCouponCode(code);
+      inp.value = '';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.remove('opacity-0', 'translate-y-3');
+      t.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        t.classList.remove('opacity-100', 'translate-y-0');
+        t.classList.add('opacity-0', 'translate-y-3');
+      }, 2200);
+    }
+
+    function adjustCartFooterPosition() {
+      const footer = document.getElementById('stickyCartFooter');
+      if (!footer) return;
+      const isEmbedded = (window.parent && window.parent !== window);
+      if (isEmbedded) {
+        footer.style.bottom = '80px';
+      } else {
+        footer.style.bottom = '0px';
+        footer.style.paddingBottom = 'max(env(safe-area-inset-bottom), 14px)';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      adjustCartFooterPosition();
+      renderCart();
+      window.addEventListener('resize', adjustCartFooterPosition);
+      window.addEventListener('cart:update', renderCart);
+      window.addEventListener('pageshow', renderCart);
+      window.addEventListener('focus', renderCart);
+      window.addEventListener('storage', renderCart);
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'cart:update') renderCart();
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) renderCart();
+      });
+      window.addEventListener('coupon:applied', renderCart);
+      window.addEventListener('address:change', renderCart);
+    });
+  </script>
+</body>
+</html>

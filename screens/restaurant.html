@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html class="h-full bg-surface" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <title>Royal Dawat &amp; Forno d'Oro — Restaurant Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a83211",
+            "primary-container": "#ca4a28",
+            "primary-fixed": "#ffdbd1",
+            "primary-fixed-dim": "#ffb4a1",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#3c0800",
+            "surface": "#fff8f5",
+            "surface-dim": "#e0d8d5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#faf2ee",
+            "surface-container": "#f4ece8",
+            "surface-container-high": "#eee7e3",
+            "on-surface": "#1e1b19",
+            "on-surface-variant": "#59413b",
+            "secondary": "#835500",
+            "secondary-container": "#feae2c",
+            "tertiary": "#006b2c",
+            "tertiary-container": "#00873a",
+            "error": "#ba1a1a"
+          },
+          fontFamily: {
+            headline: ["Epilogue", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: "Plus Jakarta Sans", sans-serif; -webkit-tap-highlight-color: transparent; }
+    h1, h2, h3, h4 { font-family: "Epilogue", sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+  <script src="/js/config.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/nav.js"></script>
+</head>
+<body class="min-h-full flex flex-col bg-surface text-on-surface antialiased pb-32 selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="sticky top-0 z-40 bg-surface/95 backdrop-blur-md pt-[env(safe-area-inset-top)] border-b border-[#e0d8d5] shadow-sm">
+    <div class="h-14 px-4 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 min-w-0">
+        <button data-nav="home" aria-label="Go back" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all -ml-1">
+          <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+        </button>
+        <div class="flex flex-col min-w-0">
+          <h1 id="headerRestName" class="font-headline text-[15px] font-bold text-on-surface truncate">Lazeez Arabian Mandi &amp; Shawarma</h1>
+          <span id="headerRestSub" class="text-[11px] font-medium text-on-surface-variant truncate">Maisammaguda, Dulapally 500100 • 20–25 min</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button id="headerShareBtn" onclick="shareRestaurant()" aria-label="Share" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-[20px]">share</span>
+        </button>
+        <button id="headerFavBtn" onclick="toggleFavorite()" aria-label="Favorite" class="w-9 h-9 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container active:scale-95 transition-all">
+          <span id="favIcon" class="material-symbols-outlined text-[20px]">favorite_border</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Restaurant Switcher Pills Bar (Maisammaguda & Dulapally Hub) -->
+    <div class="bg-surface-container-low px-3.5 py-1.5 border-t border-[#e0d8d5]/70 flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <span class="text-[10px] font-bold uppercase tracking-wider text-on-surface-variant shrink-0 flex items-center gap-1">
+        <span class="material-symbols-outlined text-[14px] text-primary">near_me</span> Maisammaguda Hub:
+      </span>
+      <div id="restSwitcherPills" class="flex items-center gap-1.5 shrink-0">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Scrollable Content -->
+  <main class="flex-1 flex flex-col w-full max-w-lg mx-auto">
+
+    <!-- 1. Hero Cover Image Showcase -->
+    <div class="relative w-full h-56 sm:h-64 bg-surface-container overflow-hidden">
+      <img id="restCoverImg" alt="Restaurant Cover" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1544025162-d76694265947?w=1200&auto=format&fit=crop&q=80"/>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent"></div>
+
+      <!-- Quick Tag Badge -->
+      <div class="absolute bottom-3 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/95 backdrop-blur-md shadow-sm">
+        <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+        <span class="text-[11px] font-bold text-on-surface uppercase tracking-wider">Kitchen Accepting Live Orders</span>
+      </div>
+    </div>
+
+    <!-- 2. Restaurant Information Card (Slight Overlap) -->
+    <div class="px-4 -mt-6 relative z-10">
+      <div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0_8px_24px_-4px_rgba(28,25,23,0.08)] border border-[#e0d8d5] flex flex-col gap-3">
+        <div>
+          <h2 id="cardRestName" class="font-headline text-[20px] font-black text-on-surface leading-snug">Lazeez Arabian Mandi &amp; Shawarma</h2>
+          <p id="cardRestCuisine" class="text-[12px] text-on-surface-variant font-medium mt-0.5">Arabian • Mandi • Shawarma • BBQ Platters</p>
+        </div>
+
+        <!-- Metric Badges Row -->
+        <div class="flex flex-wrap items-center gap-y-2 gap-x-3 text-xs">
+          <div class="flex items-center gap-1 bg-secondary-container/40 px-2 py-0.5 rounded-full text-secondary font-bold">
+            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+            <span id="cardRestRating">4.8</span>
+            <span id="cardRestReviews" class="text-[11px] font-medium text-on-surface-variant">(1.9k+)</span>
+          </div>
+          <div class="flex items-center gap-1 text-on-surface-variant font-semibold">
+            <span class="material-symbols-outlined text-[15px] text-primary">schedule</span>
+            <span id="cardRestDeliveryTime">20–25 min</span>
+          </div>
+          <span class="w-1 h-1 rounded-full bg-surface-dim"></span>
+          <div class="flex items-center gap-1 text-on-surface-variant font-semibold">
+            <span class="material-symbols-outlined text-[15px] text-primary">currency_rupee</span>
+            <span id="cardRestPrice">₹250 for one</span>
+          </div>
+          <span class="w-1 h-1 rounded-full bg-surface-dim"></span>
+          <div class="flex items-center gap-1 text-on-surface-variant font-semibold">
+            <span class="material-symbols-outlined text-[15px] text-outline">distance</span>
+            <span id="cardRestDistance">0.8 km • Maisammaguda</span>
+          </div>
+        </div>
+
+        <!-- Quick Interaction Tabs: Offers, Info, Reviews -->
+        <div class="pt-2 border-t border-[#e0d8d5]/60 flex items-center justify-between gap-2">
+          <button onclick="openOffersModal()" class="flex-1 py-1.5 px-2 rounded-xl bg-surface-container-low hover:bg-surface-container border border-[#e0d8d5]/80 text-[11px] font-bold text-primary flex items-center justify-center gap-1 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[15px]">local_offer</span>
+            <span id="cardOffersBtnText">3 Offers</span>
+          </button>
+          <button onclick="openInfoModal()" class="flex-1 py-1.5 px-2 rounded-xl bg-surface-container-low hover:bg-surface-container border border-[#e0d8d5]/80 text-[11px] font-bold text-on-surface flex items-center justify-center gap-1 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[15px]">info</span>
+            <span>Outlet Info</span>
+          </button>
+          <button onclick="openReviewsModal()" class="flex-1 py-1.5 px-2 rounded-xl bg-surface-container-low hover:bg-surface-container border border-[#e0d8d5]/80 text-[11px] font-bold text-on-surface flex items-center justify-center gap-1 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-[15px]">reviews</span>
+            <span>Reviews</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Search Food & Category Filter Navigation Bar -->
+    <div class="sticky top-14 z-30 bg-surface/95 backdrop-blur-md pt-3 pb-2 px-4 shadow-[0_4px_16px_-4px_rgba(28,25,23,0.04)] border-b border-[#e0d8d5] flex flex-col gap-2.5">
+      <!-- Search Input -->
+      <div class="relative w-full">
+        <div class="flex items-center w-full h-10 bg-surface-container-lowest rounded-full px-3.5 border border-[#e0d8d5] focus-within:border-primary transition-all shadow-inner">
+          <span class="material-symbols-outlined text-primary text-[18px] mr-2">search</span>
+          <input id="menuSearchInput" oninput="handleMenuSearch(this.value)" class="bg-transparent border-0 outline-none w-full text-on-surface placeholder:text-on-surface-variant font-medium text-xs" placeholder="Search dishes (Biryani, Manchuria, Naan, Pizza...)" type="text"/>
+          <button id="clearSearchBtn" onclick="clearMenuSearch()" class="hidden text-on-surface-variant hover:text-on-surface">
+            <span class="material-symbols-outlined text-[16px]">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div id="categoryPills" class="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        <button onclick="filterCategory('All')" class="cat-pill active px-3.5 py-1 rounded-full bg-primary text-white text-[11px] font-bold shrink-0 shadow-sm transition-all" data-category="All">
+          All (9)
+        </button>
+        <button onclick="filterCategory('Biryani')" class="cat-pill px-3 py-1 rounded-full bg-surface-container text-on-surface text-[11px] font-semibold shrink-0 hover:bg-surface-container-high transition-colors" data-category="Biryani">
+          Biryani
+        </button>
+        <button onclick="filterCategory('Starters')" class="cat-pill px-3 py-1 rounded-full bg-surface-container text-on-surface text-[11px] font-semibold shrink-0 hover:bg-surface-container-high transition-colors" data-category="Starters">
+          Starters
+        </button>
+        <button onclick="filterCategory('Main Course')" class="cat-pill px-3 py-1 rounded-full bg-surface-container text-on-surface text-[11px] font-semibold shrink-0 hover:bg-surface-container-high transition-colors" data-category="Main Course">
+          Main Course
+        </button>
+        <button onclick="filterCategory('Breads')" class="cat-pill px-3 py-1 rounded-full bg-surface-container text-on-surface text-[11px] font-semibold shrink-0 hover:bg-surface-container-high transition-colors" data-category="Breads">
+          Breads
+        </button>
+        <button onclick="filterCategory('Desserts')" class="cat-pill px-3 py-1 rounded-full bg-surface-container text-on-surface text-[11px] font-semibold shrink-0 hover:bg-surface-container-high transition-colors" data-category="Desserts">
+          Desserts
+        </button>
+        <button onclick="filterCategory('Drinks')" class="cat-pill px-3 py-1 rounded-full bg-surface-container text-on-surface text-[11px] font-semibold shrink-0 hover:bg-surface-container-high transition-colors" data-category="Drinks">
+          Drinks
+        </button>
+      </div>
+    </div>
+
+    <!-- 4. Menu Items Section -->
+    <div id="menuContainer" class="px-4 py-4 flex flex-col gap-3.5">
+      <!-- Injected dynamically via renderMenu() -->
+    </div>
+
+    <!-- Empty Search Results State -->
+    <div id="emptySearchState" class="hidden flex-col items-center justify-center py-12 px-4 text-center">
+      <div class="w-14 h-14 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant mb-3">
+        <span class="material-symbols-outlined text-[28px]">search_off</span>
+      </div>
+      <h3 class="font-headline text-base font-bold text-on-surface">No dishes found</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Try searching for Biryani, Pizza, Naan, or Manchuria</p>
+      <button onclick="clearMenuSearch()" class="mt-3 px-4 py-1.5 rounded-full bg-primary text-white text-xs font-bold shadow-sm">
+        Reset Menu
+      </button>
+    </div>
+
+  </main>
+
+  <!-- 5. Floating Bottom Cart Bar (Appears when cart has items) -->
+  <div id="floatingCartBar" class="hidden fixed bottom-[80px] inset-x-4 max-w-lg mx-auto z-40" style="display: none;">
+    <div class="bg-primary text-white rounded-2xl p-3 px-4 shadow-[0_10px_30px_rgba(168,50,17,0.35)] flex items-center justify-between gap-3 active:scale-[0.99] transition-transform cursor-pointer" onclick="goToCart()">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white">
+          <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+        </div>
+        <div class="flex flex-col">
+          <span id="floatingItemCount" class="text-xs font-bold">0 Items Added</span>
+          <span id="floatingItemTotal" class="text-sm font-black">₹0</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-1 font-bold text-xs bg-white text-primary px-3 py-1.5 rounded-xl shadow-sm">
+        <span>View Cart</span>
+        <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Food Item Detail Customization Bottom Sheet / Modal -->
+  <div id="itemDetailModal" onclick="if(event.target === this) closeItemModal()" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm transition-opacity">
+    <div class="bg-surface-container-lowest w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[88vh] sm:max-h-[90vh] flex flex-col overflow-hidden shadow-2xl animate-in slide-in-from-bottom duration-200">
+
+      <!-- Modal Header with Image -->
+      <div class="relative w-full h-52 bg-surface-container shrink-0">
+        <img id="modalItemImg" alt="Food Item" class="w-full h-full object-cover" src=""/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent"></div>
+        <button onclick="closeItemModal()" aria-label="Close" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 text-white flex items-center justify-center backdrop-blur-md active:scale-95 transition-all cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+        <div class="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
+          <div class="flex items-center gap-2">
+            <span id="modalVegBadge"></span>
+            <span id="modalItemCategory" class="text-[10px] font-bold uppercase tracking-wider bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full"></span>
+          </div>
+          <span id="modalItemRating" class="text-xs font-bold bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1"></span>
+        </div>
+      </div>
+
+      <!-- Scrollable Customizer Body -->
+      <div class="p-4 flex-1 overflow-y-auto flex flex-col gap-4 text-xs">
+        <div>
+          <h3 id="modalItemName" class="font-headline text-lg font-black text-on-surface"></h3>
+          <p id="modalItemPrice" class="text-primary font-black text-base mt-0.5"></p>
+          <p id="modalItemDesc" class="text-on-surface-variant text-xs mt-1 leading-relaxed"></p>
+        </div>
+
+        <!-- Customization Options (e.g. Spice Level / Preparation) -->
+        <div id="modalOptionsSection" class="border-t border-[#e0d8d5] pt-3 flex flex-col gap-2.5">
+          <!-- Injected dynamically -->
+        </div>
+
+        <!-- Add-ons Selection -->
+        <div id="modalAddonsSection" class="border-t border-[#e0d8d5] pt-3 flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="font-headline font-bold text-xs text-on-surface uppercase tracking-wider">Recommended Add-Ons</span>
+            <span class="text-[10px] text-on-surface-variant">Select any</span>
+          </div>
+          <div id="modalAddonsList" class="flex flex-col gap-2">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+        <!-- Quantity Selector Section -->
+        <div class="border-t border-[#e0d8d5] pt-3 flex items-center justify-between">
+          <span class="font-headline font-bold text-xs text-on-surface">Quantity</span>
+          <div class="flex items-center gap-3 bg-surface-container rounded-full px-3 py-1 border border-[#e0d8d5]">
+            <button onclick="changeModalQty(-1)" class="w-6 h-6 rounded-full flex items-center justify-center text-primary font-bold text-base active:scale-90 cursor-pointer">-</button>
+            <span id="modalItemQty" class="font-bold text-sm text-on-surface min-w-[16px] text-center">1</span>
+            <button onclick="changeModalQty(1)" class="w-6 h-6 rounded-full flex items-center justify-center text-primary font-bold text-base active:scale-90 cursor-pointer">+</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sticky Add to Cart Footer Button -->
+      <div class="p-3.5 px-4 pb-[max(env(safe-area-inset-bottom),18px)] border-t border-[#e0d8d5] bg-surface-container-low shrink-0 flex items-center justify-between gap-4 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+        <div class="flex flex-col min-w-[90px]">
+          <span class="text-[10px] uppercase tracking-wider text-on-surface-variant font-bold">Total Price</span>
+          <span id="modalCalculatedTotal" class="font-headline text-xl font-black text-on-surface tracking-tight">₹249</span>
+        </div>
+        <button id="modalAddToCartBtn" onclick="submitModalAddToCart()" class="flex-1 py-3.5 px-6 rounded-full bg-primary hover:bg-primary-container text-white font-bold text-sm shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+          <span>Add to Cart</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 7. Offers Drawer Modal -->
+  <div id="offersModal" onclick="if(event.target === this) closeOffersModal()" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[20px]">local_offer</span>
+          <h3 class="font-headline text-base font-bold text-on-surface">Available Coupons &amp; Offers</h3>
+        </div>
+        <button onclick="closeOffersModal()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+      <div id="offersList" class="flex flex-col gap-2.5">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Info & Reviews Modals -->
+  <div id="infoModal" onclick="if(event.target === this) closeInfoModal()" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl flex flex-col gap-3">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <h3 class="font-headline text-base font-bold text-on-surface">Outlet Information</h3>
+        <button onclick="closeInfoModal()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface cursor-pointer">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+      <div class="text-xs flex flex-col gap-2.5 text-on-surface">
+        <p><b>Address:</b> <span id="infoModalAddress">Opposite Malla Reddy University Campus, Maisammaguda, Dulapally, Hyderabad 500100</span></p>
+        <p><b>FSSAI License:</b> <span id="infoModalFssai">13623014000881</span></p>
+        <p><b>Phone:</b> <span id="infoModalPhone">+91 98480 77123</span></p>
+        <p><b>Hygiene Rating:</b> 5/5 (Audited monthly kitchen check)</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="reviewsModal" onclick="if(event.target === this) closeReviewsModal()" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 shadow-2xl flex flex-col gap-3 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <h3 id="reviewsModalTitle" class="font-headline text-base font-bold text-on-surface">Customer Reviews</h3>
+        <button onclick="closeReviewsModal()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+      <div id="reviewsList" class="flex flex-col gap-2.5">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-20 inset-x-4 max-w-xs mx-auto z-50 pointer-events-none opacity-0 translate-y-3 transition-all duration-300 px-4 py-2.5 rounded-full bg-on-surface text-surface text-xs font-bold text-center shadow-lg">
+  </div>
+
+  <!-- Logic Controller -->
+  <script>
+    let activeCategory = 'All';
+    let searchQuery = '';
+    let selectedItem = null;
+    let modalQty = 1;
+    let selectedAddons = [];
+    let selectedOptions = {};
+
+    function renderMenu() {
+      const container = document.getElementById('menuContainer');
+      const emptyState = document.getElementById('emptySearchState');
+      if (!container) return;
+
+      const activeRest = (window.getActiveRestaurant ? window.getActiveRestaurant() : null) || window.RESTAURANT;
+      const items = (window.getMenuItems ? window.getMenuItems(activeRest ? activeRest.id : null) : (window.MENU || []));
+      const filtered = items.filter(item => {
+        const matchesCat = activeCategory === 'All' || item.category === activeCategory;
+        const matchesQuery = !searchQuery || item.name.toLowerCase().includes(searchQuery.toLowerCase()) || item.desc.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCat && matchesQuery;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        emptyState.classList.add('flex');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      emptyState.classList.remove('flex');
+
+      const cart = window.Cart ? window.Cart.get() : [];
+
+      container.innerHTML = filtered.map(item => {
+        const cartItem = cart.find(c => c.id === item.id);
+        const qty = cartItem ? cartItem.qty : 0;
+
+        const vegIcon = item.veg
+          ? `<span class="w-3.5 h-3.5 border border-tertiary p-0.5 rounded flex items-center justify-center shrink-0" title="Veg"><span class="w-2 h-2 rounded-full bg-tertiary"></span></span>`
+          : `<span class="w-3.5 h-3.5 border border-primary p-0.5 rounded flex items-center justify-center shrink-0" title="Non-Veg"><span class="w-0 h-0 border-l-[3.5px] border-l-transparent border-r-[3.5px] border-r-transparent border-b-[6px] border-b-primary"></span></span>`;
+
+        return `
+          <div id="menu-item-${item.id}" class="bg-surface-container-lowest rounded-2xl p-3.5 shadow-sm border border-[#e0d8d5]/80 flex gap-3 cursor-pointer hover:border-primary/40 transition-all duration-300" onclick="openItemModal('${item.id}')">
+            <!-- Left Info Column -->
+            <div class="flex-1 min-w-0 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center gap-1.5">
+                  ${vegIcon}
+                  ${item.tag ? `<span class="text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.2 rounded-full bg-primary-fixed text-on-primary-fixed">${item.tag}</span>` : ''}
+                </div>
+                <h4 class="font-headline text-[14px] font-bold text-on-surface mt-1 truncate">${item.name}</h4>
+                <div class="flex items-center gap-2 mt-0.5">
+                  <span class="font-headline font-black text-sm text-primary">${money(item.price)}</span>
+                  <span class="text-[11px] font-semibold text-secondary flex items-center gap-0.5">
+                    <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span> ${item.rating}
+                  </span>
+                </div>
+                <p class="text-[11px] text-on-surface-variant line-clamp-2 mt-1 leading-snug">${item.desc}</p>
+              </div>
+
+              <div class="mt-2 flex items-center gap-1 text-[10px] text-on-surface-variant">
+                ${item.customisable ? '<span class="material-symbols-outlined text-[13px] text-secondary">tune</span><span class="font-medium">Customisable</span>' : ''}
+              </div>
+            </div>
+
+            <!-- Right Image + Action Column -->
+            <div class="w-24 sm:w-28 shrink-0 flex flex-col items-center justify-between" onclick="event.stopPropagation()">
+              <div class="w-24 sm:w-28 h-20 rounded-xl overflow-hidden bg-surface-container shadow-inner">
+                <img alt="${item.name}" class="w-full h-full object-cover" src="${item.img}" loading="lazy"/>
+              </div>
+
+              <!-- Cart Action Counter or Add Button -->
+              <div class="mt-2 w-full flex justify-center">
+                ${qty > 0 ? `
+                  <div class="flex items-center justify-between w-full bg-primary text-white rounded-full px-2 py-1 text-xs font-bold shadow-sm">
+                    <button onclick="handleQuickQty('${item.id}', -1)" class="w-5 h-5 flex items-center justify-center font-black active:scale-75 transition-transform">-</button>
+                    <span class="font-bold">${qty}</span>
+                    <button onclick="handleQuickQty('${item.id}', 1)" class="w-5 h-5 flex items-center justify-center font-black active:scale-75 transition-transform">+</button>
+                  </div>
+                ` : `
+                  <button onclick="openItemModal('${item.id}')" class="w-full py-1.5 px-3 rounded-full bg-surface-container-low hover:bg-primary-fixed border border-[#e0d8d5] text-primary text-xs font-extrabold shadow-sm active:scale-95 transition-all flex items-center justify-center gap-1">
+                    <span>ADD</span>
+                    <span class="text-[13px] font-bold">+</span>
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Filter by Category
+    function filterCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        const matches = btn.getAttribute('data-category') === cat;
+        btn.classList.toggle('active', matches);
+        btn.classList.toggle('bg-primary', matches);
+        btn.classList.toggle('text-white', matches);
+        btn.classList.toggle('bg-surface-container', !matches);
+        btn.classList.toggle('text-on-surface', !matches);
+      });
+      renderMenu();
+    }
+
+    function renderCategoryPills(items) {
+      const container = document.getElementById('categoryPills');
+      if (!container) return;
+      const cats = ['All', ...new Set(items.map(i => i.category))];
+      container.innerHTML = cats.map(cat => {
+        const isAct = cat === activeCategory;
+        const count = cat === 'All' ? items.length : items.filter(i => i.category === cat).length;
+        return `
+          <button onclick="filterCategory('${cat}')" class="cat-pill ${isAct ? 'active bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface hover:bg-surface-container-high'} px-3 py-1 rounded-full text-[11px] font-bold shrink-0 transition-all" data-category="${cat}">
+            ${cat} (${count})
+          </button>
+        `;
+      }).join('');
+    }
+
+    // Menu Search
+    function handleMenuSearch(val) {
+      searchQuery = val.trim();
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.classList.toggle('hidden', searchQuery.length === 0);
+      renderMenu();
+    }
+
+    function clearMenuSearch() {
+      searchQuery = '';
+      const input = document.getElementById('menuSearchInput');
+      if (input) input.value = '';
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.classList.add('hidden');
+      filterCategory('All');
+    }
+
+    // Quick Qty handler for inline food card button
+    function handleQuickQty(itemId, change) {
+      const cart = window.Cart ? window.Cart.get() : [];
+      const item = cart.find(c => c.id === itemId);
+      if (!item && change > 0) {
+        window.Cart.add(itemId, 1);
+      } else if (item) {
+        window.Cart.setQty(item.cartKey, item.qty + change);
+      }
+      syncFloatingCart();
+      renderMenu();
+    }
+
+    // Food Item Detail Modal / Bottom Sheet
+    function openItemModal(itemId) {
+      const item = (window.MENU || []).find(m => m.id === itemId);
+      if (!item) return;
+
+      selectedItem = item;
+      modalQty = 1;
+      selectedAddons = [];
+      selectedOptions = {};
+
+      document.getElementById('modalItemImg').src = item.img;
+      document.getElementById('modalItemName').textContent = item.name;
+      document.getElementById('modalItemDesc').textContent = item.desc;
+      document.getElementById('modalItemCategory').textContent = item.category;
+      document.getElementById('modalItemRating').innerHTML = `★ ${item.rating} (${item.ratingCount})`;
+
+      const vegBadge = document.getElementById('modalVegBadge');
+      vegBadge.innerHTML = item.veg
+        ? `<span class="w-4 h-4 border border-tertiary bg-white p-0.5 rounded flex items-center justify-center shrink-0"><span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span></span>`
+        : `<span class="w-4 h-4 border border-primary bg-white p-0.5 rounded flex items-center justify-center shrink-0"><span class="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[7px] border-b-primary"></span></span>`;
+
+      // Customization Options
+      const optionsSec = document.getElementById('modalOptionsSection');
+      if (item.options && item.options.length > 0) {
+        optionsSec.classList.remove('hidden');
+        optionsSec.innerHTML = item.options.map((opt, optIdx) => {
+          selectedOptions[opt.name] = opt.choices[0];
+          return `
+            <div class="flex flex-col gap-1.5">
+              <span class="font-headline font-bold text-on-surface">${opt.name}</span>
+              <div class="flex flex-wrap gap-2">
+                ${opt.choices.map((ch, chIdx) => `
+                  <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low cursor-pointer hover:border-primary text-xs">
+                    <input type="radio" name="opt_${optIdx}" value="${ch}" ${chIdx === 0 ? 'checked' : ''} onchange="selectOption('${opt.name}', '${ch}')" class="accent-primary"/>
+                    <span class="font-medium text-on-surface">${ch}</span>
+                  </label>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        optionsSec.classList.add('hidden');
+      }
+
+      // Addons
+      const addonsSec = document.getElementById('modalAddonsSection');
+      const addonsList = document.getElementById('modalAddonsList');
+      if (item.addons && item.addons.length > 0) {
+        addonsSec.classList.remove('hidden');
+        addonsList.innerHTML = item.addons.map(addon => `
+          <label class="flex items-center justify-between p-2.5 rounded-xl border border-[#e0d8d5] bg-surface-container-low cursor-pointer hover:border-primary/50 transition-colors">
+            <div class="flex items-center gap-2">
+              <input type="checkbox" value="${addon.id}" onchange="toggleAddon('${addon.id}', ${addon.price})" class="accent-primary w-4 h-4 rounded"/>
+              <span class="text-xs font-semibold text-on-surface">${addon.name}</span>
+            </div>
+            <span class="font-bold text-xs text-primary">+${money(addon.price)}</span>
+          </label>
+        `).join('');
+      } else {
+        addonsSec.classList.add('hidden');
+      }
+
+      updateModalTotal();
+      document.getElementById('itemDetailModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      notifyParentNavbar(false);
+    }
+
+    function closeItemModal() {
+      document.getElementById('itemDetailModal').classList.add('hidden');
+      document.body.style.overflow = '';
+      selectedItem = null;
+      notifyParentNavbar(true);
+    }
+
+    function selectOption(name, choice) {
+      selectedOptions[name] = choice;
+    }
+
+    function toggleAddon(addonId, price) {
+      const addonObj = selectedItem.addons.find(a => a.id === addonId);
+      const idx = selectedAddons.findIndex(a => a.id === addonId);
+      if (idx >= 0) {
+        selectedAddons.splice(idx, 1);
+      } else if (addonObj) {
+        selectedAddons.push(addonObj);
+      }
+      updateModalTotal();
+    }
+
+    function changeModalQty(d) {
+      modalQty = Math.max(1, modalQty + d);
+      document.getElementById('modalItemQty').textContent = modalQty;
+      updateModalTotal();
+    }
+
+    function updateModalTotal() {
+      if (!selectedItem) return;
+      const addonsSum = selectedAddons.reduce((s, a) => s + a.price, 0);
+      const total = (selectedItem.price + addonsSum) * modalQty;
+      document.getElementById('modalCalculatedTotal').textContent = money(total);
+      document.getElementById('modalItemPrice').textContent = money(selectedItem.price);
+    }
+
+    function submitModalAddToCart() {
+      if (!selectedItem) return;
+      window.Cart.add(selectedItem.id, modalQty, selectedOptions, selectedAddons);
+      showToast(`${selectedItem.name} added to your bag!`);
+      closeItemModal();
+      syncFloatingCart();
+      renderMenu();
+    }
+
+    // Floating Cart Synchronizer
+    function syncFloatingCart() {
+      const bar = document.getElementById('floatingCartBar');
+      if (!bar) return;
+      const count = window.Cart ? window.Cart.count() : 0;
+      const bill = window.Cart ? window.Cart.bill() : { total: 0 };
+
+      if (count > 0) {
+        bar.classList.remove('hidden');
+        bar.style.display = 'block';
+        const cEl = document.getElementById('floatingItemCount');
+        const tEl = document.getElementById('floatingItemTotal');
+        if (cEl) cEl.textContent = `${count} ${count === 1 ? 'Item' : 'Items'} Added`;
+        if (tEl) tEl.textContent = money(bill.total);
+      } else {
+        bar.classList.add('hidden');
+        bar.style.display = 'none';
+      }
+    }
+
+    function goToCart() {
+      if (window.parent && window.parent !== window && typeof window.parent.go === 'function') {
+        window.parent.go('#/cart');
+      } else {
+        location.href = '/screens/cart.html';
+      }
+    }
+
+    // Switcher & Data Initializer
+    function renderSwitcherPills(activeId) {
+      const container = document.getElementById('restSwitcherPills');
+      if (!container || !window.RESTAURANTS) return;
+      container.innerHTML = window.RESTAURANTS.map(r => {
+        const isSel = r.id === activeId;
+        const shortName = r.id === 'lazeez-mandi' ? 'Lazeez Mandi' :
+                          r.id === 'my-village-kitchen' ? 'Village Kitchen' :
+                          r.id === 'royal-dawat-forno' ? 'Royal Dawat' : 'Garden Bakery';
+        return `
+          <button onclick="switchRestaurant('${r.id}')" class="px-2.5 py-1 rounded-full text-[11px] font-bold transition-all shrink-0 flex items-center gap-1.5 ${isSel ? 'bg-primary text-white shadow-sm ring-1 ring-primary' : 'bg-surface-container text-on-surface hover:bg-surface-container-high hover:text-primary active:scale-95'}">
+            <span>${shortName}</span>
+            ${isSel ? '<span class="text-[9px] bg-white/20 px-1 py-0.2 rounded font-extrabold uppercase tracking-wider">Active</span>' : ''}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function switchRestaurant(id) {
+      if (window.setActiveRestaurant) {
+        window.setActiveRestaurant(id);
+      }
+      try {
+        if (window.history && window.history.replaceState) {
+          const u = new URL(window.location);
+          u.searchParams.set('id', id);
+          window.history.replaceState({}, '', u);
+        }
+      } catch(e) {}
+      loadRestaurantData(id);
+      const rest = window.getActiveRestaurant();
+      showToast(`Viewing ${rest.name}`);
+    }
+
+    function loadRestaurantData(forcedId) {
+      let rest = null;
+      if (forcedId && window.setActiveRestaurant) {
+        rest = window.setActiveRestaurant(forcedId);
+      } else if (window.getActiveRestaurant) {
+        rest = window.getActiveRestaurant();
+      }
+      if (!rest) rest = (window.RESTAURANTS && window.RESTAURANTS[0]) || window.RESTAURANT;
+      if (!rest) return;
+
+      window.RESTAURANT = rest;
+      document.title = `${rest.name} — Restaurant Menu`;
+
+      // Header text
+      const hName = document.getElementById('headerRestName');
+      const hSub = document.getElementById('headerRestSub');
+      if (hName) hName.textContent = rest.name;
+      if (hSub) hSub.textContent = `${rest.distance} • ${rest.deliveryTime}`;
+
+      // Hero Cover
+      const cover = document.getElementById('restCoverImg');
+      if (cover) cover.src = rest.coverImage;
+
+      // Card Information
+      const cName = document.getElementById('cardRestName');
+      const cCuisine = document.getElementById('cardRestCuisine');
+      const cRating = document.getElementById('cardRestRating');
+      const cReviews = document.getElementById('cardRestReviews');
+      const cTime = document.getElementById('cardRestDeliveryTime');
+      const cPrice = document.getElementById('cardRestPrice');
+      const cDist = document.getElementById('cardRestDistance');
+      const cOffersBtn = document.getElementById('cardOffersBtnText');
+
+      if (cName) cName.textContent = rest.name;
+      if (cCuisine) cCuisine.textContent = rest.cuisine;
+      if (cRating) cRating.textContent = rest.rating;
+      if (cReviews) cReviews.textContent = `(${rest.reviewsCount}+)`;
+      if (cTime) cTime.textContent = rest.deliveryTime;
+      if (cPrice) cPrice.textContent = `${rest.priceRange || '₹₹'} • ${rest.priceForTwo || '₹250 for one'}`;
+      if (cDist) cDist.textContent = rest.distance;
+      if (cOffersBtn) cOffersBtn.textContent = `${(rest.offers || []).length} Offers`;
+
+      // Modals
+      const infoAddr = document.getElementById('infoModalAddress');
+      const infoFssai = document.getElementById('infoModalFssai');
+      const infoPhone = document.getElementById('infoModalPhone');
+      const revTitle = document.getElementById('reviewsModalTitle');
+      if (infoAddr) infoAddr.textContent = rest.address;
+      if (infoFssai) infoFssai.textContent = rest.fssai || '13623014000881';
+      if (infoPhone) infoPhone.textContent = rest.phone || '+91 98480 77123';
+      if (revTitle) revTitle.textContent = `Customer Reviews (${rest.rating} ★)`;
+
+      // Switcher pills
+      renderSwitcherPills(rest.id);
+
+      // Reset category and search
+      activeCategory = 'All';
+      searchQuery = '';
+      const menuSearch = document.getElementById('menuSearchInput');
+      if (menuSearch) menuSearch.value = '';
+      const clearBtn = document.getElementById('clearSearchBtn');
+      if (clearBtn) clearBtn.classList.add('hidden');
+
+      const items = (window.getMenuItems ? window.getMenuItems(rest.id) : (window.MENU || []));
+      renderCategoryPills(items);
+      renderMenu();
+    }
+
+    // Offers & Modals
+    function openOffersModal() {
+      const list = document.getElementById('offersList');
+      const rest = (window.getActiveRestaurant ? window.getActiveRestaurant() : null) || window.RESTAURANT;
+      const offers = (rest && rest.offers) ? rest.offers : (window.Coupons ? window.Coupons.list() : []);
+      list.innerHTML = offers.map(o => `
+        <div class="p-3 rounded-2xl border border-primary/40 bg-primary-fixed/20 flex items-center justify-between gap-3">
+          <div class="flex flex-col">
+            <span class="font-headline font-black text-xs text-primary">${o.code}</span>
+            <span class="text-xs font-bold text-on-surface mt-0.5">${o.title}</span>
+            <span class="text-[11px] text-on-surface-variant">${o.desc}</span>
+          </div>
+          <button onclick="applyOfferFromModal('${o.code}')" class="px-3 py-1 rounded-full bg-primary text-white text-[11px] font-bold shadow-sm active:scale-95 transition-all">
+            APPLY
+          </button>
+        </div>
+      `).join('');
+      document.getElementById('offersModal').classList.remove('hidden');
+      notifyParentNavbar(false);
+    }
+    function closeOffersModal() {
+      document.getElementById('offersModal').classList.add('hidden');
+      notifyParentNavbar(true);
+    }
+
+    function applyOfferFromModal(code) {
+      window.Coupons.apply(code);
+      closeOffersModal();
+      showToast(`Coupon ${code} applied successfully!`);
+    }
+
+    function openInfoModal() {
+      document.getElementById('infoModal').classList.remove('hidden');
+      notifyParentNavbar(false);
+    }
+    function closeInfoModal() {
+      document.getElementById('infoModal').classList.add('hidden');
+      notifyParentNavbar(true);
+    }
+
+    function openReviewsModal() {
+      const list = document.getElementById('reviewsList');
+      const rest = (window.getActiveRestaurant ? window.getActiveRestaurant() : null) || window.RESTAURANT;
+      const revs = (rest && rest.reviews) ? rest.reviews : [];
+      list.innerHTML = revs.map(r => `
+        <div class="p-3 rounded-xl border border-[#e0d8d5] bg-surface-container-low flex flex-col gap-1.5">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-xs text-on-surface">${r.author}</span>
+            <span class="text-secondary font-bold text-xs">★ ${r.rating}</span>
+          </div>
+          <p class="text-xs text-on-surface-variant">${r.text}</p>
+          <div class="flex gap-1.5">
+            ${(r.tags || []).map(t => `<span class="text-[10px] px-2 py-0.5 rounded-full bg-surface-container font-semibold text-on-surface-variant">${t}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('reviewsModal').classList.remove('hidden');
+      notifyParentNavbar(false);
+    }
+    function closeReviewsModal() {
+      document.getElementById('reviewsModal').classList.add('hidden');
+      notifyParentNavbar(true);
+    }
+
+    function notifyParentNavbar(visible) {
+      if (window.parent && window.parent !== window) {
+        try {
+          window.parent.postMessage({ type: visible ? 'navbar:show' : 'navbar:hide' }, '*');
+        } catch(e) {}
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeItemModal();
+        closeOffersModal();
+        closeInfoModal();
+        closeReviewsModal();
+      }
+    });
+    window.addEventListener('pagehide', () => notifyParentNavbar(true));
+    window.addEventListener('beforeunload', () => notifyParentNavbar(true));
+
+    function shareRestaurant() {
+      const rest = (window.getActiveRestaurant ? window.getActiveRestaurant() : null) || window.RESTAURANT;
+      const name = rest ? rest.name : "DeliverApp Kitchen";
+      if (navigator.share) {
+        navigator.share({ title: name, url: location.href });
+      } else {
+        navigator.clipboard.writeText(location.href);
+        showToast("Restaurant link copied to clipboard!");
+      }
+    }
+
+    let isFav = false;
+    function toggleFavorite() {
+      isFav = !isFav;
+      const icon = document.getElementById('favIcon');
+      icon.textContent = isFav ? 'favorite' : 'favorite_border';
+      icon.classList.toggle('text-primary', isFav);
+      showToast(isFav ? "Saved to your favorite kitchens!" : "Removed from favorites");
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      if (!t) return;
+      t.textContent = msg;
+      t.classList.remove('opacity-0', 'translate-y-3');
+      t.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        t.classList.remove('opacity-100', 'translate-y-0');
+        t.classList.add('opacity-0', 'translate-y-3');
+      }, 2200);
+    }
+
+    function syncAll() {
+      syncFloatingCart();
+      renderMenu();
+    }
+
+    function checkAndOpenTargetItem() {
+      let targetItemId = null;
+      try {
+        const u = new URL(window.location.href);
+        targetItemId = u.searchParams.get('item');
+        if (!targetItemId && window.location.hash.includes('item=')) {
+          const match = window.location.hash.match(/item=([^&]+)/);
+          if (match) targetItemId = match[1];
+        }
+        if (!targetItemId) {
+          targetItemId = localStorage.getItem('deliverapp_target_item');
+        }
+        if (targetItemId) {
+          localStorage.removeItem('deliverapp_target_item');
+        }
+      } catch (e) {}
+
+      if (!targetItemId) return;
+
+      const item = (window.MENU || []).find(m => m.id === targetItemId);
+      if (!item) return;
+
+      // Make sure the restaurant that serves this dish is selected
+      const currentRest = (window.getActiveRestaurant ? window.getActiveRestaurant() : null) || window.RESTAURANT;
+      if (item.restaurantId && currentRest && currentRest.id !== item.restaurantId) {
+        switchRestaurant(item.restaurantId);
+      }
+
+      // Clear any local menu search query so target item is visible
+      if (typeof searchQuery !== 'undefined' && searchQuery) {
+        clearMenuSearch();
+      }
+
+      // If activeCategory hides it, reset to All
+      if (activeCategory !== 'All' && activeCategory !== item.category) {
+        filterCategory('All');
+      } else {
+        renderMenu();
+      }
+
+      // Scroll to the item, highlight it, and open modal
+      setTimeout(() => {
+        const el = document.getElementById('menu-item-' + targetItemId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('ring-2', 'ring-primary', 'shadow-lg', 'bg-primary-fixed/20');
+          setTimeout(() => {
+            el.classList.remove('ring-2', 'ring-primary', 'shadow-lg', 'bg-primary-fixed/20');
+          }, 3500);
+        }
+        openItemModal(targetItemId);
+      }, 400);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadRestaurantData();
+      syncAll();
+      setTimeout(checkAndOpenTargetItem, 250);
+      window.addEventListener('cart:update', syncAll);
+      window.addEventListener('pageshow', () => { syncAll(); checkAndOpenTargetItem(); });
+      window.addEventListener('focus', () => { syncAll(); checkAndOpenTargetItem(); });
+      window.addEventListener('storage', syncAll);
+      window.addEventListener('message', (e) => {
+        if (e.data && e.data.type === 'cart:update') syncAll();
+        if (e.data && e.data.type === 'item:open') {
+          localStorage.setItem('deliverapp_target_item', e.data.itemId);
+          checkAndOpenTargetItem();
+        }
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) { syncAll(); checkAndOpenTargetItem(); }
+      });
+      window.addEventListener('restaurant:change', (e) => {
+        loadRestaurantData(e.detail && e.detail.id);
+        checkAndOpenTargetItem();
+      });
+    });
+  </script>
+</body>
+</html>

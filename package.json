@@ -1,0 +1,29 @@
+{
+  "name": "deliverapp-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Production-grade food delivery platform with 3 applications sharing 1 backend (DeliverApp / Epicurean Curations)",
+  "workspaces": [
+    "packages/*",
+    "services/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "backend:dev": "node services/backend/dist/main.js",
+    "backend:build": "node services/backend/build.js",
+    "backend:test": "PORT=8080 node services/backend/test-backend.js",
+    "dashboard:dev": "cd apps/restaurant-dashboard && npm run dev",
+    "customer:start": "cd apps/customer && npm start",
+    "rider:start": "cd apps/delivery-partner && npm start",
+    "dev:all": "turbo run dev",
+    "build": "vite build",
+    "build:all": "turbo run build",
+    "preview": "vite preview",
+    "test": "PORT=8080 node services/backend/test-backend.js",
+    "dev": "vite --port 5173"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0",
+    "vite": "^5.4.0"
+  }
+}

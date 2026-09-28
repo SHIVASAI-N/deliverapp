@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "DeliverApp Courier | Rider OS",
+    "slug": "deliverapp-rider",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0c0a09"
+    },
+    "ios": {
+      "bundleIdentifier": "com.epicurean.deliverapp.rider"
+    },
+    "android": {
+      "package": "com.epicurean.deliverapp.rider"
+    }
+  }
+}

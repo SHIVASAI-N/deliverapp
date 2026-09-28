@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>Epicurean Curations — Food Delivery</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a83211'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" />
+<meta name="theme-color" content="#a83211" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: "#a83211",
+        "primary-container": "#ca4a28",
+        "primary-fixed": "#ffdbd1",
+        surface: "#fff8f5",
+        "surface-container": "#f4ece8",
+        "surface-container-low": "#faf2ee",
+        "on-surface": "#1e1b19",
+        "on-surface-variant": "#59413b"
+      },
+      fontFamily: {
+        headline: ["Epilogue","sans-serif"],
+        body: ["Plus Jakarta Sans","sans-serif"]
+      }
+    }
+  }
+};
+</script>
+<script src="/js/config.js"></script>
+<script src="/js/store.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/nav.js"></script>
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { font-family: "Plus Jakarta Sans", sans-serif; background: #171311; }
+  h1, h2, h3 { font-family: Epilogue, sans-serif; }
+  #shell { height: 100dvh; }
+  @media (min-width: 480px) {
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background: radial-gradient(1000px 500px at 20% 0%, #3a1c12 0%, #171311 55%, #0d0b0a 100%);
+    }
+    #shell {
+      height: min(890px, calc(100dvh - 32px));
+      border-radius: 2rem;
+      overflow: hidden;
+      border: 1px solid #3a332f;
+      box-shadow: 0 30px 80px rgba(0,0,0,.65);
+    }
+  }
+  #appFrame { border: 0; width: 100%; height: 100%; background: #fff8f5; display: block; }
+  .tabbtn { transition: color .15s, transform .1s; }
+  .tabbtn:active { transform: scale(.94); }
+</style>
+</head>
+<body>
+<div id="shell" class="w-full max-w-[430px] mx-auto bg-surface text-[#1e1b19] flex flex-col relative">
+
+  <!-- App Header -->
+  <header class="pt-[env(safe-area-inset-top)] bg-surface/95 backdrop-blur border-b border-[#e0d8d5] z-20 shrink-0">
+    <div class="h-14 px-4 flex items-center justify-between gap-2">
+      <button data-go="#/home" class="flex items-center gap-2 min-w-0">
+        <span class="w-9 h-9 rounded-full bg-primary text-white flex items-center justify-center shrink-0 shadow-sm">
+          <span class="material-symbols-outlined text-[20px]">restaurant</span>
+        </span>
+        <div class="flex flex-col text-left min-w-0">
+          <span class="font-headline font-bold text-[16px] text-on-surface tracking-tight truncate leading-tight">Epicurean</span>
+          <span class="text-[10px] font-semibold text-primary uppercase tracking-wider">Curations</span>
+        </div>
+      </button>
+      <div class="flex items-center gap-1.5 min-w-0">
+        <button data-go="#/ai" class="flex items-center gap-1.5 text-xs font-bold bg-gradient-to-r from-[#af2900] via-[#e8481c] to-[#f5a524] text-white rounded-full px-3 py-1.5 shadow-[0_2px_12px_rgba(232,72,28,0.32)] hover:opacity-95 active:scale-95 transition-all cursor-pointer shrink-0">
+          <span class="material-symbols-outlined text-[16px] text-amber-200" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+          <span class="font-medium tracking-tight">Fleet AI</span>
+        </button>
+        <button data-go="#/checkout" id="addrPill" class="flex items-center gap-1.5 text-xs font-semibold bg-[#f4ece8] hover:bg-[#eee7e3] text-on-surface rounded-full pl-2.5 pr-3 py-1.5 min-w-0 transition-colors">
+          <span class="material-symbols-outlined text-primary text-[16px]" style="font-variation-settings: 'FILL' 1;">location_on</span>
+          <span id="addrText" class="truncate max-w-[110px]">Kompally, Hyderabad</span>
+          <span class="material-symbols-outlined text-[14px] text-on-surface-variant">expand_more</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Single App Viewport -->
+  <main class="flex-1 relative bg-surface overflow-hidden">
+    <iframe id="appFrame" title="Epicurean Curations App" src="/screens/home.html"></iframe>
+  </main>
+
+  <!-- Floating Capsule Navigation Bar (5 tabs with Tap & Drag Option Selector) -->
+  <div id="navContainer" class="pointer-events-none absolute bottom-0 inset-x-0 pb-[max(env(safe-area-inset-bottom),14px)] pt-2 px-3.5 flex justify-center z-30 select-none transition-all duration-300 ease-in-out">
+    <!-- Stationary Floating Capsule Navbar -->
+    <nav id="floatingNav" class="pointer-events-auto relative w-full max-w-[390px] h-[64px] bg-[#0c0a09] border border-white/[0.12] rounded-full px-2 py-1.5 shadow-[0_16px_36px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.06)] flex items-center justify-between touch-none select-none backdrop-blur-xl transition-all duration-300">
+
+      <!-- Sliding Active Selection Pill (Drags smoothly across the 5 options) -->
+      <div id="navActivePill" class="absolute top-[8px] left-0 w-[48px] h-[48px] rounded-full bg-[#f04e23] shadow-[0_4px_18px_rgba(240,78,35,0.55)] pointer-events-none z-0 will-change-transform" style="transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+
+      <!-- Option 1: Explore -->
+      <button data-go="#/home" data-tab="home" data-index="0" aria-label="Explore" title="Explore" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
+        <div class="tab-indicator w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
+          <span class="tab-icon material-symbols-outlined text-[24px] text-white transition-colors duration-200">restaurant</span>
+        </div>
+      </button>
+
+      <!-- Option 2: Kitchen -->
+      <button data-go="#/restaurant" data-tab="restaurant" data-index="1" aria-label="Kitchen" title="Kitchen" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
+        <div class="tab-indicator w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
+          <span class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">storefront</span>
+        </div>
+      </button>
+
+      <!-- Option 3: Bag -->
+      <button data-go="#/cart" data-tab="cart" data-index="2" aria-label="Bag" title="Bag" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
+        <div class="tab-indicator relative w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
+          <span class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">shopping_bag</span>
+          <!-- Bag Count Badge -->
+          <span id="cartBadge" class="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[10px] shadow-sm hidden items-center justify-center z-20">0</span>
+        </div>
+      </button>
+
+      <!-- Option 4: Orders -->
+      <button data-go="#/tracking" data-tab="orders" data-index="3" aria-label="Orders" title="Orders" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
+        <div class="tab-indicator w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
+          <span class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">receipt_long</span>
+        </div>
+      </button>
+
+      <!-- Option 5: Account -->
+      <button data-go="#/account" data-tab="account" data-index="4" aria-label="Account" title="Account" class="tabbtn relative z-10 flex-1 flex items-center justify-center h-full active:scale-90 transition-transform cursor-pointer">
+        <div class="tab-indicator relative w-[48px] h-[48px] rounded-full flex items-center justify-center pointer-events-none">
+          <span id="acctIcon" class="tab-icon material-symbols-outlined text-[24px] text-white/60 transition-colors duration-200">person</span>
+          <span id="acctDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#00873a] border border-[#0c0a09] hidden z-20"></span>
+        </div>
+      </button>
+
+    </nav>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const ROUTES = {
+    '#/home':       { src: '/screens/home.html',       tab: 'home' },
+    '#/restaurant': { src: '/screens/restaurant.html', tab: 'restaurant' },
+    '#/cart':       { src: '/screens/cart.html',       tab: 'cart' },
+    '#/checkout':   { src: '/screens/checkout.html',   tab: 'cart' },
+    '#/success':    { src: '/screens/success.html',    tab: 'cart' },
+    '#/tracking':   { src: '/screens/tracking.html',   tab: 'orders' },
+    '#/account':    { src: '/screens/account.html',    tab: 'account' },
+    '#/login':      { src: '/screens/login.html',      tab: 'account' },
+    '#/ai':         { src: '/screens/ai.html',         tab: null }
+  };
+
+  const PATH_TO_HASH = {
+    '/screens/home.html': '#/home',
+    '/screens/restaurant.html': '#/restaurant',
+    '/screens/cart.html': '#/cart',
+    '/screens/checkout.html': '#/checkout',
+    '/screens/success.html': '#/success',
+    '/screens/tracking.html': '#/tracking',
+    '/screens/account.html': '#/account',
+    '/screens/login.html': '#/login',
+    '/screens/ai.html': '#/ai'
+  };
+
+  const TABS_ORDER = ['home', 'restaurant', 'cart', 'orders', 'account'];
+  const TABS_TO_HASH = {
+    'home': '#/home',
+    'restaurant': '#/restaurant',
+    'cart': '#/cart',
+    'orders': '#/tracking',
+    'account': '#/account'
+  };
+  const NO_NAV_ROUTES = ['#/checkout', '#/success', '#/login', '#/ai'];
+
+  const frame = document.getElementById('appFrame');
+  const navContainer = document.getElementById('navContainer');
+  const floatingNav = document.getElementById('floatingNav');
+  const navActivePill = document.getElementById('navActivePill');
+
+  let currentActiveTab = 'home';
+
+  function hideNavbar() {
+    if (navContainer) {
+      navContainer.style.transform = 'translate3d(0, 115px, 0)';
+      navContainer.style.opacity = '0';
+      navContainer.style.pointerEvents = 'none';
+    }
+    if (floatingNav) {
+      floatingNav.style.pointerEvents = 'none';
+    }
+  }
+
+  function showNavbar() {
+    if (navContainer) {
+      navContainer.style.transform = 'translate3d(0, 0, 0)';
+      navContainer.style.opacity = '1';
+      navContainer.style.pointerEvents = 'none';
+    }
+    if (floatingNav) {
+      floatingNav.style.pointerEvents = 'auto';
+    }
+  }
+
+  function getActiveHash(){
+    return ROUTES[location.hash] ? location.hash : '#/home';
+  }
+
+  function absUrl(p){
+    return new URL(p, location.origin).href;
+  }
+
+  function positionActivePill(tabNameOrIndex, animate = true) {
+    if (!floatingNav || !navActivePill) return;
+    let targetBtn = null;
+    if (typeof tabNameOrIndex === 'number') {
+      const tabName = TABS_ORDER[tabNameOrIndex] || 'home';
+      targetBtn = floatingNav.querySelector(`[data-tab="${tabName}"]`);
+    } else {
+      targetBtn = floatingNav.querySelector(`[data-tab="${tabNameOrIndex}"]`);
+    }
+    if (!targetBtn) return;
+
+    const pillWidth = navActivePill.offsetWidth || 48;
+    const targetX = targetBtn.offsetLeft + (targetBtn.offsetWidth - pillWidth) / 2;
+
+    if (animate) {
+      navActivePill.style.transition = 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    } else {
+      navActivePill.style.transition = 'none';
+    }
+    navActivePill.style.transform = `translate3d(${Math.round(targetX)}px, 0, 0)`;
+
+    // Update icons and cart badge style
+    floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
+      const isCurrent = (btn === targetBtn);
+      const icon = btn.querySelector('.tab-icon');
+      if (icon) {
+        if (isCurrent) {
+          icon.className = 'tab-icon material-symbols-outlined text-[24px] text-white scale-105 transition-all duration-200';
+        } else {
+          icon.className = 'tab-icon material-symbols-outlined text-[24px] text-white/60 hover:text-white scale-100 transition-all duration-200';
+        }
+      }
+    });
+
+    const isCartActive = (targetBtn.getAttribute('data-tab') === 'cart');
+    const badge = document.getElementById('cartBadge');
+    if (badge) {
+      if (isCartActive) {
+        badge.className = 'absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-white text-[#f04e23] font-black text-[10px] shadow-sm flex items-center justify-center z-20';
+      } else {
+        badge.className = 'absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[10px] shadow-sm flex items-center justify-center z-20';
+      }
+    }
+  }
+
+  function highlightTemporaryTab(idx) {
+    if (!floatingNav) return;
+    floatingNav.querySelectorAll('.tabbtn').forEach((btn, i) => {
+      const icon = btn.querySelector('.tab-icon');
+      if (icon) {
+        if (i === idx) {
+          icon.className = 'tab-icon material-symbols-outlined text-[24px] text-white scale-115 transition-all duration-100';
+        } else {
+          icon.className = 'tab-icon material-symbols-outlined text-[24px] text-white/40 scale-95 transition-all duration-100';
+        }
+      }
+    });
+  }
+
+  function paintTabs(activeTab){
+    currentActiveTab = activeTab || 'home';
+    positionActivePill(currentActiveTab, true);
+  }
+
+  function syncBadge(){
+    try {
+      const count = (window.Cart ? Cart.count() : 0);
+      const badge = document.getElementById('cartBadge');
+      if (!badge) return;
+      badge.textContent = count;
+      if (count > 0) {
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+        badge.style.display = 'flex';
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+        badge.style.display = 'none';
+      }
+    } catch(e){}
+  }
+
+  function syncAddress(){
+    try {
+      const a = (window.DeliveryAddress ? DeliveryAddress.get() : null);
+      if (a && a.label) {
+        const el = document.getElementById('addrText');
+        if (el) {
+          const clean = a.label.replace(/•\s*undefined/g, '• Kompally').replace(/undefined/g, 'Kompally');
+          el.textContent = clean.split(',')[0].trim();
+        }
+      }
+    } catch(e){}
+  }
+
+  function syncUser(){
+    try {
+      const u = (window.Auth ? Auth.user() : null);
+      const dot = document.getElementById('acctDot');
+      const lbl = document.getElementById('acctLabel');
+      if (dot) dot.classList.toggle('hidden', !u);
+      if (lbl) lbl.textContent = u ? (u.name || 'Account').split(' ')[0].slice(0, 9) : 'Account';
+    } catch(e){}
+  }
+
+  function render(){
+    const h = getActiveHash();
+    const r = ROUTES[h];
+    try {
+      const cur = frame.contentWindow.location.pathname;
+      if (cur !== r.src && !cur.endsWith(r.src)) {
+        frame.src = r.src;
+      }
+    } catch(e) {
+      frame.src = r.src;
+    }
+    if (NO_NAV_ROUTES.includes(h)) {
+      hideNavbar();
+    } else {
+      showNavbar();
+    }
+    paintTabs(r.tab);
+    syncBadge();
+    syncAddress();
+    syncUser();
+  }
+
+  let lastGoTime = 0;
+  let lastGoHash = '';
+  let justDragged = false;
+
+  window.go = function(h){
+    if (NO_NAV_ROUTES.includes(h)) {
+      hideNavbar();
+    } else {
+      showNavbar();
+    }
+    const now = Date.now();
+    if (lastGoHash === h && (now - lastGoTime < 250)) {
+      return;
+    }
+    lastGoTime = now;
+    lastGoHash = h;
+
+    if (location.hash === h) {
+      render();
+      try {
+        const target = localStorage.getItem('deliverapp_target_item');
+        if (target && frame && frame.contentWindow) {
+          frame.contentWindow.postMessage({ type: 'item:open', itemId: target }, '*');
+        }
+      } catch(e) {}
+    } else {
+      location.hash = h;
+    }
+  };
+
+  // Direct Click listener for all tab buttons (instant click-to-access)
+  if (floatingNav) {
+    floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        if (justDragged) {
+          e.preventDefault();
+          return;
+        }
+        const targetTab = btn.getAttribute('data-tab');
+        if (targetTab && TABS_TO_HASH[targetTab]) {
+          currentActiveTab = targetTab;
+          positionActivePill(targetTab, true);
+          window.go(TABS_TO_HASH[targetTab]);
+        }
+      });
+    });
+  }
+
+  // Click listener for header / address pill and other [data-go] elements
+  document.querySelectorAll('header [data-go]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.go(btn.getAttribute('data-go'));
+    });
+  });
+
+  // Dual Choice Interaction Engine: Click to Access OR Drag Option Pill
+  let isPointerDown = false;
+  let startX = 0;
+  let hasDragged = false;
+  let navRect = null;
+
+  if (floatingNav) {
+    floatingNav.addEventListener('pointerdown', (e) => {
+      if (e.button !== undefined && e.button !== 0) return;
+
+      isPointerDown = true;
+      startX = e.clientX;
+      hasDragged = false;
+      navRect = floatingNav.getBoundingClientRect();
+
+      try {
+        floatingNav.setPointerCapture(e.pointerId);
+      } catch(err) {}
+    });
+
+    floatingNav.addEventListener('pointermove', (e) => {
+      if (!isPointerDown || !navRect) return;
+
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 6) {
+        hasDragged = true;
+      }
+
+      if (hasDragged) {
+        // Drag active pill smoothly across options
+        const pillWidth = navActivePill.offsetWidth || 48;
+        const relX = e.clientX - navRect.left;
+        const minX = 6;
+        const maxX = navRect.width - pillWidth - 6;
+        const clampedX = Math.max(minX, Math.min(maxX, relX - pillWidth / 2));
+
+        navActivePill.style.transition = 'none';
+        navActivePill.style.transform = `translate3d(${clampedX}px, 0, 0)`;
+
+        // Highlight option under current drag position
+        const hoverIdx = Math.max(0, Math.min(4, Math.floor((clampedX + pillWidth / 2) / (navRect.width / 5))));
+        highlightTemporaryTab(hoverIdx);
+      }
+    });
+
+    const finishPointer = (e) => {
+      if (!isPointerDown) return;
+      isPointerDown = false;
+
+      try {
+        floatingNav.releasePointerCapture(e.pointerId);
+      } catch(err) {}
+
+      if (hasDragged) {
+        // USER CHOSE TO DRAG: Snap active pill to nearest tab and access screen!
+        justDragged = true;
+        setTimeout(() => { justDragged = false; }, 250);
+
+        const pillWidth = navActivePill.offsetWidth || 48;
+        const transformMatch = navActivePill.style.transform.match(/translate3d\(([-0-9.]+)px/);
+        const finalPillX = transformMatch ? parseFloat(transformMatch[1]) : 0;
+        const pillCenter = finalPillX + pillWidth / 2;
+        const targetIdx = Math.max(0, Math.min(4, Math.floor(pillCenter / (navRect.width / 5))));
+        const targetTab = TABS_ORDER[targetIdx];
+
+        if (targetTab && TABS_TO_HASH[targetTab]) {
+          currentActiveTab = targetTab;
+          positionActivePill(targetTab, true);
+          window.go(TABS_TO_HASH[targetTab]);
+        }
+      } else {
+        // USER CHOSE TO TAP / CLICK: Calculate clicked option from pointer X and access instantly!
+        if (navRect) {
+          const relX = e.clientX - navRect.left;
+          const targetIdx = Math.max(0, Math.min(4, Math.floor(relX / (navRect.width / 5))));
+          const targetTab = TABS_ORDER[targetIdx];
+
+          if (targetTab && TABS_TO_HASH[targetTab]) {
+            currentActiveTab = targetTab;
+            positionActivePill(targetTab, true);
+            window.go(TABS_TO_HASH[targetTab]);
+          }
+        }
+      }
+    };
+
+    floatingNav.addEventListener('pointerup', finishPointer);
+    floatingNav.addEventListener('pointercancel', finishPointer);
+
+    // Window resize keeps active pill precisely centered
+    window.addEventListener('resize', () => {
+      positionActivePill(currentActiveTab, false);
+    });
+
+    // Ensure initial placement after styles and font are loaded
+    requestAnimationFrame(() => {
+      positionActivePill(ROUTES[getActiveHash()].tab, false);
+    });
+  }
+
+  window.addEventListener('hashchange', render);
+
+  frame.addEventListener('load', () => {
+    try {
+      const p = frame.contentWindow.location.pathname;
+      if (PATH_TO_HASH[p] && location.hash !== PATH_TO_HASH[p]) {
+        history.replaceState(null, '', PATH_TO_HASH[p]);
+      }
+    } catch(e){}
+    const h = getActiveHash();
+    if (NO_NAV_ROUTES.includes(h)) {
+      hideNavbar();
+    } else {
+      showNavbar();
+    }
+    paintTabs(ROUTES[h].tab);
+    syncBadge();
+    syncAddress();
+    syncUser();
+
+    // Check if a target item should be opened after frame load
+    try {
+      const target = localStorage.getItem('deliverapp_target_item');
+      if (target && frame && frame.contentWindow) {
+        setTimeout(() => {
+          try {
+            frame.contentWindow.postMessage({ type: 'item:open', itemId: target }, '*');
+          } catch(err){}
+        }, 150);
+      }
+    } catch(e){}
+  });
+
+  window.addEventListener('storage', () => { syncBadge(); syncAddress(); syncUser(); });
+  window.addEventListener('cart:update', syncBadge);
+  window.addEventListener('address:change', syncAddress);
+  window.addEventListener('auth:change', syncUser);
+  window.addEventListener('pageshow', () => { syncBadge(); syncAddress(); syncUser(); });
+  window.addEventListener('focus', () => { syncBadge(); syncAddress(); syncUser(); });
+  window.addEventListener('message', (e) => {
+    if (!e.data) return;
+    if (e.data.type === 'navbar:hide') {
+      hideNavbar();
+    } else if (e.data.type === 'navbar:show') {
+      if (!NO_NAV_ROUTES.includes(getActiveHash())) {
+        showNavbar();
+      }
+    }
+    if (e.data.type === 'cart:update') {
+      syncBadge();
+    }
+    if (e.data.type === 'item:open') {
+      try {
+        if (frame && frame.contentWindow) {
+          frame.contentWindow.postMessage(e.data, '*');
+        }
+      } catch(err) {}
+    }
+  });
+
+  if (!ROUTES[location.hash]) {
+    history.replaceState(null, '', '#/home');
+  }
+  render();
+})();
+</script>
+</body>
+</html>

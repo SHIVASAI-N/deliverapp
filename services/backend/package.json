@@ -1,0 +1,16 @@
+{
+  "name": "@deliverapp/backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build.js",
+    "start": "node dist/main.js",
+    "dev": "node build.js && node dist/main.js"
+  },
+  "dependencies": {
+    "@deliverapp/types": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#fff8f5;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-tint": "#b32a00", "inverse-surface": "#342f2c", "surface": "#fff8f5", "on-background": "#1f1b18", "primary-fixed-dim": "#ffb4a1", "inverse-on-surface": "#f8efea", "surface-dim": "#e1d8d3", "surface-container-high": "#f0e6e1", "secondary-fixed-dim": "#cec5bf", "outline": "#8f7068", "on-tertiary": "#ffffff", "inverse-primary": "#ffb4a1", "on-surface-variant": "#5b403a", "surface-variant": "#eae1db", "on-secondary-fixed-variant": "#4c4641", "primary": "#af2900", "tertiary": "#615b54", "outline-variant": "#e4beb5", "surface-container": "#f6ece7", "surface-bright": "#fff8f5", "on-error": "#ffffff", "on-tertiary-fixed": "#1f1b16", "surface-container-lowest": "#ffffff", "error-container": "#ffdad6", "on-surface": "#1f1b18", "primary-container": "#d63c0f", "surface-container-low": "#fbf2ec", "on-tertiary-fixed-variant": "#4b4640", "on-primary-container": "#fffbff", "primary-fixed": "#ffdbd2", "background": "#fff8f5", "on-secondary-container": "#6a635e", "tertiary-fixed-dim": "#cdc5bd", "on-secondary": "#ffffff", "error": "#ba1a1a", "on-primary-fixed": "#3c0800", "on-tertiary-container": "#fffbff", "on-secondary-fixed": "#1f1b17", "secondary": "#645d58", "on-primary": "#ffffff", "on-error-container": "#93000a", "secondary-container": "#ebe1da", "on-primary-fixed-variant": "#891e00", "tertiary-fixed": "#eae1d8", "surface-container-highest": "#eae1db", "secondary-fixed": "#ebe1da", "tertiary-container": "#7a746c" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-lg": "1.5rem", "gutter-desktop": "2rem", "margin-desktop": "3rem", "margin-tablet": "2rem", "space-xs": "0.25rem", "gutter-tablet": "1.5rem", "space-xl": "2.5rem", "margin": "1.25rem", "gutter": "1rem", "space-sm": "0.5rem", "space-md": "1rem" }, fontFamily: { "headline-sm": ["Plus Jakarta Sans"], "body-md": ["Plus Jakarta Sans"], "headline-md": ["Playfair Display"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"], "display-lg-mobile": ["Playfair Display"], "body-sm": ["Plus Jakarta Sans"], "headline-lg": ["Playfair Display"], "display-lg": ["Playfair Display"], "body-lg": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Playfair Display"], "label-sm": ["Plus Jakarta Sans"] }, fontSize: { "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "22px", "letterSpacing": "0", "fontWeight": "400" }], "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0", "fontWeight": "600" }], "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "600" }], "label-lg": ["15px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-sm": ["12px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "400" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "26px", "letterSpacing": "0", "fontWeight": "400" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "0", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "700" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center"><button aria-label="Go back" class="w-11 h-11 -ml-space-xs flex items-center justify-center rounded-full text-on-surface hover:bg-surface-variant/40 transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[22px]">arrow_back</span></button></div><div class="flex items-center gap-space-xs"><span class="material-symbols-outlined text-primary text-[20px]">auto_awesome</span><h1 class="font-headline-sm text-headline-sm text-on-surface">Fleet Ai</h1></div><div class="flex items-center gap-space-xs"><button aria-label="Chat History" class="w-11 h-11 flex items-center justify-center rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors"><span class="material-symbols-outlined text-[22px]">history</span></button><button aria-label="New Chat" class="w-11 h-11 flex items-center justify-center rounded-full text-primary hover:bg-primary-fixed/30 transition-colors"><span class="material-symbols-outlined text-[22px]">edit_square</span></button><div class="w-8 h-8 ml-space-xs rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface"><div class="flex flex-col w-full pb-32">
+<!-- Interactive Toast Notification (hidden initially) -->
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm rounded-full shadow-lg opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-space-xs font-label-md text-label-md" id="toast">
+<span class="material-symbols-outlined text-[18px] text-primary-fixed">check_circle</span>
+<span id="toast-msg">Item added to your order</span>
+</div>
+<!-- Chat Content Stream -->
+<div class="flex flex-col px-margin gap-space-lg w-full pt-space-md">
+<!-- Timeline Timestamp Pill -->
+<div class="flex justify-center">
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm px-space-md py-1 rounded-full uppercase tracking-wider">
+        Today, 8:12 PM
+      </span>
+</div>
+<!-- 1. User Message (Right-aligned bubble) -->
+<div class="flex flex-col items-end w-full max-w-[88%] self-end">
+<div class="bg-primary text-on-primary rounded-[22px] rounded-br-sm px-space-md py-3 shadow-[0_8px_20px_-4px_rgba(175,41,0,0.24)]">
+<p class="font-body-md text-body-md text-on-primary leading-relaxed">
+          I want something indulgent for dinner, maybe woodfired pizza or artisan burger, under 35 mins.
+        </p>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-1 mr-1">8:12 PM</span>
+</div>
+<!-- 2. AI Response -->
+<div class="flex flex-col items-start w-full gap-space-md">
+<!-- AI Identity Bar -->
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-full bg-primary-fixed flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary text-[17px]">arrow_back_ios_new</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-semibold tracking-tight">Fleet Epicure Concierge</span>
+</div>
+<!-- AI Conversational Editorial Text -->
+<p class="font-body-lg text-body-lg text-on-surface leading-relaxed">
+        I’ve handpicked 3 sensational kitchens baking right now. The woodfired sourdough crusts at <strong class="font-semibold text-primary">Forno d'Oro</strong> are fresh out of the hearth:
+      </p>
+<!-- Dish Carousel (Full Edge-to-Edge Bleed with margin offset) -->
+<div class="-mx-margin px-margin overflow-x-auto no-scrollbar flex gap-space-md py-space-xs snap-x snap-mandatory">
+<!-- Dish 1: Burrata Pugliese Pizza -->
+<div class="flex-shrink-0 w-[270px] snap-start bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col justify-between">
+<div class="relative w-full h-44 bg-surface-container">
+<img alt="Burrata Pugliese Pizza" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1WS-It3hPjRwqw3hDfysNMnw4zW9AnldOapj3V6zm3ymRNaEZp2ydAEmHhRDzPbcYhp0nkTzrhm--JWyTce0QzSy9fDX0kV2MU2UbIR74IHxaXOPJkBhls9agIhQAJgbtGtadllAEyG48dK6my3GcLGESNmq7y_HvdRZ-4oiYZFYICIT7DH0Y_q4WHit9X_X8gfE1RygESBfYgmn9PXILL8kOO1FPkMFAYG0jw1HfHoWGzK87ydGi65Ta0"/>
+<!-- Dietary Tag -->
+<div class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="font-label-sm text-label-sm text-on-surface">VEG</span>
+</div>
+<!-- ETA Pill -->
+<div class="absolute bottom-2.5 right-2.5 bg-inverse-surface/85 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary-fixed">schedule</span>
+<span>25-30 min</span>
+</div>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Forno d'Oro Trattoria</span>
+<div class="flex items-center text-amber-500 font-label-sm text-label-sm gap-0.5">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-on-surface font-bold">4.9</span>
+<span class="text-on-surface-variant font-normal">(1.2k)</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Burrata Pugliese Pizza</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">San Marzano DOP, confit heirloom pomodori, whole fresh burrata heart.</p>
+<div class="flex items-center justify-between mt-2 pt-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">₹540</span>
+<button class="h-9 px-4 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center gap-1 shadow-[0_4px_14px_rgba(175,41,0,0.28)] hover:bg-primary-container active:scale-95 transition-all" onclick="handleAddToCart('Burrata Pugliese Pizza')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add
+              </button>
+</div>
+</div>
+</div>
+<!-- Dish 2: Truffle Wagyu Brioche -->
+<div class="flex-shrink-0 w-[270px] snap-start bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col justify-between">
+<div class="relative w-full h-44 bg-surface-container">
+<img alt="Truffle Wagyu Brioche" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1W4c7YUErqEj0-Pe6XE94PKRJsVjXPYqxcBgpjYnFsxo2o8NH53BqZ5bYaGkkOLy1G5WIEv_ylAbqPIAsqtc0JD3_KlorQkJ3jW3LG6Lu4uTg0JeOsToLdceFkwdhX3h6W00cY5Sa5fqNrMReX407dPKMQzuDFQLCB3UTEC37I8KW0kZF84KiF74BqAyckhJRQSm4Jcbd-kAeOdXVR42-jJTpIU0DM244VEsjrJCuWwK2gpSGNhrgBDsUE"/>
+<!-- Non-Veg Tag -->
+<div class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-rose-600"></span>
+<span class="font-label-sm text-label-sm text-on-surface">NON-VEG</span>
+</div>
+<!-- ETA Pill -->
+<div class="absolute bottom-2.5 right-2.5 bg-inverse-surface/85 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary-fixed">schedule</span>
+<span>20-25 min</span>
+</div>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Atelier Burger Co.</span>
+<div class="flex items-center text-amber-500 font-label-sm text-label-sm gap-0.5">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-on-surface font-bold">4.8</span>
+<span class="text-on-surface-variant font-normal">(850)</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Truffle Wagyu Brioche</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Double smashed A5 Wagyu, melted taleggio, shaved summer truffles.</p>
+<div class="flex items-center justify-between mt-2 pt-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">₹620</span>
+<button class="h-9 px-4 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center gap-1 shadow-[0_4px_14px_rgba(175,41,0,0.28)] hover:bg-primary-container active:scale-95 transition-all" onclick="handleAddToCart('Truffle Wagyu Brioche')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add
+              </button>
+</div>
+</div>
+</div>
+<!-- Dish 3: Truffle Cacio e Pepe -->
+<div class="flex-shrink-0 w-[270px] snap-start bg-surface-container-lowest rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden flex flex-col justify-between">
+<div class="relative w-full h-44 bg-surface-container">
+<img alt="Truffle Cacio e Pepe" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UJXdWoLl8FCXqk4uA8_4JTjkgNwDrcEt6DK5WmX4CDSPdgwdoiQbeeWrTOrVKyr7--yCVc4utPDXAQl9C7tSsYSDmBVTcE8Hs9yEattM2wRB9IlAFMm5ydOKYqzQIjRWHI3s9l-NZ05uBaWhyTbymA76v7jU3xw3Gs_CFiOXv_9f9gO3qo83MekvCvslCE2xFgoZMdAspQrPDcYBbq6b1nKSDjDxLviI84_QMpFF9Qa_QBS06HWOVn7Lk"/>
+<!-- Dietary Tag -->
+<div class="absolute top-2.5 left-2.5 bg-surface-container-lowest/90 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="font-label-sm text-label-sm text-on-surface">VEG</span>
+</div>
+<!-- ETA Pill -->
+<div class="absolute bottom-2.5 right-2.5 bg-inverse-surface/85 backdrop-blur-md text-inverse-on-surface font-label-sm text-label-sm px-2 py-0.5 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-primary-fixed">schedule</span>
+<span>28-32 min</span>
+</div>
+</div>
+<div class="p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Bespoke Pasta Bar</span>
+<div class="flex items-center text-amber-500 font-label-sm text-label-sm gap-0.5">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-on-surface font-bold">4.9</span>
+<span class="text-on-surface-variant font-normal">(620)</span>
+</div>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface line-clamp-1">Truffle Cacio e Pepe</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">Handmade tagliolini, aged Pecorino Romano, black pepper cream &amp; truffle.</p>
+<div class="flex items-center justify-between mt-2 pt-2">
+<span class="font-headline-md text-headline-md text-on-surface font-bold">₹490</span>
+<button class="h-9 px-4 rounded-full bg-primary text-on-primary font-label-md text-label-md flex items-center gap-1 shadow-[0_4px_14px_rgba(175,41,0,0.28)] hover:bg-primary-container active:scale-95 transition-all" onclick="handleAddToCart('Truffle Cacio e Pepe')">
+<span class="material-symbols-outlined text-[16px]">add</span> Add
+              </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Feature "Why This?" Recommendation Card -->
+<div class="w-full bg-surface-container-low rounded-xl p-space-md shadow-sm relative overflow-hidden flex gap-space-sm">
+<div class="w-1.5 self-stretch bg-primary rounded-full shrink-0"></div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[17px]">restaurant_menu</span>
+<span class="font-label-sm text-label-sm uppercase font-bold tracking-wider">Sommelier &amp; Chef Insight</span>
+</div>
+<p class="font-headline-md text-headline-md text-on-surface italic font-normal leading-snug">
+            “Chef’s Table Pick: 48-hr slow-fermented dough fired at 900°F with imported DOP burrata. High satiety, zero bloat.”
+          </p>
+</div>
+</div>
+<!-- Ticket-Style Voucher / Offer Card -->
+<div class="w-full relative bg-surface-container-lowest rounded-xl shadow-md overflow-hidden flex items-stretch">
+<!-- Left Side: Offer Specs -->
+<div class="flex-1 p-space-md flex flex-col justify-center gap-1">
+<div class="flex items-center gap-1.5">
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm tracking-wider font-bold">EPICURE20</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Limited Drop</span>
+</div>
+<div class="font-headline-sm text-headline-sm text-on-surface font-bold">20% OFF above ₹399</div>
+<div class="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[14px]">timer</span>
+<span>Valid till 11:00 PM tonight</span>
+</div>
+</div>
+<!-- Perforated Cutout Line -->
+<div class="relative flex flex-col items-center justify-between w-6 shrink-0 py-2">
+<!-- Top Scallop -->
+<div class="w-5 h-5 bg-surface rounded-full -mt-4 shadow-inner"></div>
+<!-- Vertical Perforation Dots -->
+<div class="w-0.5 h-full my-1 flex flex-col justify-around items-center">
+<span class="w-1 h-1 rounded-full bg-surface-variant my-0.5"></span>
+<span class="w-1 h-1 rounded-full bg-surface-variant my-0.5"></span>
+<span class="w-1 h-1 rounded-full bg-surface-variant my-0.5"></span>
+<span class="w-1 h-1 rounded-full bg-surface-variant my-0.5"></span>
+<span class="w-1 h-1 rounded-full bg-surface-variant my-0.5"></span>
+</div>
+<!-- Bottom Scallop -->
+<div class="w-5 h-5 bg-surface rounded-full -mb-4 shadow-inner"></div>
+</div>
+<!-- Right Side: Apply Action -->
+<div class="p-space-md flex flex-col justify-center items-center shrink-0">
+<button class="px-4 py-2 rounded-full bg-surface-container-high hover:bg-surface-variant text-on-surface font-label-md text-label-md font-semibold transition-colors flex items-center gap-1 active:scale-95" id="copy-btn" onclick="copyCoupon()">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span id="copy-text">Copy</span>
+</button>
+</div>
+</div>
+<!-- AI Feedback & Quick Action Controls -->
+<div class="flex items-center justify-between w-full pt-1">
+<div class="flex items-center gap-1">
+<button aria-label="Copy response" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button aria-label="Helpful" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+</button>
+<button aria-label="Not helpful" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">thumb_down</span>
+</button>
+<button aria-label="Regenerate" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+</button>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">Live kitchen data • 2m ago</span>
+</div>
+<!-- Quick Reply Suggestion Chips -->
+<div class="-mx-margin px-margin overflow-x-auto no-scrollbar flex items-center gap-space-xs pt-space-xs pb-1">
+<button class="shrink-0 h-9 px-3.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md shadow-sm transition-all flex items-center gap-1" onclick="fillPrompt('Add the Burrata Pizza to cart')">
+<span class="material-symbols-outlined text-[15px] text-primary">add_shopping_cart</span>
+          Add Burrata Pizza to cart
+        </button>
+<button class="shrink-0 h-9 px-3.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md shadow-sm transition-all flex items-center gap-1" onclick="fillPrompt('Only show pure vegetarian')">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+          Only veg
+        </button>
+<button class="shrink-0 h-9 px-3.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md shadow-sm transition-all" onclick="fillPrompt('Show lighter or cheaper options')">
+          Show cheaper options
+        </button>
+<button class="shrink-0 h-9 px-3.5 rounded-full bg-surface-container-lowest hover:bg-surface-container text-on-surface font-label-md text-label-md shadow-sm transition-all" onclick="fillPrompt('What are the best dessert pairings?')">
+          Any desserts?
+        </button>
+</div>
+</div>
+</div>
+<!-- Bottom Floating Input Bar -->
+<div class="fixed bottom-0 left-0 right-0 z-40 px-margin pb-6 pt-3 bg-gradient-to-t from-surface via-surface/90 to-transparent">
+<div class="w-full max-w-2xl mx-auto flex items-center bg-surface-container-lowest rounded-full p-1.5 shadow-[0_12px_36px_-6px_rgba(31,27,24,0.14)] gap-2">
+<div class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer shrink-0">
+<span class="material-symbols-outlined text-[22px]">tune</span>
+</div>
+<input class="flex-1 bg-transparent border-0 outline-none font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant px-1" id="prompt-input" placeholder="Ask Fleet for menus, cravings, pairings..." type="text" value="Add the Burrata Pizza and check coupon"/>
+<button aria-label="Send message" class="w-11 h-11 rounded-full bg-primary hover:bg-primary-container text-on-primary flex items-center justify-center shrink-0 shadow-[0_4px_16px_rgba(175,41,0,0.32)] active:scale-95 transition-transform" onclick="submitPrompt()">
+<span class="material-symbols-outlined text-[20px]">arrow_upward</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+  function showToast(text) {
+    const toast = document.getElementById('toast');
+    const msg = document.getElementById('toast-msg');
+    if (toast && msg) {
+      msg.textContent = text;
+      toast.classList.remove('opacity-0');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0');
+      }, 2200);
+    }
+  }
+
+  function handleAddToCart(dishName) {
+    showToast(`${dishName} added to your feast!`);
+  }
+
+  function copyCoupon() {
+    navigator.clipboard?.writeText('EPICURE20');
+    const copyText = document.getElementById('copy-text');
+    if (copyText) {
+      copyText.textContent = 'Applied';
+      setTimeout(() => {
+        copyText.textContent = 'Copy';
+      }, 2500);
+    }
+    showToast('Code EPICURE20 copied to clipboard');
+  }
+
+  function fillPrompt(val) {
+    const input = document.getElementById('prompt-input');
+    if (input) {
+      input.value = val;
+      input.focus();
+    }
+  }
+
+  function submitPrompt() {
+    const input = document.getElementById('prompt-input');
+    if (input && input.value.trim() !== '') {
+      showToast(`Fleet AI is curating: "${input.value}"`);
+      input.value = '';
+    }
+  }
+</script></main></body></html>

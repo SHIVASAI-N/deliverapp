@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+  <meta content="mobile_stack" name="shell-type"/>
+  <title>Fleet AI — Curated Culinary Intelligence | FreshFleet</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-tint": "#b32a00",
+            "inverse-surface": "#342f2c",
+            "surface": "#fff8f5",
+            "on-background": "#1f1b18",
+            "primary-fixed-dim": "#ffb4a1",
+            "inverse-on-surface": "#f8efea",
+            "surface-dim": "#e1d8d3",
+            "surface-container-high": "#f0e6e1",
+            "secondary-fixed-dim": "#cec5bf",
+            "outline": "#8f7068",
+            "on-tertiary": "#ffffff",
+            "inverse-primary": "#ffb4a1",
+            "on-surface-variant": "#5b403a",
+            "surface-variant": "#eae1db",
+            "on-secondary-fixed-variant": "#4c4641",
+            "primary": "#af2900",
+            "primary-bright": "#e8481c",
+            "primary-container": "#d63c0f",
+            "on-primary-container": "#fffbff",
+            "primary-fixed": "#ffdbd2",
+            "tertiary": "#615b54",
+            "outline-variant": "#e4beb5",
+            "surface-container": "#f6ece7",
+            "surface-bright": "#fff8f5",
+            "on-error": "#ffffff",
+            "on-tertiary-fixed": "#1f1b16",
+            "surface-container-lowest": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-surface": "#1f1b18",
+            "surface-container-low": "#fbf2ec",
+            "background": "#fff8f5",
+            "secondary": "#645d58",
+            "on-primary": "#ffffff",
+            "secondary-container": "#ebe1da",
+            "amber-sparkle": "#f5a524"
+          },
+          fontFamily: {
+            "serif": ["Playfair Display", "serif"],
+            "sans": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          animation: {
+            'pulse-subtle': 'pulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'shimmer': 'shimmer 1.8s infinite linear',
+            'fade-slide-up': 'fadeSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards'
+          },
+          keyframes: {
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' }
+            },
+            fadeSlideUp: {
+              '0%': { opacity: '0', transform: 'translateY(12px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' }
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    @layer base {
+      html, body {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        overscroll-behavior: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .pb-safe { padding-bottom: max(env(safe-area-inset-bottom, 0px), 16px); }
+      .pt-safe { padding-top: max(env(safe-area-inset-top, 0px), 12px); }
+    }
+    
+    ::-webkit-scrollbar { display: none; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* Shimmer Skeleton effect */
+    .skeleton-shimmer {
+      background: linear-gradient(90deg, rgba(230,220,215,0.4) 25%, rgba(250,240,235,0.9) 50%, rgba(230,220,215,0.4) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+    .dark .skeleton-shimmer {
+      background: linear-gradient(90deg, rgba(50,42,37,0.5) 25%, rgba(80,68,60,0.8) 50%, rgba(50,42,37,0.5) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    /* Soft blinking cursor for streaming */
+    .typing-cursor::after {
+      content: '|';
+      display: inline-block;
+      margin-left: 2px;
+      color: #e8481c;
+      animation: blink 0.9s infinite;
+      font-weight: 700;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Waveform animation for voice mode */
+    @keyframes waveBar {
+      0%, 100% { transform: scaleY(0.2); }
+      50% { transform: scaleY(1); }
+    }
+  </style>
+
+  <!-- Core DeliverApp dependencies for real Cart and Session sync -->
+  <script src="/js/store.js"></script>
+  <script src="/js/auth.js"></script>
+</head>
+
+<body class="bg-surface dark:bg-[#171310] font-sans text-on-surface dark:text-[#fff8f5] antialiased min-h-screen flex flex-col transition-colors duration-300">
+
+  <!-- Top Sticky Banner: Offline Notification (Screen 7 Edge State) -->
+  <div id="offlineBanner" class="hidden fixed top-0 inset-x-0 z-[60] bg-rose-600 text-white text-xs font-semibold py-2 px-4 text-center shadow-md flex items-center justify-center gap-2">
+    <span class="material-symbols-outlined text-[16px]">wifi_off</span>
+    <span>You're currently offline. Reconnecting to FreshFleet...</span>
+  </div>
+
+  <!-- Interactive Toast Notification -->
+  <div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[70] bg-[#1f1b18] dark:bg-[#fff8f5] text-[#fff8f5] dark:text-[#1f1b18] px-4 py-2.5 rounded-full shadow-2xl opacity-0 translate-y-[-8px] transition-all duration-300 pointer-events-none flex items-center gap-2 font-medium text-xs">
+    <span id="toastIcon" class="material-symbols-outlined text-[18px] text-[#f5a524]">auto_awesome</span>
+    <span id="toastMsg">Fleet AI updated</span>
+  </div>
+
+  <!-- Screen Header -->
+  <header class="fixed top-0 w-full z-40 pt-safe bg-surface/85 dark:bg-[#171310]/85 backdrop-blur-xl border-b border-[#e4beb5]/30 dark:border-white/[0.08] shadow-[0_1px_8px_rgba(0,0,0,0.03)] transition-colors">
+    <div class="h-14 px-4 flex items-center justify-between max-w-2xl mx-auto w-full">
+      
+      <!-- Left: Back Button & AI Sparkle Identity -->
+      <div class="flex items-center gap-2">
+        <button aria-label="Go back" onclick="navigateBack()" class="w-9 h-9 flex items-center justify-center rounded-full text-on-surface dark:text-[#fff8f5] hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all">
+          <span class="material-symbols-outlined text-[22px]">arrow_back</span>
+        </button>
+        
+        <div class="flex items-center gap-1.5 cursor-pointer" onclick="scrollToTop()">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-primary to-amber-sparkle flex items-center justify-center shadow-[0_2px_10px_rgba(232,72,28,0.35)]">
+            <span class="material-symbols-outlined text-white text-[16px]">auto_awesome</span>
+          </div>
+          <div>
+            <div class="flex items-center gap-1">
+              <h1 class="font-serif font-bold text-base text-on-surface dark:text-white leading-tight">Fleet AI</h1>
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            </div>
+            <p class="text-[10px] text-secondary dark:text-[#a89d95] font-medium leading-none">FreshFleet Concierge</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Actions: AI Key, Dark Mode, History Drawer, New Chat -->
+      <div class="flex items-center gap-1">
+        <!-- AI Key Settings Button (Pure Gemini AI) -->
+        <button id="apiKeyBtn" aria-label="Configure AI API Key" onclick="openApiKeyModal()" class="relative w-8 h-8 flex items-center justify-center rounded-full text-secondary dark:text-[#a89d95] hover:text-primary dark:hover:text-amber-sparkle hover:bg-black/5 dark:hover:bg-white/10 transition-colors" title="Connect Free Gemini API Key">
+          <span class="material-symbols-outlined text-[20px]">smart_toy</span>
+          <span id="apiKeyDot" class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 hidden border border-white dark:border-[#171310]"></span>
+        </button>
+
+        <!-- Dark Mode Toggle -->
+        <button id="themeToggleBtn" aria-label="Toggle dark mode" onclick="toggleDarkMode()" class="w-8 h-8 flex items-center justify-center rounded-full text-secondary dark:text-[#a89d95] hover:text-primary dark:hover:text-amber-sparkle hover:bg-black/5 dark:hover:bg-white/10 transition-colors" title="Toggle Dark/Light Mode">
+          <span id="themeToggleIcon" class="material-symbols-outlined text-[20px]">dark_mode</span>
+        </button>
+
+        <!-- History Drawer Button (Screen 6) -->
+        <button aria-label="Chat History" onclick="openHistoryDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full text-secondary dark:text-[#a89d95] hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 transition-colors" title="Past Conversations">
+          <span class="material-symbols-outlined text-[20px]">history</span>
+        </button>
+
+        <!-- New Chat Button -->
+        <button aria-label="New Chat" onclick="startNewChat()" class="h-8 px-2.5 rounded-full bg-primary/10 dark:bg-primary/20 text-primary-bright dark:text-[#ff9d7d] hover:bg-primary/20 flex items-center gap-1 text-xs font-bold transition-all active:scale-95" title="Start New Conversation">
+          <span class="material-symbols-outlined text-[16px]">add</span>
+          <span class="hidden sm:inline">New</span>
+        </button>
+
+        <!-- Cart shortcut with badge -->
+        <button aria-label="Cart" onclick="navigateToCart()" class="relative w-8 h-8 flex items-center justify-center rounded-full text-secondary dark:text-[#a89d95] hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 transition-colors ml-0.5">
+          <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+          <span id="headerCartBadge" class="absolute -top-1 -right-1 min-w-[16px] h-[16px] px-1 rounded-full bg-primary text-white text-[9px] font-black flex items-center justify-center hidden">0</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Chat Content Container -->
+  <main class="flex-1 flex flex-col relative w-full pt-16 pb-28 max-w-2xl mx-auto px-4">
+
+    <!-- Warm Radial Ambient Background Glow -->
+    <div class="fixed top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-b from-[#ffdbd2]/40 dark:from-[#d63c0f]/15 via-[#f6ece7]/20 to-transparent blur-3xl pointer-events-none rounded-full -z-10"></div>
+
+    <!-- ========================================== -->
+    <!-- SCREEN 1: EMPTY STATE VIEW (Shown initially) -->
+    <!-- ========================================== -->
+    <section id="emptyStateView" class="flex flex-col w-full py-4 transition-all duration-300">
+      
+      <!-- Greeting Section with Dynamic Time of Day -->
+      <div class="pt-3 pb-6 flex flex-col items-start relative">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container-high dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] rounded-full shadow-sm mb-3">
+          <span class="material-symbols-outlined text-primary-bright dark:text-amber-sparkle text-[14px]" style="font-variation-settings: 'FILL' 1;">stars</span>
+          <span class="text-[11px] font-bold text-on-surface-variant dark:text-[#d3c7bf] uppercase tracking-wider">Curated Culinary Intelligence</span>
+        </div>
+
+        <h2 id="greetingHeading" class="font-serif text-[26px] sm:text-[30px] font-semibold text-on-surface dark:text-[#fff8f5] leading-tight">
+          Good evening, Rahul.
+        </h2>
+        <p class="font-serif text-[32px] sm:text-[36px] font-bold text-primary-bright dark:text-[#ff6e40] mt-1 leading-tight tracking-tight">
+          What are you craving?
+        </p>
+        <p class="text-xs text-secondary dark:text-[#a89d95] mt-2 flex items-center gap-1 font-medium">
+          <span class="material-symbols-outlined text-primary-bright text-[15px]">verified</span>
+          <span>Trained on 400+ artisan kitchens, gourmet chefs & live discounts.</span>
+        </p>
+      </div>
+
+      <!-- Chef's Evening Highlights Carousel -->
+      <div class="mb-6 -mx-4 px-4 overflow-x-auto no-scrollbar">
+        <div class="flex items-center justify-between mb-2.5 px-0.5">
+          <span class="text-xs font-bold text-on-surface dark:text-[#fff8f5] flex items-center gap-1.5 uppercase tracking-wider">
+            <span class="material-symbols-outlined text-primary-bright text-[18px]">local_fire_department</span>
+            Chef's Live Highlights
+          </span>
+          <span class="text-[11px] font-bold text-primary-bright uppercase tracking-wider">In Real-Time</span>
+        </div>
+
+        <div class="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+          <!-- Highlight 1: Forno d'Oro Burrata -->
+          <div class="flex-shrink-0 w-64 bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.06] rounded-2xl shadow-sm p-2.5 flex flex-col cursor-pointer hover:shadow-md transition-all active:scale-[0.99]" onclick="submitUserQuery('Show me artisan woodfired sourdough pizzas')">
+            <div class="relative w-full h-32 rounded-xl overflow-hidden bg-surface-container dark:bg-[#2e241f]">
+              <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop&q=80" alt="Burrata Pizza" class="w-full h-full object-cover"/>
+              <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                Kompally Hearth
+              </span>
+              <span class="absolute bottom-2 left-2 bg-emerald-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">VEG</span>
+            </div>
+            <div class="mt-2.5 flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">Forno d'Oro Trattoria</h4>
+                <p class="text-[11px] text-secondary dark:text-[#a89d95]">48-hr Neapolitan Burrata Pies</p>
+              </div>
+              <span class="text-[11px] font-bold text-primary-bright bg-primary/10 px-2 py-0.5 rounded-full">₹₹₹</span>
+            </div>
+          </div>
+
+          <!-- Highlight 2: Royal Dawat Biryani -->
+          <div class="flex-shrink-0 w-64 bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.06] rounded-2xl shadow-sm p-2.5 flex flex-col cursor-pointer hover:shadow-md transition-all active:scale-[0.99]" onclick="submitUserQuery('Recommend top fragrant Chicken Dum Biryani with side gravies')">
+            <div class="relative w-full h-32 rounded-xl overflow-hidden bg-surface-container dark:bg-[#2e241f]">
+              <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&auto=format&fit=crop&q=80" alt="Chicken Dum Biryani" class="w-full h-full object-cover"/>
+              <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                Dulapally
+              </span>
+              <span class="absolute bottom-2 left-2 bg-rose-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NON-VEG</span>
+            </div>
+            <div class="mt-2.5 flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">Royal Dawat & Grill</h4>
+                <p class="text-[11px] text-secondary dark:text-[#a89d95]">Slow-Dum Saffron Biryani</p>
+              </div>
+              <span class="text-[11px] font-bold text-primary-bright bg-primary/10 px-2 py-0.5 rounded-full">₹₹</span>
+            </div>
+          </div>
+
+          <!-- Highlight 3: Truffle Wagyu Brioche -->
+          <div class="flex-shrink-0 w-64 bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.06] rounded-2xl shadow-sm p-2.5 flex flex-col cursor-pointer hover:shadow-md transition-all active:scale-[0.99]" onclick="submitUserQuery('Find gourmet smashed burgers and brioche buns')">
+            <div class="relative w-full h-32 rounded-xl overflow-hidden bg-surface-container dark:bg-[#2e241f]">
+              <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=600&auto=format&fit=crop&q=80" alt="Gourmet Burger" class="w-full h-full object-cover"/>
+              <span class="absolute top-2 right-2 bg-black/70 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                Medchal Road
+              </span>
+              <span class="absolute bottom-2 left-2 bg-rose-700 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">NON-VEG</span>
+            </div>
+            <div class="mt-2.5 flex justify-between items-start">
+              <div>
+                <h4 class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">Atelier Burger Co.</h4>
+                <p class="text-[11px] text-secondary dark:text-[#a89d95]">Smashed Patties & Shaved Truffle</p>
+              </div>
+              <span class="text-[11px] font-bold text-primary-bright bg-primary/10 px-2 py-0.5 rounded-full">₹₹₹</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2x2 Suggestion Cards Grid (Screen 1) -->
+      <div class="mb-5">
+        <span class="text-[11px] font-bold text-secondary dark:text-[#a89d95] uppercase tracking-wider block mb-2 px-0.5">
+          Curated Starter Prompts
+        </span>
+        <div class="grid grid-cols-2 gap-3">
+          
+          <!-- Card 1: Best under ₹300 -->
+          <button onclick="submitUserQuery('Best dinner options under ₹300 near me')" class="bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] p-3.5 rounded-2xl shadow-sm text-left flex flex-col justify-between hover:border-primary-bright/40 dark:hover:border-primary-bright/40 hover:shadow-md transition-all active:scale-[0.98] group">
+            <div class="w-9 h-9 rounded-full bg-primary/10 dark:bg-primary/20 flex items-center justify-center text-primary-bright mb-3 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-[20px]">currency_rupee</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">Best under ₹300</h3>
+              <p class="text-[11px] text-secondary dark:text-[#a89d95] mt-0.5 line-clamp-2">Hearty grain bowls & artisan snacks</p>
+            </div>
+          </button>
+
+          <!-- Card 2: Any offers now? -->
+          <button onclick="submitUserQuery('What active offers and coupon codes can I apply right now?')" class="bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] p-3.5 rounded-2xl shadow-sm text-left flex flex-col justify-between hover:border-primary-bright/40 dark:hover:border-primary-bright/40 hover:shadow-md transition-all active:scale-[0.98] group">
+            <div class="w-9 h-9 rounded-full bg-amber-sparkle/15 flex items-center justify-center text-amber-500 mb-3 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">redeem</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">Any offers now?</h3>
+              <p class="text-[11px] text-secondary dark:text-[#a89d95] mt-0.5 line-clamp-2">20% off drops & free delivery</p>
+            </div>
+          </button>
+
+          <!-- Card 3: Light & Healthy -->
+          <button onclick="submitUserQuery('Show me light, high-protein healthy suppers under 400 calories')" class="bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] p-3.5 rounded-2xl shadow-sm text-left flex flex-col justify-between hover:border-primary-bright/40 dark:hover:border-primary-bright/40 hover:shadow-md transition-all active:scale-[0.98] group">
+            <div class="w-9 h-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 mb-3 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-[20px]">eco</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">Light & healthy</h3>
+              <p class="text-[11px] text-secondary dark:text-[#a89d95] mt-0.5 line-clamp-2">Sourdough salads & high protein</p>
+            </div>
+          </button>
+
+          <!-- Card 4: Reorder last order -->
+          <button onclick="submitUserQuery('Reorder my last favorite meal from Forno d\'Oro')" class="bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] p-3.5 rounded-2xl shadow-sm text-left flex flex-col justify-between hover:border-primary-bright/40 dark:hover:border-primary-bright/40 hover:shadow-md transition-all active:scale-[0.98] group">
+            <div class="w-9 h-9 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-600 mb-3 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-[20px]">history_toggle_off</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">Reorder my order</h3>
+              <p class="text-[11px] text-secondary dark:text-[#a89d95] mt-0.5 line-clamp-2">Burrata Pugliese Woodfired Pizza</p>
+            </div>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Horizontal Quick Filter Chips (Screen 1) -->
+      <div class="mb-4">
+        <span class="text-[11px] font-bold text-secondary dark:text-[#a89d95] uppercase tracking-wider block mb-2 px-0.5">
+          Quick Inquiries
+        </span>
+        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+          <button onclick="submitUserQuery('Find bold and spicy artisanal dishes near me')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm text-on-surface dark:text-[#fff8f5] hover:border-primary-bright transition-all active:scale-95 flex items-center gap-1.5 text-xs font-semibold">
+            <span>🌶️</span>
+            <span>Spicy</span>
+          </button>
+          <button onclick="submitUserQuery('Show 100% pure vegetarian gourmet options')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm text-on-surface dark:text-[#fff8f5] hover:border-primary-bright transition-all active:scale-95 flex items-center gap-1.5 text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span>Pure veg</span>
+          </button>
+          <button onclick="submitUserQuery('What exquisite meals can arrive in under 30 minutes?')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm text-on-surface dark:text-[#fff8f5] hover:border-primary-bright transition-all active:scale-95 flex items-center gap-1.5 text-xs font-semibold">
+            <span>⚡</span>
+            <span>Under 30 min</span>
+          </button>
+          <button onclick="submitUserQuery('Recommend chef-crafted high protein meals with macro counts')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm text-on-surface dark:text-[#fff8f5] hover:border-primary-bright transition-all active:scale-95 flex items-center gap-1.5 text-xs font-semibold">
+            <span>💪</span>
+            <span>High protein</span>
+          </button>
+          <button onclick="submitUserQuery('Show me artisanal French pastries and warm desserts')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm text-on-surface dark:text-[#fff8f5] hover:border-primary-bright transition-all active:scale-95 flex items-center gap-1.5 text-xs font-semibold">
+            <span>🍰</span>
+            <span>Desserts</span>
+          </button>
+          <button onclick="submitUserQuery('Help me curate a group feast for 4 people with appetizers and mains')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm text-on-surface dark:text-[#fff8f5] hover:border-primary-bright transition-all active:scale-95 flex items-center gap-1.5 text-xs font-semibold">
+            <span>👥</span>
+            <span>Group order</span>
+          </button>
+          <button onclick="submitUserQuery('What artisanal beverage or wine pairings match pizza tonight?')" class="flex-shrink-0 px-3.5 py-1.5 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm text-on-surface dark:text-[#fff8f5] hover:border-primary-bright transition-all active:scale-95 flex items-center gap-1.5 text-xs font-semibold">
+            <span>🍷</span>
+            <span>Pairings</span>
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================================== -->
+    <!-- SCREEN 2: ACTIVE CONVERSATION STREAM CONTAINER -->
+    <!-- ============================================== -->
+    <div id="conversationStream" class="hidden flex flex-col gap-5 w-full pt-2">
+      <!-- Chat timeline timestamp -->
+      <div class="flex justify-center my-1">
+        <span class="bg-surface-container-high dark:bg-[#231c18] text-secondary dark:text-[#a89d95] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
+          Today • Live Session
+        </span>
+      </div>
+
+      <!-- Messages injected here dynamically -->
+      <div id="messagesList" class="flex flex-col gap-5 w-full"></div>
+
+      <!-- ============================================== -->
+      <!-- SCREEN 3: THINKING & STREAMING SKELETON STATE  -->
+      <!-- ============================================== -->
+      <div id="aiThinkingSkeleton" class="hidden flex flex-col items-start w-full gap-3 animate-fade-slide-up">
+        <!-- AI Sparkle identity with gentle pulse -->
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-primary to-amber-sparkle flex items-center justify-center shadow-sm animate-pulse">
+            <span class="material-symbols-outlined text-white text-[15px]">auto_awesome</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xs font-bold text-on-surface dark:text-[#fff8f5]">Fleet AI Concierge</span>
+            <span id="aiThinkingStatusText" class="text-[11px] text-primary-bright dark:text-amber-sparkle font-semibold">
+              Searching artisan kitchens near you...
+            </span>
+          </div>
+        </div>
+
+        <!-- Animated Skeleton Bars -->
+        <div class="w-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/25 dark:border-white/[0.06] rounded-2xl p-4 shadow-sm flex flex-col gap-2.5">
+          <div class="h-3 w-3/4 rounded-full skeleton-shimmer"></div>
+          <div class="h-3 w-full rounded-full skeleton-shimmer"></div>
+          <div class="h-3 w-5/6 rounded-full skeleton-shimmer"></div>
+          
+          <div class="flex gap-3 pt-2">
+            <div class="h-28 w-44 rounded-xl skeleton-shimmer flex-shrink-0"></div>
+            <div class="h-28 w-44 rounded-xl skeleton-shimmer flex-shrink-0"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Edge State Message Container (Screen 7) -->
+    <div id="edgeStateContainer" class="hidden my-4 p-4 rounded-2xl bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] shadow-sm flex flex-col items-center text-center gap-3 animate-fade-slide-up">
+      <div id="edgeStateIcon" class="w-12 h-12 rounded-full bg-amber-500/15 text-amber-600 flex items-center justify-center">
+        <span class="material-symbols-outlined text-[28px]">search_off</span>
+      </div>
+      <div>
+        <h4 id="edgeStateTitle" class="font-bold text-sm text-on-surface dark:text-[#fff8f5]">No Exact Matches Found</h4>
+        <p id="edgeStateDesc" class="text-xs text-secondary dark:text-[#a89d95] mt-1 max-w-sm">Nothing quite matched that exact filter. Would you like to increase budget or browse our most popular woodfired pizzas?</p>
+      </div>
+      <div id="edgeStateActions" class="flex flex-wrap items-center justify-center gap-2 pt-1">
+        <button onclick="submitUserQuery('Show all popular bestsellers')" class="px-3.5 py-1.5 rounded-full bg-primary text-white text-xs font-bold shadow-sm active:scale-95">
+          Show Bestsellers
+        </button>
+        <button onclick="resetEdgeState()" class="px-3.5 py-1.5 rounded-full bg-surface-container-high dark:bg-[#2e241f] text-on-surface dark:text-white text-xs font-bold active:scale-95">
+          Try Another Query
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- FLOATING INPUT BAR (Screen 1 & Screen 2)   -->
+  <!-- ========================================== -->
+  <div class="fixed bottom-0 inset-x-0 z-40 px-3 pb-safe pt-2 bg-gradient-to-t from-surface dark:from-[#171310] via-surface/90 dark:via-[#171310]/90 to-transparent pointer-events-none">
+    <div class="w-full max-w-2xl mx-auto flex flex-col gap-1.5 pointer-events-auto">
+      
+      <!-- Dock Pill Container -->
+      <div class="bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/40 dark:border-white/[0.1] rounded-full p-1.5 shadow-[0_12px_36px_-6px_rgba(31,27,24,0.12)] dark:shadow-[0_12px_36px_-6px_rgba(0,0,0,0.5)] flex items-center gap-1.5 transition-all">
+        
+        <!-- Media / Preference Attachment Button -->
+        <button aria-label="Add dietary requirements" onclick="openDietaryModal()" class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full text-secondary dark:text-[#a89d95] hover:text-primary hover:bg-black/5 dark:hover:bg-white/10 active:scale-90 transition-all cursor-pointer" title="Dietary & Budget Preferences">
+          <span class="material-symbols-outlined text-[20px]">tune</span>
+        </button>
+
+        <!-- Input Field -->
+        <input id="chatInput" type="text" placeholder="Ask about food, offers, prices..." autocomplete="off" class="w-full bg-transparent border-0 outline-none text-on-surface dark:text-[#fff8f5] placeholder:text-secondary dark:placeholder:text-[#8f827a] text-xs sm:text-sm font-medium py-2 px-1 focus:ring-0"/>
+
+        <!-- Voice Input Mic Button (Screen 5) -->
+        <button id="micBtn" aria-label="Voice dictation" onclick="openVoiceModal()" class="w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-full text-secondary dark:text-[#a89d95] hover:text-primary-bright hover:bg-black/5 dark:hover:bg-white/10 active:scale-90 transition-all cursor-pointer" title="Speak to Fleet AI">
+          <span class="material-symbols-outlined text-[20px]">mic</span>
+        </button>
+
+        <!-- Submit Send Button -->
+        <button id="sendBtn" aria-label="Send message" onclick="handleSendButtonClick()" class="w-9 h-9 flex-shrink-0 rounded-full bg-primary-bright hover:bg-primary-container text-white flex items-center justify-center shadow-md active:scale-90 transition-all opacity-80 hover:opacity-100 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+          <span class="material-symbols-outlined text-[19px]">arrow_upward</span>
+        </button>
+
+      </div>
+
+      <!-- Footnote Disclaimer -->
+      <p class="text-center text-[10px] text-secondary dark:text-[#8f827a] px-3 font-medium">
+        Fleet AI references live menu inventories & privilege club drops. Prices are live.
+      </p>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- SCREEN 4: ADD-TO-CART CONFIRMATION BOTTOM SHEET -->
+  <!-- ============================================== -->
+  <div id="addToCartSheet" onclick="if(event.target === this) closeCartSheet()" class="hidden fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm transition-opacity duration-300">
+    <div class="bg-surface-container-lowest dark:bg-[#231c18] border-t border-[#e4beb5]/30 dark:border-white/[0.1] w-full max-w-lg rounded-t-[28px] p-5 shadow-2xl flex flex-col gap-4 max-h-[88vh] overflow-y-auto animate-fade-slide-up">
+      
+      <!-- Drag handle indicator -->
+      <div class="w-12 h-1 bg-[#cec5bf] dark:bg-white/20 rounded-full mx-auto -mt-1 mb-1"></div>
+
+      <!-- Dish Header in Sheet -->
+      <div class="flex items-start gap-3.5 pb-2 border-b border-[#e4beb5]/30 dark:border-white/[0.08]">
+        <img id="sheetDishImg" src="" alt="Dish" class="w-20 h-20 rounded-2xl object-cover bg-surface-container dark:bg-[#2e241f] flex-shrink-0 shadow-sm"/>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 mb-1">
+            <span id="sheetVegBadge" class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span id="sheetVegText" class="text-[10px] font-bold text-on-surface-variant dark:text-[#d3c7bf] uppercase">VEG</span>
+            <span class="text-secondary dark:text-[#8f827a] text-[10px]">•</span>
+            <span id="sheetRestName" class="text-[10px] text-secondary dark:text-[#a89d95] font-semibold truncate">Forno d'Oro</span>
+          </div>
+          <h3 id="sheetDishName" class="font-serif font-bold text-base text-on-surface dark:text-[#fff8f5] leading-snug truncate">Burrata Pugliese Pizza</h3>
+          <p id="sheetDishPrice" class="font-bold text-primary-bright dark:text-[#ff6e40] text-sm mt-0.5">₹540</p>
+        </div>
+        <button onclick="closeCartSheet()" class="w-8 h-8 rounded-full bg-surface-container dark:bg-white/10 flex items-center justify-center text-on-surface dark:text-white">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Quantity Stepper -->
+      <div class="flex items-center justify-between py-1">
+        <span class="text-xs font-bold text-on-surface dark:text-[#fff8f5]">Portion Quantity</span>
+        <div class="flex items-center gap-3 bg-surface-container-high dark:bg-[#2e241f] px-2.5 py-1 rounded-full">
+          <button onclick="changeSheetQty(-1)" class="w-7 h-7 rounded-full bg-white dark:bg-[#1f1b18] text-on-surface dark:text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90">
+            -
+          </button>
+          <span id="sheetQtyVal" class="text-xs font-bold text-on-surface dark:text-white min-w-[16px] text-center">1</span>
+          <button onclick="changeSheetQty(1)" class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-sm active:scale-90">
+            +
+          </button>
+        </div>
+      </div>
+
+      <!-- Customization Chips -->
+      <div class="flex flex-col gap-2">
+        <span class="text-xs font-bold text-on-surface dark:text-[#fff8f5]">Chef Add-ons & Customizations</span>
+        <div id="sheetCustomizationChips" class="flex flex-wrap gap-2">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Price Breakdown -->
+      <div class="bg-surface-container-low dark:bg-[#2a221d] rounded-xl p-3 flex flex-col gap-1 text-xs">
+        <div class="flex justify-between text-secondary dark:text-[#a89d95]">
+          <span>Item Subtotal</span>
+          <span id="sheetBaseSubtotal">₹540</span>
+        </div>
+        <div class="flex justify-between text-secondary dark:text-[#a89d95]">
+          <span>Customizations</span>
+          <span id="sheetAddonsSubtotal">₹0</span>
+        </div>
+        <div class="flex justify-between font-bold text-on-surface dark:text-white pt-1.5 border-t border-[#e4beb5]/30 dark:border-white/[0.08]">
+          <span>Total Payable</span>
+          <span id="sheetFinalTotal" class="text-primary-bright font-bold">₹540</span>
+        </div>
+      </div>
+
+      <!-- Full-Width Orange Add to Cart Button -->
+      <div class="flex flex-col gap-2 pt-1">
+        <button id="sheetConfirmAddBtn" onclick="confirmAddToCart()" class="w-full py-3.5 px-6 rounded-full bg-primary-bright hover:bg-primary-container text-white font-bold text-xs shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-[18px]">shopping_bag</span>
+          <span id="sheetConfirmBtnText">Add to cart — ₹540</span>
+        </button>
+        <button onclick="closeCartSheet()" class="text-center text-xs font-semibold text-secondary dark:text-[#a89d95] hover:text-primary py-1">
+          Cancel
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- SCREEN 5: VOICE INPUT OVERLAY (Full-Screen)    -->
+  <!-- ============================================== -->
+  <div id="voiceModal" class="hidden fixed inset-0 z-50 flex flex-col justify-between bg-black/90 backdrop-blur-xl p-6 text-white animate-fade-slide-up">
+    
+    <!-- Top voice header -->
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-amber-sparkle text-[22px] animate-pulse">mic</span>
+        <span class="font-serif font-bold text-base tracking-wide">Fleet AI Voice</span>
+      </div>
+      <button onclick="closeVoiceModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white">
+        <span class="material-symbols-outlined text-[20px]">close</span>
+      </button>
+    </div>
+
+    <!-- Center Waveform & Live Transcript -->
+    <div class="flex flex-col items-center justify-center my-auto gap-8 text-center max-w-md mx-auto w-full">
+      
+      <!-- Waveform Bars -->
+      <div class="flex items-center justify-center gap-1.5 h-20 w-full">
+        <span class="w-1.5 bg-primary-bright rounded-full h-8" style="animation: waveBar 0.9s infinite ease-in-out;"></span>
+        <span class="w-1.5 bg-amber-sparkle rounded-full h-14" style="animation: waveBar 0.7s infinite ease-in-out 0.1s;"></span>
+        <span class="w-1.5 bg-primary-bright rounded-full h-20" style="animation: waveBar 1.1s infinite ease-in-out 0.2s;"></span>
+        <span class="w-1.5 bg-amber-sparkle rounded-full h-16" style="animation: waveBar 0.8s infinite ease-in-out 0.3s;"></span>
+        <span class="w-1.5 bg-primary-bright rounded-full h-10" style="animation: waveBar 0.6s infinite ease-in-out 0.4s;"></span>
+        <span class="w-1.5 bg-amber-sparkle rounded-full h-18" style="animation: waveBar 1.0s infinite ease-in-out 0.15s;"></span>
+        <span class="w-1.5 bg-primary-bright rounded-full h-12" style="animation: waveBar 0.85s infinite ease-in-out 0.25s;"></span>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <p class="text-xs uppercase font-bold text-amber-sparkle tracking-widest animate-pulse">Listening...</p>
+        <h3 id="voiceTranscriptText" class="font-serif text-xl sm:text-2xl font-bold leading-relaxed text-white min-h-[64px]">
+          “Show me light, healthy suppers with burrata or clean salads...”
+        </h3>
+        <p class="text-xs text-white/50">Speak naturally. Mention dishes, budget, dietary tags or restaurants.</p>
+      </div>
+
+    </div>
+
+    <!-- Bottom Voice Action Controls -->
+    <div class="flex flex-col gap-3 max-w-sm mx-auto w-full pb-6">
+      <button onclick="sendVoiceTranscript()" class="w-full py-3.5 px-6 rounded-full bg-gradient-to-r from-primary to-amber-sparkle text-white font-bold text-xs shadow-xl active:scale-95 transition-all flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">send</span>
+        <span>Send to Fleet AI</span>
+      </button>
+      <button onclick="closeVoiceModal()" class="w-full py-2.5 text-center text-xs font-semibold text-white/70 hover:text-white">
+        Cancel Voice Search
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ============================================== -->
+  <!-- SCREEN 6: CHAT HISTORY DRAWER (Slide-in)       -->
+  <!-- ============================================== -->
+  <div id="historyDrawerBackdrop" onclick="closeHistoryDrawer()" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm transition-opacity duration-300"></div>
+  
+  <aside id="historyDrawer" class="fixed top-0 bottom-0 left-0 w-80 max-w-[85vw] z-50 bg-surface dark:bg-[#1a1512] border-r border-[#e4beb5]/30 dark:border-white/[0.08] shadow-2xl flex flex-col justify-between transform -translate-x-full transition-transform duration-300 ease-out">
+    
+    <div class="flex flex-col h-full overflow-hidden">
+      <!-- Drawer Header -->
+      <div class="p-4 border-b border-[#e4beb5]/30 dark:border-white/[0.08] flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary-bright text-[20px]">history</span>
+          <h3 class="font-serif font-bold text-base text-on-surface dark:text-white">Conversations</h3>
+        </div>
+        <button onclick="closeHistoryDrawer()" class="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-on-surface dark:text-white">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Search in conversations -->
+      <div class="p-3 border-b border-[#e4beb5]/20 dark:border-white/[0.06]">
+        <div class="flex items-center bg-surface-container dark:bg-[#241d19] rounded-xl px-3 py-1.5 gap-2">
+          <span class="material-symbols-outlined text-secondary text-[16px]">search</span>
+          <input id="historySearchInput" oninput="filterHistoryList(this.value)" type="text" placeholder="Search chats..." class="bg-transparent border-0 outline-none text-xs w-full text-on-surface dark:text-white placeholder:text-secondary"/>
+        </div>
+      </div>
+
+      <!-- Conversations Grouped List -->
+      <div id="historyListContainer" class="flex-1 overflow-y-auto p-3 flex flex-col gap-4">
+        
+        <!-- TODAY GROUP -->
+        <div>
+          <span class="text-[10px] font-bold text-secondary dark:text-[#8f827a] uppercase tracking-wider px-2 block mb-1.5">Today</span>
+          <div class="flex flex-col gap-1">
+            <button onclick="restoreChat('Woodfired pizza under 35 mins')" class="w-full text-left p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-all text-xs font-medium text-on-surface dark:text-[#fff8f5] flex items-center justify-between group">
+              <span class="truncate">Woodfired pizza under 35 mins</span>
+              <span class="material-symbols-outlined text-[14px] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+            </button>
+            <button onclick="restoreChat('Healthy high-protein salads')" class="w-full text-left p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-all text-xs font-medium text-on-surface dark:text-[#fff8f5] flex items-center justify-between group">
+              <span class="truncate">Healthy high-protein salads</span>
+              <span class="material-symbols-outlined text-[14px] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- YESTERDAY GROUP -->
+        <div>
+          <span class="text-[10px] font-bold text-secondary dark:text-[#8f827a] uppercase tracking-wider px-2 block mb-1.5">Yesterday</span>
+          <div class="flex flex-col gap-1">
+            <button onclick="restoreChat('Best biryani near Dulapally')" class="w-full text-left p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-all text-xs font-medium text-on-surface dark:text-[#fff8f5] flex items-center justify-between group">
+              <span class="truncate">Best biryani near Dulapally</span>
+              <span class="material-symbols-outlined text-[14px] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+            </button>
+            <button onclick="restoreChat('Late night dessert craving')" class="w-full text-left p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-all text-xs font-medium text-on-surface dark:text-[#fff8f5] flex items-center justify-between group">
+              <span class="truncate">Late night dessert craving</span>
+              <span class="material-symbols-outlined text-[14px] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- LAST 7 DAYS GROUP -->
+        <div>
+          <span class="text-[10px] font-bold text-secondary dark:text-[#8f827a] uppercase tracking-wider px-2 block mb-1.5">Last 7 Days</span>
+          <div class="flex flex-col gap-1">
+            <button onclick="restoreChat('Sunday family dinner recommendations')" class="w-full text-left p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-all text-xs font-medium text-on-surface dark:text-[#fff8f5] flex items-center justify-between group">
+              <span class="truncate">Sunday family dinner recommendations</span>
+              <span class="material-symbols-outlined text-[14px] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+            </button>
+            <button onclick="restoreChat('Burgers under ₹300')" class="w-full text-left p-2.5 rounded-xl hover:bg-surface-container dark:hover:bg-white/5 transition-all text-xs font-medium text-on-surface dark:text-[#fff8f5] flex items-center justify-between group">
+              <span class="truncate">Burgers under ₹300</span>
+              <span class="material-symbols-outlined text-[14px] text-secondary opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Drawer Footer with "Clear My Data" -->
+      <div class="p-3 border-t border-[#e4beb5]/30 dark:border-white/[0.08] bg-surface-container-low dark:bg-[#1f1915]">
+        <button onclick="clearMyData()" class="w-full py-2 px-3 rounded-xl border border-rose-300 dark:border-rose-900/40 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-xs font-bold transition-all flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">delete_sweep</span>
+          <span>Clear my chat data</span>
+        </button>
+      </div>
+
+    </div>
+
+  </aside>
+
+  <!-- Preferences & Dietary Modal (Triggered by "+" or "tune" button) -->
+  <div id="dietaryModal" onclick="if(event.target === this) closeDietaryModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-slide-up">
+    <div class="bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.1] rounded-2xl p-5 shadow-2xl max-w-sm w-full flex flex-col gap-3">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e4beb5]/20 dark:border-white/[0.08]">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary-bright text-[20px]">tune</span>
+          <h3 class="font-serif font-bold text-sm text-on-surface dark:text-white">Taste & Dietary Filters</h3>
+        </div>
+        <button onclick="closeDietaryModal()" class="w-7 h-7 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-secondary">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-2.5 text-xs">
+        <label class="font-bold text-on-surface dark:text-white">Dietary Focus</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button onclick="togglePref(this, 'veg')" class="p-2 rounded-xl border border-[#e4beb5]/40 dark:border-white/10 text-left font-medium text-on-surface dark:text-white flex items-center gap-1.5 active:scale-95">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span>Pure Veg</span>
+          </button>
+          <button onclick="togglePref(this, 'non-veg')" class="p-2 rounded-xl border border-[#e4beb5]/40 dark:border-white/10 text-left font-medium text-on-surface dark:text-white flex items-center gap-1.5 active:scale-95">
+            <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+            <span>Non-Veg</span>
+          </button>
+          <button onclick="togglePref(this, 'halal')" class="p-2 rounded-xl border border-[#e4beb5]/40 dark:border-white/10 text-left font-medium text-on-surface dark:text-white flex items-center gap-1.5 active:scale-95">
+            <span>✨</span>
+            <span>100% Halal</span>
+          </button>
+          <button onclick="togglePref(this, 'low-calorie')" class="p-2 rounded-xl border border-[#e4beb5]/40 dark:border-white/10 text-left font-medium text-on-surface dark:text-white flex items-center gap-1.5 active:scale-95">
+            <span>🥗</span>
+            <span>Low Calorie</span>
+          </button>
+        </div>
+
+        <label class="font-bold text-on-surface dark:text-white mt-1">Maximum Budget</label>
+        <div class="flex gap-2">
+          <button onclick="applyBudget(300)" class="flex-1 py-1.5 rounded-xl border border-[#e4beb5]/40 dark:border-white/10 text-center font-bold text-on-surface dark:text-white hover:border-primary-bright">Under ₹300</button>
+          <button onclick="applyBudget(500)" class="flex-1 py-1.5 rounded-xl border border-[#e4beb5]/40 dark:border-white/10 text-center font-bold text-on-surface dark:text-white hover:border-primary-bright">Under ₹500</button>
+          <button onclick="applyBudget(1000)" class="flex-1 py-1.5 rounded-xl border border-[#e4beb5]/40 dark:border-white/10 text-center font-bold text-on-surface dark:text-white hover:border-primary-bright">Any</button>
+        </div>
+      </div>
+
+      <button onclick="closeDietaryModal()" class="w-full mt-1 py-2.5 rounded-xl bg-primary text-white font-bold text-xs shadow-md active:scale-95">
+        Apply Preferences
+      </button>
+    </div>
+  </div>
+
+  <!-- Live Gemini AI Configuration Modal (100% Free API Key) -->
+  <div id="apiKeyModal" onclick="if(event.target === this) closeApiKeyModal()" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-slide-up">
+    <div class="bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.1] rounded-3xl p-6 shadow-2xl max-w-md w-full flex flex-col gap-4">
+      
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-[#e4beb5]/20 dark:border-white/[0.08]">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-amber-500 flex items-center justify-center text-white shadow-sm">
+            <span class="material-symbols-outlined text-[18px]">smart_toy</span>
+          </div>
+          <div>
+            <h3 class="font-serif font-bold text-base text-on-surface dark:text-white">Connect Pure Gemini AI</h3>
+            <p class="text-[11px] text-secondary dark:text-[#a89d95]">Google Gemini 1.5 Flash (100% Free Tier)</p>
+          </div>
+        </div>
+        <button onclick="closeApiKeyModal()" class="w-8 h-8 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-secondary">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Free Key Info Box -->
+      <div class="bg-amber-500/10 dark:bg-amber-500/15 border border-amber-500/30 rounded-2xl p-3.5 flex items-start gap-2.5">
+        <span class="material-symbols-outlined text-amber-600 text-[20px] shrink-0 mt-0.5">verified_user</span>
+        <div class="text-xs text-on-surface dark:text-[#fff8f5] leading-relaxed">
+          <p class="font-bold text-amber-700 dark:text-amber-400">Yes! Google provides 100% free API keys.</p>
+          <p class="text-[11px] text-secondary dark:text-[#d3c7bf] mt-1">
+            Get your free key in 30 seconds at <a href="https://aistudio.google.com/app/apikey" target="_blank" class="text-primary-bright font-bold underline hover:opacity-80">Google AI Studio</a>. No credit card required. Free tier includes 1,500 requests/day.
+          </p>
+        </div>
+      </div>
+
+      <!-- Key Input Form -->
+      <div class="flex flex-col gap-1.5">
+        <label class="text-xs font-bold text-on-surface dark:text-white flex items-center justify-between">
+          <span>Gemini API Key</span>
+          <span id="keyStatusBadge" class="text-[10px] font-semibold text-secondary">Not connected</span>
+        </label>
+        <div class="relative">
+          <input id="geminiApiKeyInput" type="password" placeholder="Paste your AIzaSy... key here" class="w-full bg-surface-container dark:bg-[#1a1512] border border-[#e4beb5]/50 dark:border-white/10 rounded-xl px-3 py-2.5 text-xs text-on-surface dark:text-white outline-none focus:border-primary-bright font-mono pr-9"/>
+          <button type="button" onclick="toggleApiKeyVisibility()" class="absolute right-2.5 top-2.5 text-secondary hover:text-on-surface">
+            <span id="eyeIcon" class="material-symbols-outlined text-[18px]">visibility</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 pt-1">
+        <button id="btnSaveApiKey" onclick="saveGeminiApiKey()" class="flex-1 py-3 rounded-full bg-primary-bright hover:bg-primary-container text-white font-bold text-xs shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px]">check</span>
+          <span>Save & Activate Pure AI</span>
+        </button>
+        <button onclick="clearGeminiApiKey()" class="px-3.5 py-3 rounded-full border border-rose-300 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 font-bold text-xs hover:bg-rose-50 dark:hover:bg-rose-950/20 active:scale-95 transition-all">
+          Remove
+        </button>
+      </div>
+
+      <!-- Link to Google AI Studio -->
+      <div class="text-center pt-1">
+        <a href="https://aistudio.google.com/app/apikey" target="_blank" class="inline-flex items-center gap-1 text-[11px] text-primary-bright font-semibold hover:underline">
+          <span>Open Google AI Studio to get your free key</span>
+          <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT LOGIC & CONVERSATIONAL ENGINE -->
+  <script>
+    // ==========================================
+    // STATE & CONFIGURATION
+    // ==========================================
+    let conversationHistory = [];
+    let currentSelectedDish = null;
+    let sheetQuantity = 1;
+    let selectedAddons = [];
+    let isDarkMode = false;
+    let isThinking = false;
+
+    // Dishes Data for Rich Cards (Mapped to real store items & gourmet highlights)
+    const FLEET_KNOWLEDGE = [
+      {
+        id: 'burrata-pugliese',
+        name: 'Burrata Pugliese Woodfired Pizza',
+        rest: "Forno d'Oro Trattoria",
+        desc: 'San Marzano DOP, confit heirloom pomodori, whole fresh burrata heart, 48-hr slow-fermented crust.',
+        price: 540,
+        veg: true,
+        rating: 4.9,
+        reviewsCount: 1240,
+        deliveryTime: '25-30 min',
+        img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&auto=format&fit=crop&q=80',
+        whyThis: 'Chef’s Table Pick: 48-hr slow-fermented sourdough fired at 900°F with imported DOP burrata. High satiety, zero bloat.',
+        macros: '420 kcal • 18g Protein • 52g Carbs • 16g Fats',
+        tags: ['pizza', 'italian', 'woodfired', 'burrata', 'cheese', 'sourdough', 'indulgent'],
+        addons: [
+          { id: 'extra-burrata', name: 'Extra Whole Burrata Crown', price: 90 },
+          { id: 'black-truffle-oil', name: 'Umbrian Black Truffle Oil', price: 50 },
+          { id: 'wild-arugula', name: 'Aged Balsamic Wild Rocket', price: 35 }
+        ]
+      },
+      {
+        id: 'wagyu-truffle-pizza',
+        name: 'Truffle Wagyu Brioche Burger',
+        rest: 'Atelier Burger Co.',
+        desc: 'Double smashed A5 Wagyu, melted taleggio, shaved black summer truffles, brioche bun.',
+        price: 620,
+        veg: false,
+        rating: 4.8,
+        reviewsCount: 850,
+        deliveryTime: '20-25 min',
+        img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?w=700&auto=format&fit=crop&q=80',
+        whyThis: 'Premium dry-aged beef blend with real shaved summer truffles on artisanal toasted milk brioche.',
+        macros: '580 kcal • 38g Protein • 34g Carbs • 32g Fats',
+        tags: ['burger', 'wagyu', 'truffle', 'non-veg', 'brioche', 'american', 'indulgent'],
+        addons: [
+          { id: 'extra-cheese', name: 'Double Taleggio Melt', price: 60 },
+          { id: 'caramelized-onions', name: 'Port Wine Onions', price: 35 }
+        ]
+      },
+      {
+        id: 'truffle-pasta',
+        name: 'Truffle Cacio e Pepe Tagliolini',
+        rest: 'Bespoke Pasta Bar',
+        desc: 'Handmade fresh tagliolini, aged Pecorino Romano DOP, toasted black pepper cream & summer truffle.',
+        price: 490,
+        veg: true,
+        rating: 4.9,
+        reviewsCount: 620,
+        deliveryTime: '28-32 min',
+        img: 'https://images.unsplash.com/photo-1621996346565-e3d5d6281781?w=700&auto=format&fit=crop&q=80',
+        whyThis: 'Fresh daily handmade egg tagliolini emulsion. Creamy without heavy cream, authentic Roman technique.',
+        macros: '490 kcal • 20g Protein • 62g Carbs • 18g Fats',
+        tags: ['pasta', 'italian', 'truffle', 'cacio e pepe', 'cheese', 'veg'],
+        addons: [
+          { id: 'extra-pecorino', name: 'Extra Aged Pecorino Shavings', price: 40 },
+          { id: 'truffle-butter', name: 'Black Truffle Butter Dollop', price: 55 }
+        ]
+      },
+      {
+        id: 'chicken-biryani',
+        name: 'Chicken Dum Biryani Pot',
+        rest: "Royal Dawat & Forno d'Oro",
+        desc: 'Fragrant aged basmati slow-cooked on charcoal dum with tender marinated chicken, saffron & mint.',
+        price: 249,
+        veg: false,
+        rating: 4.8,
+        reviewsCount: 1840,
+        deliveryTime: '22-26 min',
+        img: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=700&auto=format&fit=crop&q=80',
+        whyThis: 'Hyderabadi authentic dum pukht method. Low oil, rich saffron aroma, served with cooling burani raita.',
+        macros: '510 kcal • 32g Protein • 58g Carbs • 14g Fats',
+        tags: ['biryani', 'chicken', 'under 300', 'hyderabadi', 'non-veg', 'spicy', 'bestseller'],
+        addons: [
+          { id: 'extra-chicken', name: 'Extra Spiced Chicken Pieces', price: 80 },
+          { id: 'mirchi-salan', name: 'Hyderabadi Mirchi Ka Salan', price: 40 }
+        ]
+      },
+      {
+        id: 'paneer-butter-masala',
+        name: 'Smoked Malai Paneer Butter Masala',
+        rest: "Royal Dawat & Forno d'Oro",
+        desc: 'Charred soft cottage cheese cubes simmered in velvety slow-cooked plum tomato makhani with fenugreek.',
+        price: 220,
+        veg: true,
+        rating: 4.7,
+        reviewsCount: 1120,
+        deliveryTime: '20-25 min',
+        img: 'https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=700&auto=format&fit=crop&q=80',
+        whyThis: 'Pure vegetarian high-protein bowl. Roasted cashew-tomato base without artificial food coloring.',
+        macros: '390 kcal • 24g Protein • 18g Carbs • 22g Fats',
+        tags: ['paneer', 'curry', 'under 300', 'pure veg', 'high protein', 'north indian'],
+        addons: [
+          { id: 'garlic-naan', name: 'Butter Garlic Naan (1 pc)', price: 45 }
+        ]
+      },
+      {
+        id: 'gulab-jamun-rabdi',
+        name: 'Hot Gulab Jamun with Malai Rabdi',
+        rest: "Royal Dawat & Forno d'Oro",
+        desc: 'Two golden khoya jamuns soaked in warm saffron nectar, served with chilled slow-cooked malai rabdi.',
+        price: 149,
+        veg: true,
+        rating: 4.8,
+        reviewsCount: 1640,
+        deliveryTime: '15-20 min',
+        img: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=700&auto=format&fit=crop&q=80',
+        whyThis: 'Rich traditional dessert pairing the warmth of cardamon jamun with chilled creamy rabdi.',
+        macros: '340 kcal • 8g Protein • 52g Carbs • 12g Fats',
+        tags: ['dessert', 'sweet', 'rabdi', 'gulab jamun', 'veg'],
+        addons: [
+          { id: 'pista-topping', name: 'Roasted Iranian Pistachios', price: 25 }
+        ]
+      }
+    ];
+
+    // ==========================================
+    // INITIALIZATION & GREETING
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      updateDynamicGreeting();
+      syncCartBadge();
+      setupInputListeners();
+      updateKeyStatusBadge();
+      
+      // Listen for cart changes
+      window.addEventListener('cart:update', syncCartBadge);
+      window.addEventListener('storage', syncCartBadge);
+
+      // Check offline status
+      window.addEventListener('offline', () => {
+        document.getElementById('offlineBanner').classList.remove('hidden');
+      });
+      window.addEventListener('online', () => {
+        document.getElementById('offlineBanner').classList.add('hidden');
+      });
+    });
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem('fleet_theme') || 'light';
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+        isDarkMode = true;
+        document.getElementById('themeToggleIcon').textContent = 'light_mode';
+      } else {
+        document.documentElement.classList.remove('dark');
+        isDarkMode = false;
+        document.getElementById('themeToggleIcon').textContent = 'dark_mode';
+      }
+    }
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('fleet_theme', 'dark');
+        document.getElementById('themeToggleIcon').textContent = 'light_mode';
+        showToast('Switched to Dark Mode');
+      } else {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('fleet_theme', 'light');
+        document.getElementById('themeToggleIcon').textContent = 'dark_mode';
+        showToast('Switched to Warm Epicurean Mode');
+      }
+    }
+
+    function updateDynamicGreeting() {
+      const heading = document.getElementById('greetingHeading');
+      const hour = new Date().getHours();
+      let timeOfDay = 'evening';
+      if (hour < 12) timeOfDay = 'morning';
+      else if (hour < 17) timeOfDay = 'afternoon';
+
+      // Get user name if authenticated
+      let userName = 'Rahul';
+      if (window.Auth && window.Auth.getUser) {
+        const u = window.Auth.getUser();
+        if (u && u.name) userName = u.name.split(' ')[0];
+      }
+
+      if (heading) {
+        heading.textContent = `Good ${timeOfDay}, ${userName}.`;
+      }
+    }
+
+    function setupInputListeners() {
+      const input = document.getElementById('chatInput');
+      const sendBtn = document.getElementById('sendBtn');
+
+      input.addEventListener('input', () => {
+        if (input.value.trim().length > 0) {
+          sendBtn.removeAttribute('disabled');
+          sendBtn.classList.remove('opacity-40');
+          sendBtn.classList.add('opacity-100');
+        } else {
+          sendBtn.classList.remove('opacity-100');
+          sendBtn.classList.add('opacity-80');
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleSendButtonClick();
+        }
+      });
+    }
+
+    function syncCartBadge() {
+      const badge = document.getElementById('headerCartBadge');
+      if (!badge) return;
+      const count = window.Cart ? window.Cart.count() : 0;
+      if (count > 0) {
+        badge.textContent = count;
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+      } else {
+        badge.classList.add('hidden');
+        badge.classList.remove('flex');
+      }
+    }
+
+    // ==========================================
+    // NAVIGATION
+    // ==========================================
+    function navigateBack() {
+      if (window.parent && window.parent !== window && window.parent.go) {
+        window.parent.go('#/home');
+      } else if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.hash = '#/home';
+      }
+    }
+
+    function navigateToCart() {
+      if (window.parent && window.parent !== window && window.parent.go) {
+        window.parent.go('#/cart');
+      } else {
+        window.location.href = '/screens/cart.html';
+      }
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    // TOAST NOTIFICATIONS
+    // ==========================================
+    function showToast(msg, icon = 'auto_awesome') {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toastMsg');
+      const ic = document.getElementById('toastIcon');
+      if (!toast) return;
+
+      text.textContent = msg;
+      ic.textContent = icon;
+      toast.classList.remove('opacity-0', 'translate-y-[-8px]', 'pointer-events-none');
+      toast.classList.add('opacity-100', 'translate-y-0');
+
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-[-8px]', 'pointer-events-none');
+      }, 2500);
+    }
+
+    // ==========================================
+    // CONVERSATIONAL LOGIC & MESSAGE RENDERING
+    // ==========================================
+    function submitUserQuery(text) {
+      const input = document.getElementById('chatInput');
+      input.value = text;
+      handleSendButtonClick();
+    }
+
+    function handleSendButtonClick() {
+      const input = document.getElementById('chatInput');
+      const query = input.value.trim();
+      if (!query || isThinking) return;
+
+      // Reset edge state if visible
+      resetEdgeState();
+
+      // Switch from Empty State (Screen 1) to Conversation Stream (Screen 2)
+      document.getElementById('emptyStateView').classList.add('hidden');
+      document.getElementById('conversationStream').classList.remove('hidden');
+
+      // 1. Render User Message Bubble
+      renderUserMessage(query);
+
+      // Clear input
+      input.value = '';
+      input.blur();
+
+      // Visual send button animation
+      const sendBtn = document.getElementById('sendBtn');
+      sendBtn.classList.add('scale-90');
+      setTimeout(() => sendBtn.classList.remove('scale-90'), 200);
+
+      // 2. Start Thinking & Streaming Simulation (Screen 3)
+      startThinking(query);
+    }
+
+    function renderUserMessage(text) {
+      const list = document.getElementById('messagesList');
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const bubbleHtml = `
+        <div class="flex flex-col items-end w-full max-w-[88%] self-end animate-fade-slide-up">
+          <div class="bg-primary-bright text-white rounded-[22px] rounded-br-sm px-4 py-3 shadow-[0_6px_20px_-4px_rgba(232,72,28,0.35)]">
+            <p class="text-xs sm:text-sm font-medium text-white leading-relaxed">${escapeHtml(text)}</p>
+          </div>
+          <span class="text-[10px] text-secondary dark:text-[#a89d95] mt-1 mr-1">${timeStr}</span>
+        </div>
+      `;
+      list.insertAdjacentHTML('beforeend', bubbleHtml);
+      scrollToBottom();
+    }
+
+    // Thinking sequence (Screen 3)
+    function startThinking(query) {
+      isThinking = true;
+      const skeleton = document.getElementById('aiThinkingSkeleton');
+      const statusText = document.getElementById('aiThinkingStatusText');
+      skeleton.classList.remove('hidden');
+      scrollToBottom();
+
+      const stages = [
+        'Searching restaurants near you...',
+        "Checking today's offers & chef specials...",
+        'Curating personalized recommendations...'
+      ];
+
+      let idx = 0;
+      statusText.textContent = stages[0];
+
+      const interval = setInterval(() => {
+        idx++;
+        if (idx < stages.length) {
+          statusText.textContent = stages[idx];
+        } else {
+          clearInterval(interval);
+          skeleton.classList.add('hidden');
+          isThinking = false;
+          streamAIResponse(query);
+        }
+      }, 550);
+    }
+
+    // ==========================================
+    // PURE GEMINI AI INTEGRATION (100% Free Tier)
+    // ==========================================
+    function getStoredApiKey() {
+      return localStorage.getItem('fleet_gemini_api_key') || '';
+    }
+
+    function updateKeyStatusBadge() {
+      const key = getStoredApiKey();
+      const badge = document.getElementById('keyStatusBadge');
+      const dot = document.getElementById('apiKeyDot');
+      const btn = document.getElementById('apiKeyBtn');
+      if (key) {
+        if (badge) {
+          badge.textContent = 'Active (Gemini 1.5 Flash)';
+          badge.className = 'text-[10px] font-bold text-emerald-600 dark:text-emerald-400';
+        }
+        if (dot) dot.classList.remove('hidden');
+        if (btn) btn.title = 'Pure Gemini AI Active (Tap to change)';
+      } else {
+        if (badge) {
+          badge.textContent = 'Using Smart Built-in Concierge';
+          badge.className = 'text-[10px] font-semibold text-secondary dark:text-[#a89d95]';
+        }
+        if (dot) dot.classList.add('hidden');
+        if (btn) btn.title = 'Connect Free Gemini AI Key';
+      }
+    }
+
+    function openApiKeyModal() {
+      const modal = document.getElementById('apiKeyModal');
+      const input = document.getElementById('geminiApiKeyInput');
+      input.value = getStoredApiKey();
+      updateKeyStatusBadge();
+      modal.classList.remove('hidden');
+    }
+
+    function closeApiKeyModal() {
+      document.getElementById('apiKeyModal').classList.add('hidden');
+    }
+
+    function toggleApiKeyVisibility() {
+      const input = document.getElementById('geminiApiKeyInput');
+      const eye = document.getElementById('eyeIcon');
+      if (input.type === 'password') {
+        input.type = 'text';
+        eye.textContent = 'visibility_off';
+      } else {
+        input.type = 'password';
+        eye.textContent = 'visibility';
+      }
+    }
+
+    async function saveGeminiApiKey() {
+      const input = document.getElementById('geminiApiKeyInput');
+      const key = input.value.trim();
+      if (!key) {
+        alert('Please enter a valid Gemini API key or tap Remove.');
+        return;
+      }
+      
+      const btn = document.getElementById('btnSaveApiKey');
+      btn.innerHTML = `<span class="material-symbols-outlined text-[16px] animate-spin">refresh</span><span>Verifying Key...</span>`;
+
+      try {
+        const testUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+        const testResp = await fetch(testUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: 'Hello, reply with "OK".' }] }]
+          })
+        });
+        
+        if (!testResp.ok) {
+          const errData = await testResp.json();
+          throw new Error(errData.error?.message || 'Invalid API key or network error');
+        }
+
+        localStorage.setItem('fleet_gemini_api_key', key);
+        updateKeyStatusBadge();
+        closeApiKeyModal();
+        showToast('Pure Gemini AI Activated! ✨', 'verified');
+      } catch(e) {
+        alert('Verification failed: ' + e.message + '\nPlease check that your key from Google AI Studio is correct.');
+      } finally {
+        btn.innerHTML = `<span class="material-symbols-outlined text-[16px]">check</span><span>Save & Activate Pure AI</span>`;
+      }
+    }
+
+    function clearGeminiApiKey() {
+      localStorage.removeItem('fleet_gemini_api_key');
+      const input = document.getElementById('geminiApiKeyInput');
+      if (input) input.value = '';
+      updateKeyStatusBadge();
+      closeApiKeyModal();
+      showToast('Switched to built-in concierge engine');
+    }
+
+    async function callGeminiLiveAI(query, apiKey) {
+      const menuSummary = FLEET_KNOWLEDGE.map(d => 
+        `- ID "${d.id}": "${d.name}" by "${d.rest}" (₹${d.price}, ${d.veg ? 'VEG' : 'NON-VEG'}, Rating: ${d.rating}, ETA: ${d.deliveryTime}). ${d.desc}. Highlights: ${d.whyThis}`
+      ).join('\n');
+
+      const systemPrompt = `You are Fleet AI, the warm, hospitable, and Michelin-tier food concierge for FreshFleet (Epicurean Curations) in Hyderabad/Bangalore.
+Your role is to help users discover gourmet dishes, understand nutritional macros, apply live offers, and guide them in ordering.
+
+LIVE DISHES INVENTORY:
+${menuSummary}
+
+ACTIVE OFFERS:
+- EPICURE20 (20% OFF above ₹399)
+- FEAST50 (Flat ₹50 OFF above ₹199)
+- PUREVEG15 (15% OFF Pure Veg orders)
+- SNACK30 (Flat ₹30 OFF above ₹149)
+
+INSTRUCTIONS:
+1. Greet warmly and answer user questions in an appetizing, elegant, concise editorial style (2-4 sentences max).
+2. Recommend 1 to 3 specific dishes from the inventory above that best match the query.
+3. At the very end of your response, on a new line, you MUST list the recommended dish IDs in this exact format:
+RECOMMENDED_DISH_IDS: ["id1", "id2"]
+Example:
+RECOMMENDED_DISH_IDS: ["burrata-pugliese", "truffle-pasta"]`;
+
+      const geminiContents = [];
+      conversationHistory.slice(-6).forEach(m => {
+        geminiContents.push({
+          role: m.role === 'user' ? 'user' : 'model',
+          parts: [{ text: m.text }]
+        });
+      });
+      geminiContents.push({
+        role: 'user',
+        parts: [{ text: query }]
+      });
+
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: geminiContents,
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 500
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const err = await response.json();
+        throw new Error(err.error?.message || 'Gemini API Error');
+      }
+
+      const data = await response.json();
+      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      
+      let cleanText = rawText;
+      let matchedIds = [];
+      const match = rawText.match(/RECOMMENDED_DISH_IDS:\s*(\[[^\]]+\])/i);
+      if (match) {
+        try {
+          matchedIds = JSON.parse(match[1]);
+          cleanText = rawText.replace(match[0], '').trim();
+        } catch(e) {}
+      }
+
+      let matchedDishes = FLEET_KNOWLEDGE.filter(d => matchedIds.includes(d.id));
+      if (matchedDishes.length === 0) {
+        matchedDishes = FLEET_KNOWLEDGE.filter(d => 
+          cleanText.toLowerCase().includes(d.name.toLowerCase().split(' ')[0]) ||
+          cleanText.toLowerCase().includes(d.tags[0])
+        );
+      }
+      if (matchedDishes.length === 0) matchedDishes = FLEET_KNOWLEDGE.slice(0, 3);
+
+      return {
+        text: cleanText,
+        matchedDishes: matchedDishes
+      };
+    }
+
+    // Stream AI response with character streaming & rich inline cards (Screen 2 & Screen 3)
+    async function streamAIResponse(query) {
+      const lower = query.toLowerCase();
+
+      // Check Edge State triggers (Screen 7)
+      if (lower.includes('error') || lower.includes('fail')) {
+        showEdgeState('error');
+        return;
+      }
+      if (lower.includes('limit') || lower.includes('quota')) {
+        showEdgeState('rate_limit');
+        return;
+      }
+      if (lower.includes('unicorn') || lower.includes('xyzabc') || lower.includes('under ₹50')) {
+        showEdgeState('no_results');
+        return;
+      }
+
+      // Check if user has connected Pure Gemini API Key
+      const apiKey = getStoredApiKey();
+      if (apiKey) {
+        try {
+          const liveRes = await callGeminiLiveAI(query, apiKey);
+          if (liveRes && liveRes.text) {
+            conversationHistory.push({ role: 'user', text: query });
+            conversationHistory.push({ role: 'model', text: liveRes.text });
+            renderAIAnswer(liveRes.text, liveRes.matchedDishes, 'EPICURE20', '20% OFF above ₹399', query);
+            return;
+          }
+        } catch(err) {
+          console.warn("Live Gemini API call failed, falling back to local concierge:", err);
+          showToast('Live AI note: using kitchen concierge fallback', 'info');
+        }
+      }
+
+      // Determine matching items & content based on query (Built-in engine)
+      let matchedItems = FLEET_KNOWLEDGE;
+      let replyIntro = "I've handpicked 3 sensational kitchens baking right now. The woodfired sourdough crusts at <strong class='font-semibold text-primary-bright'>Forno d'Oro</strong> are fresh out of the hearth:";
+      let offerCode = 'EPICURE20';
+      let offerText = '20% OFF above ₹399';
+
+      if (lower.includes('veg') && !lower.includes('non-veg')) {
+        matchedItems = FLEET_KNOWLEDGE.filter(d => d.veg);
+        replyIntro = "Here are our finest 100% pure vegetarian culinary creations, featuring slow-simmered sauces and fresh artisan cheeses:";
+        offerCode = 'PUREVEG15';
+        offerText = 'Flat 15% OFF Pure Veg Meals';
+      } else if (lower.includes('biryani') || lower.includes('chicken') || lower.includes('meat')) {
+        matchedItems = FLEET_KNOWLEDGE.filter(d => d.tags.includes('biryani') || d.tags.includes('non-veg'));
+        replyIntro = "Curated slow-cooked charcoal dum specialties with rich saffron aromas and authentic spice profiles:";
+        offerCode = 'FEAST50';
+        offerText = 'Flat ₹50 OFF on Dum Pots';
+      } else if (lower.includes('under 300') || lower.includes('under ₹300') || lower.includes('budget') || lower.includes('cheap')) {
+        matchedItems = FLEET_KNOWLEDGE.filter(d => d.price <= 300);
+        replyIntro = "Exquisite artisan dining under ₹300! Hearty, high-satiety chef selections with zero compromise on quality:";
+        offerCode = 'SNACK30';
+        offerText = 'Flat ₹30 OFF under ₹300';
+      } else if (lower.includes('healthy') || lower.includes('light') || lower.includes('protein')) {
+        matchedItems = FLEET_KNOWLEDGE.filter(d => d.tags.includes('high protein') || d.tags.includes('burrata'));
+        replyIntro = "Curated light, nutrient-dense suppers designed for sustained energy, gut health, and clean macros:";
+        offerCode = 'FITFEAST';
+        offerText = 'Free Immunity Drink on orders > ₹349';
+      } else if (lower.includes('dessert') || lower.includes('sweet')) {
+        matchedItems = FLEET_KNOWLEDGE.filter(d => d.tags.includes('dessert'));
+        replyIntro = "Sweet indulgence crafted by master pastry chefs. Fresh daily khoya and authentic cardamom reductions:";
+        offerCode = 'SWEET20';
+        offerText = '20% OFF Artisan Sweets';
+      }
+
+      if (matchedItems.length === 0) matchedItems = FLEET_KNOWLEDGE.slice(0, 3);
+      
+      conversationHistory.push({ role: 'user', text: query });
+      conversationHistory.push({ role: 'model', text: replyIntro.replace(/<[^>]*>?/gm, '') });
+
+      renderAIAnswer(replyIntro, matchedItems, offerCode, offerText, query);
+    }
+
+    function renderAIAnswer(replyIntro, matchedItems, offerCode, offerText, query) {
+      const primaryItem = matchedItems[0] || FLEET_KNOWLEDGE[0];
+      const list = document.getElementById('messagesList');
+      const msgId = 'ai-msg-' + Date.now();
+      const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const isLiveGemini = !!getStoredApiKey();
+
+      const aiMsgHtml = `
+        <div id="${msgId}" class="flex flex-col items-start w-full gap-3 animate-fade-slide-up">
+          
+          <!-- AI Avatar & Header -->
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-primary to-amber-sparkle flex items-center justify-center shadow-sm">
+              <span class="material-symbols-outlined text-white text-[15px]">auto_awesome</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-bold text-on-surface dark:text-[#fff8f5]">Fleet AI Concierge</span>
+              ${isLiveGemini ? '<span class="text-[9px] font-bold px-1.5 py-0.2 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded-full">Gemini Live</span>' : ''}
+              <span class="text-[10px] text-secondary dark:text-[#a89d95] font-medium">• ${timeStr}</span>
+            </div>
+          </div>
+
+          <!-- Conversational Text (Streamed in) -->
+          <p id="${msgId}-text" class="text-xs sm:text-sm text-on-surface dark:text-[#fff8f5] leading-relaxed typing-cursor">
+          </p>
+
+          <!-- Rich Cards Container (Fades in after text streams) -->
+          <div id="${msgId}-cards" class="hidden flex flex-col gap-3.5 w-full mt-1">
+            
+            <!-- 1. Dish Cards Swipe Carousel -->
+            <div class="-mx-4 px-4 overflow-x-auto no-scrollbar flex gap-3 py-1 snap-x snap-mandatory">
+              ${matchedItems.map(dish => `
+                <div class="flex-shrink-0 w-[265px] snap-start bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.3)] overflow-hidden flex flex-col justify-between hover:shadow-md transition-all">
+                  <div class="relative w-full h-36 bg-surface-container dark:bg-[#2e241f]">
+                    <img src="${dish.img}" alt="${dish.name}" class="w-full h-full object-cover"/>
+                    
+                    <!-- Dietary Tag -->
+                    <div class="absolute top-2.5 left-2.5 bg-white/90 dark:bg-black/80 backdrop-blur-md px-2 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
+                      <span class="w-2 h-2 rounded-full ${dish.veg ? 'bg-emerald-600' : 'bg-rose-600'}"></span>
+                      <span class="text-[9px] font-bold text-on-surface dark:text-white uppercase">${dish.veg ? 'VEG' : 'NON-VEG'}</span>
+                    </div>
+
+                    <!-- ETA Pill -->
+                    <div class="absolute bottom-2.5 right-2.5 bg-black/75 backdrop-blur-md text-white text-[10px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[13px] text-amber-sparkle">schedule</span>
+                      <span>${dish.deliveryTime}</span>
+                    </div>
+                  </div>
+
+                  <div class="p-3 flex flex-col gap-1.5">
+                    <div class="flex items-center justify-between">
+                      <span class="text-[10px] text-secondary dark:text-[#a89d95] font-semibold uppercase tracking-wider truncate max-w-[150px]">${dish.rest}</span>
+                      <div class="flex items-center text-amber-500 text-[11px] gap-0.5 font-bold">
+                        <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                        <span>${dish.rating}</span>
+                      </div>
+                    </div>
+
+                    <h4 class="font-bold text-xs text-on-surface dark:text-[#fff8f5] line-clamp-1">${dish.name}</h4>
+                    <p class="text-[11px] text-secondary dark:text-[#a89d95] line-clamp-2 leading-tight">${dish.desc}</p>
+
+                    <div class="flex items-center justify-between mt-2 pt-2 border-t border-[#e4beb5]/25 dark:border-white/[0.06]">
+                      <span class="font-serif text-sm font-bold text-on-surface dark:text-white">₹${dish.price}</span>
+                      <button onclick="openAddToCartSheet('${dish.id}')" class="h-8 px-3 rounded-full bg-primary-bright text-white text-[11px] font-bold flex items-center gap-1 shadow-sm hover:bg-primary-container active:scale-95 transition-all cursor-pointer">
+                        <span class="material-symbols-outlined text-[15px]">add</span> Add
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <!-- 2. Feature Recommendation "Why This?" Card -->
+            <div class="w-full bg-surface-container-low dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] rounded-2xl p-3.5 shadow-sm relative overflow-hidden flex gap-3">
+              <div class="w-1.5 self-stretch bg-primary-bright rounded-full shrink-0"></div>
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-1 text-primary-bright">
+                  <span class="material-symbols-outlined text-[16px]">restaurant_menu</span>
+                  <span class="text-[10px] uppercase font-bold tracking-wider">Sommelier & Chef Insight</span>
+                </div>
+                <p class="font-serif text-xs sm:text-sm text-on-surface dark:text-[#fff8f5] italic font-normal leading-snug">
+                  “${primaryItem.whyThis}”
+                </p>
+                <div class="text-[10px] text-secondary dark:text-[#a89d95] font-semibold mt-0.5">
+                  Nutrition Specs: ${primaryItem.macros}
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Ticket-Style Offer Card with Dashed Edge & Scallops -->
+            <div class="w-full relative bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/35 dark:border-white/[0.08] rounded-2xl shadow-sm overflow-hidden flex items-stretch">
+              <!-- Left: Offer Specs -->
+              <div class="flex-1 p-3.5 flex flex-col justify-center gap-0.5">
+                <div class="flex items-center gap-1.5">
+                  <span class="px-2 py-0.5 rounded bg-primary/10 dark:bg-primary/25 text-primary-bright font-bold text-[10px] tracking-wider">${offerCode}</span>
+                  <span class="text-[10px] text-primary-bright font-semibold">Special Privilege</span>
+                </div>
+                <div class="font-bold text-xs text-on-surface dark:text-[#fff8f5]">${offerText}</div>
+                <div class="flex items-center gap-1 text-secondary dark:text-[#a89d95] text-[10px]">
+                  <span class="material-symbols-outlined text-[12px]">timer</span>
+                  <span>Valid till 11:00 PM tonight</span>
+                </div>
+              </div>
+
+              <!-- Ticket Perforation Scallops Line -->
+              <div class="relative flex flex-col items-center justify-between w-5 shrink-0 py-2">
+                <div class="w-4 h-4 bg-surface dark:bg-[#171310] rounded-full -mt-4 border border-[#e4beb5]/30 dark:border-white/[0.08]"></div>
+                <div class="w-0.5 h-full my-1 flex flex-col justify-around items-center">
+                  <span class="w-1 h-1 rounded-full bg-secondary/30 my-0.5"></span>
+                  <span class="w-1 h-1 rounded-full bg-secondary/30 my-0.5"></span>
+                  <span class="w-1 h-1 rounded-full bg-secondary/30 my-0.5"></span>
+                  <span class="w-1 h-1 rounded-full bg-secondary/30 my-0.5"></span>
+                </div>
+                <div class="w-4 h-4 bg-surface dark:bg-[#171310] rounded-full -mb-4 border border-[#e4beb5]/30 dark:border-white/[0.08]"></div>
+              </div>
+
+              <!-- Right: Copy / Apply Button -->
+              <div class="p-3 flex flex-col justify-center items-center shrink-0">
+                <button onclick="copyCouponCode('${offerCode}', this)" class="px-3 py-1.5 rounded-full bg-surface-container-high dark:bg-[#2e241f] hover:bg-primary-bright hover:text-white text-on-surface dark:text-[#fff8f5] text-[11px] font-bold transition-all flex items-center gap-1 active:scale-95">
+                  <span class="material-symbols-outlined text-[14px]">content_copy</span>
+                  <span>Copy</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 4. AI Feedback Action Controls Row -->
+            <div class="flex items-center justify-between w-full pt-1">
+              <div class="flex items-center gap-1">
+                <button onclick="copyResponseText('${msgId}')" title="Copy reply" class="w-7 h-7 rounded-full flex items-center justify-center text-secondary dark:text-[#a89d95] hover:bg-black/5 dark:hover:bg-white/10 hover:text-primary transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">content_copy</span>
+                </button>
+                <button onclick="thumbFeedback(this, true)" title="Helpful" class="w-7 h-7 rounded-full flex items-center justify-center text-secondary dark:text-[#a89d95] hover:bg-black/5 dark:hover:bg-white/10 hover:text-emerald-600 transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">thumb_up</span>
+                </button>
+                <button onclick="thumbFeedback(this, false)" title="Not helpful" class="w-7 h-7 rounded-full flex items-center justify-center text-secondary dark:text-[#a89d95] hover:bg-black/5 dark:hover:bg-white/10 hover:text-rose-600 transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">thumb_down</span>
+                </button>
+                <button onclick="regenerateAnswer('${escapeHtml(query)}')" title="Regenerate" class="w-7 h-7 rounded-full flex items-center justify-center text-secondary dark:text-[#a89d95] hover:bg-black/5 dark:hover:bg-white/10 hover:text-primary transition-colors">
+                  <span class="material-symbols-outlined text-[16px]">refresh</span>
+                </button>
+              </div>
+              <span class="text-[10px] text-secondary dark:text-[#a89d95] italic font-medium">Prices & offers live • 1m ago</span>
+            </div>
+
+            <!-- 5. Quick-Reply Chips -->
+            <div class="-mx-4 px-4 overflow-x-auto no-scrollbar flex items-center gap-1.5 pt-1 pb-1">
+              <button onclick="openAddToCartSheet('${primaryItem.id}')" class="shrink-0 h-8 px-3 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] text-on-surface dark:text-[#fff8f5] text-[11px] font-bold shadow-sm hover:border-primary-bright transition-all flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px] text-primary-bright">add_shopping_cart</span>
+                <span>Add ${primaryItem.name.split(' ')[0]} to cart</span>
+              </button>
+              <button onclick="submitUserQuery('Show 100% pure vegetarian options only')" class="shrink-0 h-8 px-3 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] text-on-surface dark:text-[#fff8f5] text-[11px] font-bold shadow-sm hover:border-primary-bright transition-all flex items-center gap-1">
+                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                <span>Only veg</span>
+              </button>
+              <button onclick="submitUserQuery('Show cheaper options under ₹300')" class="shrink-0 h-8 px-3 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] text-on-surface dark:text-[#fff8f5] text-[11px] font-bold shadow-sm hover:border-primary-bright transition-all">
+                Show cheaper options
+              </button>
+              <button onclick="submitUserQuery('What artisanal desserts would pair best?')" class="shrink-0 h-8 px-3 rounded-full bg-surface-container-lowest dark:bg-[#231c18] border border-[#e4beb5]/30 dark:border-white/[0.08] text-on-surface dark:text-[#fff8f5] text-[11px] font-bold shadow-sm hover:border-primary-bright transition-all">
+                Any desserts?
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+      `;
+
+      list.insertAdjacentHTML('beforeend', aiMsgHtml);
+      scrollToBottom();
+
+      // Typewriter Character Streaming Effect
+      const textElem = document.getElementById(`${msgId}-text`);
+      const cardsElem = document.getElementById(`${msgId}-cards`);
+      
+      let charIndex = 0;
+      const plainText = replyIntro.replace(/<[^>]*>?/gm, ''); // for typewriter timing
+      
+      const streamTimer = setInterval(() => {
+        charIndex += 3;
+        if (charIndex < plainText.length) {
+          textElem.innerHTML = replyIntro.slice(0, charIndex);
+          scrollToBottom();
+        } else {
+          clearInterval(streamTimer);
+          textElem.innerHTML = replyIntro;
+          textElem.classList.remove('typing-cursor');
+          cardsElem.classList.remove('hidden');
+          cardsElem.classList.add('animate-fade-slide-up');
+          scrollToBottom();
+        }
+      }, 20);
+    }
+
+    // ==========================================
+    // SCREEN 4: ADD-TO-CART CONFIRMATION SHEET
+    // ==========================================
+    function openAddToCartSheet(dishId) {
+      const dish = FLEET_KNOWLEDGE.find(d => d.id === dishId) || FLEET_KNOWLEDGE[0];
+      currentSelectedDish = dish;
+      sheetQuantity = 1;
+      selectedAddons = [];
+
+      document.getElementById('sheetDishImg').src = dish.img;
+      document.getElementById('sheetDishName').textContent = dish.name;
+      document.getElementById('sheetRestName').textContent = dish.rest;
+      document.getElementById('sheetDishPrice').textContent = `₹${dish.price}`;
+      document.getElementById('sheetQtyVal').textContent = '1';
+
+      const vegBadge = document.getElementById('sheetVegBadge');
+      const vegText = document.getElementById('sheetVegText');
+      if (dish.veg) {
+        vegBadge.className = 'w-2 h-2 rounded-full bg-emerald-600';
+        vegText.textContent = 'VEG';
+      } else {
+        vegBadge.className = 'w-2 h-2 rounded-full bg-rose-600';
+        vegText.textContent = 'NON-VEG';
+      }
+
+      // Populate Customization Chips
+      const chipsContainer = document.getElementById('sheetCustomizationChips');
+      chipsContainer.innerHTML = '';
+      if (dish.addons && dish.addons.length > 0) {
+        dish.addons.forEach(addon => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'px-3 py-1.5 rounded-full border border-[#e4beb5]/40 dark:border-white/10 text-xs font-semibold text-secondary dark:text-[#a89d95] flex items-center gap-1 active:scale-95 transition-all';
+          chip.innerHTML = `<span>+ ${addon.name}</span> <span class="text-primary-bright font-bold">(+₹${addon.price})</span>`;
+          chip.onclick = () => toggleSheetAddon(addon, chip);
+          chipsContainer.appendChild(chip);
+        });
+      } else {
+        chipsContainer.innerHTML = `<span class="text-[11px] text-secondary italic">Standard chef preparation — ready to order!</span>`;
+      }
+
+      updateSheetTotals();
+      document.getElementById('addToCartSheet').classList.remove('hidden');
+    }
+
+    function toggleSheetAddon(addon, btn) {
+      const idx = selectedAddons.findIndex(a => a.id === addon.id);
+      if (idx >= 0) {
+        selectedAddons.splice(idx, 1);
+        btn.classList.remove('bg-primary', 'text-white', 'border-primary');
+        btn.classList.add('border-[#e4beb5]/40', 'text-secondary');
+      } else {
+        selectedAddons.push(addon);
+        btn.classList.add('bg-primary', 'text-white', 'border-primary');
+        btn.classList.remove('border-[#e4beb5]/40', 'text-secondary');
+      }
+      updateSheetTotals();
+    }
+
+    function changeSheetQty(delta) {
+      sheetQuantity = Math.max(1, sheetQuantity + delta);
+      document.getElementById('sheetQtyVal').textContent = sheetQuantity;
+      updateSheetTotals();
+    }
+
+    function updateSheetTotals() {
+      if (!currentSelectedDish) return;
+      const baseSub = currentSelectedDish.price * sheetQuantity;
+      const addonUnit = selectedAddons.reduce((acc, a) => acc + a.price, 0);
+      const addonSub = addonUnit * sheetQuantity;
+      const finalTot = baseSub + addonSub;
+
+      document.getElementById('sheetBaseSubtotal').textContent = `₹${baseSub}`;
+      document.getElementById('sheetAddonsSubtotal').textContent = `₹${addonSub}`;
+      document.getElementById('sheetFinalTotal').textContent = `₹${finalTot}`;
+      document.getElementById('sheetConfirmBtnText').textContent = `Add to cart — ₹${finalTot}`;
+    }
+
+    function confirmAddToCart() {
+      if (!currentSelectedDish) return;
+      
+      // Real Cart Integration: add to DeliverApp unified Cart engine
+      if (window.Cart && window.Cart.add) {
+        window.Cart.add(currentSelectedDish.id, sheetQuantity, {}, selectedAddons);
+      } else if (window.parent && window.parent.Cart && window.parent.Cart.add) {
+        window.parent.Cart.add(currentSelectedDish.id, sheetQuantity, {}, selectedAddons);
+      }
+
+      closeCartSheet();
+      syncCartBadge();
+      showToast(`${currentSelectedDish.name} added to cart!`, 'check_circle');
+
+      // Post message to parent shell for smooth badge and state sync
+      try {
+        window.parent.postMessage({ type: 'cart:update' }, '*');
+      } catch (e) {}
+    }
+
+    function closeCartSheet() {
+      document.getElementById('addToCartSheet').classList.add('hidden');
+    }
+
+    // ==========================================
+    // SCREEN 5: VOICE INPUT OVERLAY
+    // ==========================================
+    let recognition = null;
+
+    function openVoiceModal() {
+      const modal = document.getElementById('voiceModal');
+      const transcript = document.getElementById('voiceTranscriptText');
+      modal.classList.remove('hidden');
+
+      // Initialize Web Speech API if supported
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        try {
+          recognition = new SpeechRecognition();
+          recognition.continuous = false;
+          recognition.interimResults = true;
+          recognition.lang = 'en-IN';
+
+          recognition.onresult = (e) => {
+            let res = '';
+            for (let i = 0; i < e.results.length; i++) {
+              res += e.results[i][0].transcript;
+            }
+            if (res) transcript.textContent = `“${res}”`;
+          };
+
+          recognition.onerror = () => {
+            fallbackVoiceSimulation();
+          };
+
+          recognition.start();
+        } catch(err) {
+          fallbackVoiceSimulation();
+        }
+      } else {
+        fallbackVoiceSimulation();
+      }
+    }
+
+    function fallbackVoiceSimulation() {
+      const samples = [
+        "“Show me woodfired sourdough burrata pizza under 35 mins...”",
+        "“What are the best healthy high-protein meals under 400 calories?”",
+        "“Find best chicken dum biryani pots with active discount codes...”",
+        "“Any pure veg Italian dishes with truffle oil?”"
+      ];
+      const picked = samples[Math.floor(Math.random() * samples.length)];
+      const transcript = document.getElementById('voiceTranscriptText');
+      transcript.textContent = picked;
+    }
+
+    function sendVoiceTranscript() {
+      const transcript = document.getElementById('voiceTranscriptText');
+      const text = transcript.textContent.replace(/[“”"]/g, '').trim();
+      closeVoiceModal();
+      if (text) {
+        submitUserQuery(text);
+      }
+    }
+
+    function closeVoiceModal() {
+      if (recognition) {
+        try { recognition.stop(); } catch(e) {}
+      }
+      document.getElementById('voiceModal').classList.add('hidden');
+    }
+
+    // ==========================================
+    // SCREEN 6: CHAT HISTORY DRAWER
+    // ==========================================
+    function openHistoryDrawer() {
+      document.getElementById('historyDrawerBackdrop').classList.remove('hidden');
+      document.getElementById('historyDrawer').classList.remove('-translate-x-full');
+    }
+
+    function closeHistoryDrawer() {
+      document.getElementById('historyDrawerBackdrop').classList.add('hidden');
+      document.getElementById('historyDrawer').classList.add('-translate-x-full');
+    }
+
+    function restoreChat(query) {
+      closeHistoryDrawer();
+      submitUserQuery(query);
+    }
+
+    function filterHistoryList(searchTerm) {
+      const term = searchTerm.toLowerCase();
+      const buttons = document.querySelectorAll('#historyListContainer button');
+      buttons.forEach(btn => {
+        const text = btn.textContent.toLowerCase();
+        if (text.includes(term)) {
+          btn.style.display = 'flex';
+        } else {
+          btn.style.display = 'none';
+        }
+      });
+    }
+
+    function clearMyData() {
+      if (confirm('Clear all conversation history and preference data from Fleet AI?')) {
+        document.getElementById('messagesList').innerHTML = '';
+        document.getElementById('conversationStream').classList.add('hidden');
+        document.getElementById('emptyStateView').classList.remove('hidden');
+        closeHistoryDrawer();
+        showToast('Your conversation history has been cleared', 'delete');
+      }
+    }
+
+    function startNewChat() {
+      document.getElementById('messagesList').innerHTML = '';
+      document.getElementById('conversationStream').classList.add('hidden');
+      document.getElementById('emptyStateView').classList.remove('hidden');
+      resetEdgeState();
+      showToast('Started a fresh session with Fleet AI');
+    }
+
+    // ==========================================
+    // SCREEN 7: EDGE STATES
+    // ==========================================
+    function showEdgeState(type) {
+      const container = document.getElementById('edgeStateContainer');
+      const icon = document.getElementById('edgeStateIcon');
+      const title = document.getElementById('edgeStateTitle');
+      const desc = document.getElementById('edgeStateDesc');
+
+      container.classList.remove('hidden');
+
+      if (type === 'no_results') {
+        icon.className = 'w-12 h-12 rounded-full bg-amber-500/15 text-amber-600 flex items-center justify-center';
+        icon.innerHTML = `<span class="material-symbols-outlined text-[28px]">search_off</span>`;
+        title.textContent = 'Nothing Matched Your Criteria';
+        desc.textContent = "We couldn't locate active dishes matching that exact budget or constraint. Try a broader search or browse our chef's favorites:";
+      } else if (type === 'error') {
+        icon.className = 'w-12 h-12 rounded-full bg-rose-500/15 text-rose-600 flex items-center justify-center';
+        icon.innerHTML = `<span class="material-symbols-outlined text-[28px]">error</span>`;
+        title.textContent = 'Something Went Wrong';
+        desc.textContent = 'Unable to reach the culinary kitchen database right now. Please tap Retry to reload kitchen data.';
+      } else if (type === 'rate_limit') {
+        icon.className = 'w-12 h-12 rounded-full bg-purple-500/15 text-purple-600 flex items-center justify-center';
+        icon.innerHTML = `<span class="material-symbols-outlined text-[28px]">hourglass_top</span>`;
+        title.textContent = 'High Demand on Fleet AI';
+        desc.textContent = 'Our concierge is consulting kitchen inventories for numerous foodies. Please wait a quick moment.';
+      }
+
+      scrollToBottom();
+    }
+
+    function resetEdgeState() {
+      document.getElementById('edgeStateContainer').classList.add('hidden');
+    }
+
+    // Dietary preference modal
+    function openDietaryModal() {
+      document.getElementById('dietaryModal').classList.remove('hidden');
+    }
+    function closeDietaryModal() {
+      document.getElementById('dietaryModal').classList.add('hidden');
+    }
+    function togglePref(btn, tag) {
+      btn.classList.toggle('bg-primary');
+      btn.classList.toggle('text-white');
+    }
+    function applyBudget(amount) {
+      closeDietaryModal();
+      submitUserQuery(`Show best meals under ₹${amount}`);
+    }
+
+    // Feedback & actions
+    function copyCouponCode(code, btn) {
+      navigator.clipboard?.writeText(code);
+      btn.innerHTML = `<span class="material-symbols-outlined text-[14px]">check</span><span>Applied</span>`;
+      btn.classList.add('bg-emerald-600', 'text-white');
+      showToast(`Coupon ${code} copied to clipboard!`, 'sell');
+      setTimeout(() => {
+        btn.innerHTML = `<span class="material-symbols-outlined text-[14px]">content_copy</span><span>Copy</span>`;
+        btn.classList.remove('bg-emerald-600', 'text-white');
+      }, 2500);
+    }
+
+    function copyResponseText(msgId) {
+      const elem = document.getElementById(`${msgId}-text`);
+      if (elem) {
+        navigator.clipboard?.writeText(elem.textContent.trim());
+        showToast('Fleet AI reply copied to clipboard', 'content_copy');
+      }
+    }
+
+    function thumbFeedback(btn, isUp) {
+      btn.classList.add(isUp ? 'text-emerald-600' : 'text-rose-600', 'scale-110');
+      showToast(isUp ? 'Thanks for your feedback!' : 'Thanks, refining taste model', 'thumb_up');
+    }
+
+    function regenerateAnswer(query) {
+      showToast('Consulting kitchens for fresh recommendations...', 'refresh');
+      startThinking(query);
+    }
+
+    function scrollToBottom() {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+  </script>
+</body>
+</html>

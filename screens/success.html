@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="h-full bg-surface" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+  <title>Order Confirmed — Royal Dawat &amp; Forno d'Oro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#a83211",
+            "primary-container": "#ca4a28",
+            "primary-fixed": "#ffdbd1",
+            "primary-fixed-dim": "#ffb4a1",
+            "on-primary": "#ffffff",
+            "on-primary-fixed": "#3c0800",
+            "surface": "#fff8f5",
+            "surface-dim": "#e0d8d5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#faf2ee",
+            "surface-container": "#f4ece8",
+            "surface-container-high": "#eee7e3",
+            "on-surface": "#1e1b19",
+            "on-surface-variant": "#59413b",
+            "secondary": "#835500",
+            "secondary-container": "#feae2c",
+            "tertiary": "#006b2c",
+            "tertiary-container": "#00873a",
+            "error": "#ba1a1a"
+          },
+          fontFamily: {
+            headline: ["Epilogue", "sans-serif"],
+            body: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: "Plus Jakarta Sans", sans-serif; -webkit-tap-highlight-color: transparent; }
+    h1, h2, h3, h4 { font-family: "Epilogue", sans-serif; }
+    .pulse-ring {
+      animation: pulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 107, 44, 0.4); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 16px rgba(0, 107, 44, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 107, 44, 0); }
+    }
+  </style>
+  <script src="/js/config.js"></script>
+  <script src="/js/store.js"></script>
+  <script src="/js/nav.js"></script>
+</head>
+<body class="min-h-full flex items-center justify-center p-4 bg-surface text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed">
+
+  <div class="max-w-md w-full bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-xl text-center border border-[#e0d8d5] flex flex-col items-center gap-4">
+
+    <!-- Large Success Animation (Section 10) -->
+    <div class="w-20 h-20 rounded-full bg-tertiary text-white flex items-center justify-center shadow-lg pulse-ring">
+      <span class="material-symbols-outlined text-[44px]">check</span>
+    </div>
+
+    <div>
+      <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-tertiary bg-tertiary/10 px-3 py-1 rounded-full">
+        Payment Successful &amp; Dispatched
+      </span>
+      <h1 class="font-headline text-2xl font-black mt-2 text-on-surface leading-tight">Order Confirmed!</h1>
+      <p class="text-xs text-on-surface-variant font-medium mt-1">Your food is being prepared in the kitchen.</p>
+    </div>
+
+    <!-- Order Metadata Pill Card (Section 10) -->
+    <div class="w-full bg-surface-container-low rounded-2xl p-4 text-xs text-on-surface flex flex-col gap-2.5 text-left border border-[#e0d8d5]">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <div class="flex flex-col">
+          <span class="text-[10px] uppercase font-bold text-on-surface-variant">Order Identifier</span>
+          <span id="orderIdText" class="font-headline font-black text-sm text-primary">#12345</span>
+        </div>
+        <div class="flex flex-col text-right">
+          <span class="text-[10px] uppercase font-bold text-on-surface-variant">Estimated Delivery</span>
+          <span class="font-bold text-xs text-tertiary flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">schedule</span> 30–35 min
+          </span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <span class="font-bold text-on-surface">Restaurant</span>
+        <span id="restNameText" class="font-semibold text-on-surface-variant">Royal Dawat &amp; Forno d'Oro</span>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <span class="font-bold text-on-surface">Payment Mode</span>
+        <span id="payModeText" class="font-semibold text-on-surface-variant">UPI (Instant)</span>
+      </div>
+
+      <div class="flex items-center justify-between pt-1 border-t border-[#e0d8d5]/80 text-sm font-black">
+        <span>Total Paid</span>
+        <span id="orderTotalText" class="text-primary text-base">₹434</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons (Section 10) -->
+    <div class="flex flex-col w-full gap-2.5 mt-2">
+      <!-- Primary CTA: Track Order -->
+      <button data-nav="tracking" class="w-full py-3.5 rounded-full bg-primary hover:bg-primary-container text-white font-bold text-xs shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">electric_moped</span>
+        <span>TRACK ORDER</span>
+      </button>
+
+      <!-- Secondary CTA: View Order Details (Section 10) -->
+      <button onclick="openOrderDetailsModal()" class="w-full py-3 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-bold text-xs active:scale-95 transition-all flex items-center justify-center gap-1.5">
+        <span class="material-symbols-outlined text-[16px]">receipt_long</span>
+        <span>VIEW ORDER DETAILS</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Order Receipt Modal (Section 16: Order Details) -->
+  <div id="detailsModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-surface-container-lowest w-full max-w-md rounded-3xl p-5 shadow-2xl flex flex-col gap-3.5 max-h-[90vh] overflow-y-auto border border-[#e0d8d5]">
+      <div class="flex items-center justify-between pb-2 border-b border-[#e0d8d5]">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-[20px]">receipt</span>
+          <h3 class="font-headline text-base font-bold text-on-surface">Receipt &amp; Tax Invoice</h3>
+        </div>
+        <button onclick="closeOrderDetailsModal()" class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center text-on-surface">
+          <span class="material-symbols-outlined text-[16px]">close</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-2 text-xs">
+        <div class="flex justify-between items-center bg-surface-container-low p-2.5 rounded-xl">
+          <span class="font-bold text-on-surface" id="modalOrderId">Order #12345</span>
+          <span class="text-tertiary font-bold flex items-center gap-1">
+            <span class="material-symbols-outlined text-[14px]">check_circle</span> Placed Successfully
+          </span>
+        </div>
+
+        <div class="font-bold text-on-surface uppercase tracking-wider text-[11px] pt-1">Items Summary</div>
+        <div id="modalItemsList" class="flex flex-col gap-1.5 divide-y divide-[#e0d8d5]/40">
+          <!-- Injected via JS -->
+        </div>
+
+        <div class="font-bold text-on-surface uppercase tracking-wider text-[11px] pt-2">Bill Breakdown</div>
+        <div id="modalBillBreakdown" class="flex flex-col gap-1.5 text-on-surface-variant">
+          <!-- Injected via JS -->
+        </div>
+
+        <div class="font-bold text-on-surface uppercase tracking-wider text-[11px] pt-2">Delivery Address</div>
+        <p id="modalAddressText" class="text-on-surface bg-surface-container-low p-2.5 rounded-xl leading-relaxed"></p>
+      </div>
+
+      <div class="flex gap-2 pt-2 border-t border-[#e0d8d5]">
+        <button onclick="window.print()" class="flex-1 py-2.5 rounded-xl bg-surface-container text-on-surface font-bold text-xs flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">print</span>
+          <span>Print Receipt</span>
+        </button>
+        <button onclick="downloadInvoiceText()" class="flex-1 py-2.5 rounded-xl bg-primary text-white font-bold text-xs flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">download</span>
+          <span>Download Invoice</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeOrder = null;
+
+    function renderConfirmation() {
+      const idParam = new URLSearchParams(location.search).get('id');
+      const orders = window.Orders ? window.Orders.all() : [];
+      activeOrder = (idParam ? orders.find(o => o.id === idParam) : null) || (window.Orders ? window.Orders.active() : null) || orders[0];
+
+      if (activeOrder) {
+        document.getElementById('orderIdText').textContent = `#${activeOrder.id}`;
+        document.getElementById('restNameText').textContent = activeOrder.restaurant?.name || "Royal Dawat & Forno d'Oro";
+        document.getElementById('payModeText').textContent = activeOrder.payment?.method || 'UPI (Instant)';
+        document.getElementById('orderTotalText').textContent = money(activeOrder.bill?.total || 434);
+      }
+    }
+
+    function openOrderDetailsModal() {
+      if (!activeOrder) return;
+      document.getElementById('modalOrderId').textContent = `Order #${activeOrder.id}`;
+
+      const itemsList = document.getElementById('modalItemsList');
+      itemsList.innerHTML = (activeOrder.items || []).map(item => `
+        <div class="flex justify-between py-1 text-xs">
+          <span>${item.qty}× ${item.name}</span>
+          <span class="font-bold text-on-surface">${money(item.qty * item.price)}</span>
+        </div>
+      `).join('');
+
+      const bill = activeOrder.bill || {};
+      const billEl = document.getElementById('modalBillBreakdown');
+      billEl.innerHTML = `
+        <div class="flex justify-between"><span>Subtotal</span><span class="font-semibold text-on-surface">${money(bill.sub || 0)}</span></div>
+        ${bill.discount > 0 ? `<div class="flex justify-between text-tertiary font-bold"><span>Discount</span><span>-${money(bill.discount)}</span></div>` : ''}
+        <div class="flex justify-between"><span>Delivery Fee</span><span class="font-semibold text-on-surface">${bill.delivery === 0 ? 'FREE' : money(bill.delivery)}</span></div>
+        <div class="flex justify-between"><span>Platform Fee</span><span class="font-semibold text-on-surface">${money(bill.platform || 5)}</span></div>
+        <div class="flex justify-between"><span>GST &amp; Taxes</span><span class="font-semibold text-on-surface">${money(bill.tax || 0)}</span></div>
+        <div class="flex justify-between pt-1 border-t border-[#e0d8d5] text-sm font-black text-on-surface"><span>Total Paid</span><span class="text-primary">${money(bill.total || 0)}</span></div>
+      `;
+
+      const addr = activeOrder.address || {};
+      document.getElementById('modalAddressText').textContent = `${addr.tag || 'HOME'} • ${addr.house || ''}, ${addr.street || ''}, ${addr.area || ''}, ${addr.city || 'Hyderabad'} (PIN: ${addr.pin || '500100'})`;
+
+      document.getElementById('detailsModal').classList.remove('hidden');
+    }
+
+    function closeOrderDetailsModal() {
+      document.getElementById('detailsModal').classList.add('hidden');
+    }
+
+    function downloadInvoiceText() {
+      if (!activeOrder) return;
+      const invoiceData = `
+========================================
+     EPICUREAN CURATIONS / DELIVERAPP
+        TAX INVOICE & ORDER RECEIPT
+========================================
+Order ID: #${activeOrder.id}
+Date: ${new Date(activeOrder.placedAt || Date.now()).toLocaleString()}
+Restaurant: ${activeOrder.restaurant?.name || "Royal Dawat & Forno d'Oro"}
+Payment Method: ${activeOrder.payment?.method || 'UPI'} (${activeOrder.payment?.id || 'Ref'})
+Status: CONFIRMED / PREPARING
+
+ITEMS ORDERED:
+${(activeOrder.items || []).map(i => `- ${i.qty}x ${i.name} : ${money(i.qty * i.price)}`).join('\n')}
+
+BILL SUMMARY:
+Subtotal: ${money(activeOrder.bill?.sub || 0)}
+Discount: -${money(activeOrder.bill?.discount || 0)}
+Delivery Fee: ${activeOrder.bill?.delivery === 0 ? 'FREE' : money(activeOrder.bill?.delivery || 0)}
+Platform Fee: ${money(activeOrder.bill?.platform || 5)}
+Taxes (5% GST): ${money(activeOrder.bill?.tax || 0)}
+----------------------------------------
+TOTAL PAID: ${money(activeOrder.bill?.total || 0)}
+========================================
+Delivery to: ${activeOrder.address?.house || ''}, ${activeOrder.address?.area || 'Kompally, Hyderabad'}
+Thank you for dining with Epicurean Curations!
+      `.trim();
+
+      const blob = new Blob([invoiceData], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Invoice_Order_${activeOrder.id}.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener('DOMContentLoaded', renderConfirmation);
+  </script>
+</body>
+</html>

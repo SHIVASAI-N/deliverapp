@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Epicurean Curations — Premium Food Delivery</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23a83211'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" />
+<meta name="theme-color" content="#fff8f5" />
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: "#a83211",
+        "primary-container": "#ca4a28",
+        "primary-fixed": "#ffdbd1",
+        surface: "#fff8f5",
+        "surface-container": "#f4ece8",
+        "surface-container-low": "#faf2ee",
+        "surface-container-high": "#eee7e3",
+        "on-surface": "#1e1b19",
+        "on-surface-variant": "#59413b",
+        secondary: "#835500",
+        tertiary: "#006b2c"
+      },
+      fontFamily: {
+        headline: ["Epilogue","sans-serif"],
+        body: ["Plus Jakarta Sans","sans-serif"]
+      }
+    }
+  }
+};
+</script>
+<style>
+  body { font-family: "Plus Jakarta Sans", sans-serif; }
+  h1, h2, h3, h4 { font-family: Epilogue, sans-serif; }
+  .phone-frame iframe { border: 0; width: 100%; height: 100%; background: #fff8f5; display: block; }
+</style>
+</head>
+<body class="bg-surface text-[#1e1b19] min-h-screen antialiased">
+
+<!-- Site Navigation -->
+<header class="sticky top-0 z-50 bg-surface/90 backdrop-blur border-b border-[#e0d8d5]">
+  <div class="max-w-6xl mx-auto px-5 h-16 flex items-center justify-between gap-3">
+    <a href="#top" class="flex items-center gap-2.5">
+      <span class="w-9 h-9 rounded-xl bg-primary text-white flex items-center justify-center shadow-sm">
+        <span class="material-symbols-outlined text-[20px]">restaurant</span>
+      </span>
+      <div class="flex flex-col">
+        <span class="font-headline font-bold text-lg tracking-tight leading-tight">Epicurean <span class="text-primary">Curations</span></span>
+        <span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Kompally, Hyderabad</span>
+      </div>
+    </a>
+    <nav class="hidden md:flex items-center gap-6 text-sm font-semibold text-[#59413b]">
+      <a href="#top" class="hover:text-primary transition-colors">Overview</a>
+      <a href="#journey" class="hover:text-primary transition-colors">Order Journey</a>
+      <a href="#screens" class="hover:text-primary transition-colors">Screen Catalog</a>
+      <a href="#app" class="hover:text-primary transition-colors">Live Simulation</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <a href="/screens/account.html" class="px-4 py-2 rounded-full bg-[#f4ece8] text-sm font-bold text-on-surface hover:bg-[#eee7e3] transition-colors hidden sm:block">Patron Account</a>
+      <a href="/app.html" class="px-5 py-2.5 rounded-full bg-primary text-white text-sm font-bold shadow hover:opacity-95 transition-all">Launch Live App</a>
+    </div>
+  </div>
+</header>
+
+<!-- Hero Section with Live Embedded App -->
+<section id="top" class="max-w-6xl mx-auto px-5 pt-10 md:pt-16 pb-12 grid gap-12 lg:grid-cols-12 items-center">
+  <div class="lg:col-span-7 space-y-5">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed text-xs font-bold uppercase tracking-wider">
+      <span class="material-symbols-outlined text-sm">location_on</span>
+      <span>Live in Kompally, Hyderabad • 17.55714, 78.44987</span>
+    </div>
+    <h1 class="text-4xl md:text-6xl font-extrabold text-[#1e1b19] leading-[1.05] tracking-tight">
+      Royal Dawats &amp; artisan crusts,<br/>
+      delivered <span class="text-primary">steaming hot.</span>
+    </h1>
+    <p class="text-[#59413b] text-base md:text-lg max-w-xl leading-relaxed">
+      A complete end-to-end food delivery journey. From authentic Hyderabadi Dum Biryani and Crispy Starters to Italian Woodfired Neapolitan sourdough pizzas. Real-time OpenStreetMap radar tracking with interactive 7-stage order progression and delivery partner telemetry.
+    </p>
+
+    <!-- CTAs -->
+    <div class="flex flex-wrap gap-3 pt-2">
+      <a href="/app.html" class="px-6 py-3.5 rounded-full bg-primary text-white font-bold text-sm shadow-md hover:bg-primary-container active:scale-95 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">smartphone</span>
+        <span>Launch App Simulator</span>
+      </a>
+      <a href="#screens" class="px-6 py-3.5 rounded-full bg-surface-container text-primary font-bold text-sm hover:bg-surface-container-high active:scale-95 transition-all flex items-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">grid_view</span>
+        <span>Explore All 7 Screens</span>
+      </a>
+    </div>
+
+    <!-- Trust Stats -->
+    <div class="grid grid-cols-3 gap-4 pt-6 border-t border-[#e0d8d5] max-w-md">
+      <div>
+        <p class="text-2xl font-black text-primary">4.8★</p>
+        <p class="text-xs text-on-surface-variant font-medium">Royal Dawat &amp; Forno</p>
+      </div>
+      <div>
+        <p class="text-2xl font-black text-on-surface">25-30m</p>
+        <p class="text-xs text-on-surface-variant font-medium">Avg Delivery Time</p>
+      </div>
+      <div>
+        <p class="text-2xl font-black text-tertiary">FREE</p>
+        <p class="text-xs text-on-surface-variant font-medium">On orders &gt; ₹399</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive Live Simulator Frame -->
+  <div id="app" class="lg:col-span-5 flex flex-col items-center">
+    <div class="phone-frame w-full max-w-[390px] h-[720px] rounded-[2.5rem] p-3 bg-[#171311] border-[4px] border-[#3a332f] shadow-[0_25px_70px_rgba(0,0,0,0.4)] relative flex flex-col">
+      <!-- Phone Speaker notch -->
+      <div class="w-28 h-4 bg-[#171311] rounded-full mx-auto mb-2 shrink-0 flex items-center justify-center">
+        <div class="w-12 h-1 bg-[#3a332f] rounded-full"></div>
+      </div>
+      <!-- Screen Viewport -->
+      <div class="flex-1 rounded-[1.8rem] overflow-hidden bg-surface relative">
+        <iframe id="heroFrame" src="/screens/home.html" title="DeliverApp Simulator" class="w-full h-full border-0"></iframe>
+      </div>
+    </div>
+
+    <!-- Quick Frame Switcher Pills -->
+    <div class="flex flex-wrap items-center justify-center gap-1.5 mt-4 bg-surface-container px-3 py-2 rounded-2xl border border-[#e0d8d5] text-xs font-bold text-on-surface max-w-[420px]">
+      <button onclick="switchScreen('/screens/home.html', this)" class="px-2.5 py-1 rounded-full bg-primary text-white shadow-sm">Home</button>
+      <button onclick="switchScreen('/screens/restaurant.html', this)" class="px-2.5 py-1 rounded-full hover:bg-surface-container-high transition-colors">Restaurant</button>
+      <button onclick="switchScreen('/screens/cart.html', this)" class="px-2.5 py-1 rounded-full hover:bg-surface-container-high transition-colors">Cart</button>
+      <button onclick="switchScreen('/screens/checkout.html', this)" class="px-2.5 py-1 rounded-full hover:bg-surface-container-high transition-colors">Checkout</button>
+      <button onclick="switchScreen('/screens/success.html', this)" class="px-2.5 py-1 rounded-full hover:bg-surface-container-high transition-colors">Confirmed</button>
+      <button onclick="switchScreen('/screens/tracking.html', this)" class="px-2.5 py-1 rounded-full hover:bg-surface-container-high transition-colors">Live Track</button>
+      <button onclick="switchScreen('/screens/account.html', this)" class="px-2.5 py-1 rounded-full hover:bg-surface-container-high transition-colors">Account</button>
+    </div>
+  </div>
+</section>
+
+<!-- 10-Step Customer Journey -->
+<section id="journey" class="max-w-6xl mx-auto px-5 py-12 border-t border-[#e0d8d5]">
+  <div class="text-center max-w-xl mx-auto mb-8">
+    <span class="text-xs uppercase tracking-widest text-primary font-bold">End-to-End Design Flow</span>
+    <h2 class="text-2xl md:text-3xl font-extrabold text-[#1e1b19] mt-1">The 10-Step Customer Journey</h2>
+    <p class="text-xs md:text-sm text-on-surface-variant mt-2">Carefully architected with consistent visual hierarchy, sticky CTAs, micro-interactions, and real-time state sync.</p>
+  </div>
+
+  <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">1</span>
+      <p class="text-xs font-bold text-on-surface">Home</p>
+      <p class="text-[10px] text-on-surface-variant">Spotlight &amp; categories</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">2</span>
+      <p class="text-xs font-bold text-on-surface">Restaurant</p>
+      <p class="text-[10px] text-on-surface-variant">Menu, search &amp; filters</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">3</span>
+      <p class="text-xs font-bold text-on-surface">Food Item</p>
+      <p class="text-[10px] text-on-surface-variant">Customizer &amp; add-ons</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">4</span>
+      <p class="text-xs font-bold text-on-surface">Cart / Bag</p>
+      <p class="text-[10px] text-on-surface-variant">Coupons &amp; bill breakdown</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">5</span>
+      <p class="text-xs font-bold text-on-surface">Checkout</p>
+      <p class="text-[10px] text-on-surface-variant">Address &amp; instructions</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">6</span>
+      <p class="text-xs font-bold text-on-surface">Payment</p>
+      <p class="text-[10px] text-on-surface-variant">UPI ID &amp; card verify</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">7</span>
+      <p class="text-xs font-bold text-on-surface">Confirmed</p>
+      <p class="text-[10px] text-on-surface-variant">Checkmark &amp; invoice</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">8</span>
+      <p class="text-xs font-bold text-on-surface">Live Tracking</p>
+      <p class="text-[10px] text-on-surface-variant">OSM Kompally radar</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">9</span>
+      <p class="text-xs font-bold text-on-surface">Delivered</p>
+      <p class="text-[10px] text-on-surface-variant">7-stage progression</p>
+    </div>
+    <div class="p-3 rounded-xl bg-surface-container border border-[#e0d8d5] text-center">
+      <span class="w-7 h-7 rounded-full bg-primary/10 text-primary inline-flex items-center justify-center font-bold text-xs mb-1.5">10</span>
+      <p class="text-xs font-bold text-on-surface">Rating</p>
+      <p class="text-[10px] text-on-surface-variant">5★ food &amp; courier review</p>
+    </div>
+  </div>
+</section>
+
+<!-- Screen Catalog -->
+<section id="screens" class="max-w-6xl mx-auto px-5 py-12 border-t border-[#e0d8d5]">
+  <div class="text-center max-w-xl mx-auto mb-10">
+    <span class="text-xs uppercase tracking-widest text-primary font-bold">Complete Prototype Ecosystem</span>
+    <h2 class="text-3xl font-extrabold text-[#1e1b19] mt-1">Screen Catalog &amp; Subsystems</h2>
+    <p class="text-sm text-on-surface-variant mt-2">Every screen crafted with custom Material 3 Expressive tokens, real-time store synchronization, and touch-optimized responsive ergonomics.</p>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Screen 1: Explore Home -->
+    <a href="/screens/home.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">restaurant</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">1. Explore Dining</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Curated kitchens, search bar, dietary filters (Pure Veg, Under 30 min), and Royal Dawat &amp; Forno d'Oro spotlight.</p>
+    </a>
+
+    <!-- Screen 2: Restaurant Detail -->
+    <a href="/screens/restaurant.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">storefront</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">2. Restaurant &amp; Customizer</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Live dish search, category tabs, veg/non-veg badges, and interactive bottom sheet customizer with add-on checklist.</p>
+    </a>
+
+    <!-- Screen 3: Cart / Bag -->
+    <a href="/screens/cart.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">shopping_bag</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">3. Cart &amp; Empty State</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Item steppers [- 1 +], customizations summary, coupons (FEAST50, EPICURE20), delivery notes, and bill breakdown.</p>
+    </a>
+
+    <!-- Screen 4: Checkout & Address -->
+    <a href="/screens/checkout.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">home_pin</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">4. Checkout &amp; Address Selector</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Saved address drawer (Home, Work, Other) with edit, new address form validation, delivery notes, and sticky CTA.</p>
+    </a>
+
+    <!-- Screen 5: Dedicated Payment UI -->
+    <a href="/screens/checkout.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">payment</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">5. Payment UI &amp; Simulation</h3>
+      <p class="text-xs text-on-surface-variant mt-1">UPI with custom ID &amp; instant verify, Credit Card, NetBanking, Wallets, COD, processing overlay &amp; failure simulator.</p>
+    </a>
+
+    <!-- Screen 6: Order Confirmation -->
+    <a href="/screens/success.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">verified</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">6. Order Confirmed &amp; Invoice</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Animated green checkmark, Order #, ETA 30-35 min, Track Order CTA, and itemized Tax Invoice receipt modal.</p>
+    </a>
+
+    <!-- Screen 7: Live GPS Telemetry -->
+    <a href="/screens/tracking.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">near_me</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">7. Live GPS Telemetry &amp; 7 States</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Leaflet OSM radar centered on Kompally (17.55714, 78.44987), border box with exit buttons, courier card &amp; chat drawer.</p>
+    </a>
+
+    <!-- Screen 8: Rating & Feedback -->
+    <a href="/screens/tracking.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">star</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">8. Rating &amp; Review Modal</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Triggered upon delivery: 5-star restaurant rating, 5-star delivery rating, quick feedback tags, and comments.</p>
+    </a>
+
+    <!-- Screen 9: Rider & Kitchen Dashboards -->
+    <a href="/screens/account.html" target="_blank" class="group bg-surface-container-lowest rounded-2xl p-5 border border-[#e0d8d5] shadow-sm hover:shadow-md transition-all">
+      <div class="flex items-center justify-between mb-3">
+        <span class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+          <span class="material-symbols-outlined text-[22px]">dashboard</span>
+        </span>
+        <span class="text-xs font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center">Open ↗</span>
+      </div>
+      <h3 class="font-headline text-lg font-bold text-on-surface">9. Rider &amp; Kitchen Portals</h3>
+      <p class="text-xs text-on-surface-variant mt-1">Delivery partner portal (Rahul: ₹850 earnings, 12 trips, mark delivered) &amp; kitchen orders manager (New, Preparing, Ready).</p>
+    </a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-surface-container border-t border-[#e0d8d5] py-8 text-center text-xs text-on-surface-variant">
+  <div class="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="flex items-center gap-2">
+      <span class="w-6 h-6 rounded bg-primary text-white flex items-center justify-center font-bold text-xs">E</span>
+      <span class="font-bold text-on-surface">Epicurean Curations — DeliverApp</span>
+    </div>
+    <p>Authentic Royal Dawats &amp; artisan crusts delivered hot to Kompally, Hyderabad (17.55714, 78.44987).</p>
+    <a href="/app.html" class="text-primary font-bold hover:underline">Open Mobile App</a>
+  </div>
+</footer>
+
+<script>
+  function switchScreen(url, btn) {
+    document.getElementById('heroFrame').src = url;
+    btn.parentElement.querySelectorAll('button').forEach(b => {
+      b.classList.remove('bg-primary', 'text-white', 'shadow-sm');
+    });
+    btn.classList.add('bg-primary', 'text-white', 'shadow-sm');
+  }
+</script>
+</body>
+</html>

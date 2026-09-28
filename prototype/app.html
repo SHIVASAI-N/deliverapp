@@ -122,7 +122,7 @@ tailwind.config = {
       <div id="navActivePill" class="absolute top-[6px] left-0 w-[56px] h-[54px] rounded-2xl bg-gradient-to-b from-[#f04e23] to-[#c73812] shadow-[0_4px_18px_rgba(240,78,35,0.45)] pointer-events-none z-0 will-change-transform" style="transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
 
       <!-- Option 1: Explore -->
-      <button data-go="#/home" data-tab="home" data-index="0" aria-label="Explore" title="Explore" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+      <button data-go="#/home" data-tab="home" data-index="0" aria-label="Explore" title="Explore" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full cursor-pointer touch-manipulation select-none">
         <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
           <span class="tab-icon material-symbols-outlined text-[22px] text-white transition-all duration-200">restaurant</span>
           <span class="tab-label text-[10px] font-semibold text-white/90 tracking-tight mt-0.5 transition-colors">Explore</span>
@@ -130,7 +130,7 @@ tailwind.config = {
       </button>
 
       <!-- Option 2: Kitchen -->
-      <button data-go="#/restaurant" data-tab="restaurant" data-index="1" aria-label="Kitchen" title="Kitchen" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+      <button data-go="#/restaurant" data-tab="restaurant" data-index="1" aria-label="Kitchen" title="Kitchen" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full cursor-pointer touch-manipulation select-none">
         <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
           <span class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">storefront</span>
           <span class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Kitchen</span>
@@ -138,7 +138,7 @@ tailwind.config = {
       </button>
 
       <!-- Option 3: Bag -->
-      <button data-go="#/cart" data-tab="cart" data-index="2" aria-label="Bag" title="Bag" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+      <button data-go="#/cart" data-tab="cart" data-index="2" aria-label="Bag" title="Bag" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full cursor-pointer touch-manipulation select-none">
         <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
           <div class="relative">
             <span class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">shopping_bag</span>
@@ -150,7 +150,7 @@ tailwind.config = {
       </button>
 
       <!-- Option 4: Orders -->
-      <button data-go="#/tracking" data-tab="orders" data-index="3" aria-label="Orders" title="Orders" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+      <button data-go="#/tracking" data-tab="orders" data-index="3" aria-label="Orders" title="Orders" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full cursor-pointer touch-manipulation select-none">
         <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
           <span class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">receipt_long</span>
           <span class="tab-label text-[10px] font-semibold text-white/50 tracking-tight mt-0.5 transition-colors">Orders</span>
@@ -158,7 +158,7 @@ tailwind.config = {
       </button>
 
       <!-- Option 5: Account -->
-      <button data-go="#/account" data-tab="account" data-index="4" aria-label="Account" title="Account" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full active:scale-90 transition-transform cursor-pointer touch-manipulation">
+      <button data-go="#/account" data-tab="account" data-index="4" aria-label="Account" title="Account" class="tabbtn relative z-10 flex-1 flex flex-col items-center justify-center h-full cursor-pointer touch-manipulation select-none">
         <div class="tab-indicator relative flex flex-col items-center justify-center pointer-events-none">
           <div class="relative">
             <span id="acctIcon" class="tab-icon material-symbols-outlined text-[22px] text-white/60 transition-all duration-200">person</span>
@@ -268,70 +268,38 @@ tailwind.config = {
     }
     navActivePill.style.transform = `translate3d(${Math.round(targetX)}px, 0, 0)`;
 
-    // Update icons and labels
+    updateTabVisuals(targetBtn.getAttribute('data-tab'));
+  }
+
+  function updateTabVisuals(activeTab) {
+    if (!floatingNav) return;
     floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
-      const isCurrent = (btn === targetBtn);
+      const isCurrent = (btn.getAttribute('data-tab') === activeTab);
       const icon = btn.querySelector('.tab-icon');
       const label = btn.querySelector('.tab-label');
       if (icon) {
-        if (isCurrent) {
-          icon.className = 'tab-icon material-symbols-outlined text-[22px] text-white scale-110 transition-all duration-200';
-        } else {
-          icon.className = 'tab-icon material-symbols-outlined text-[22px] text-white/60 hover:text-white scale-100 transition-all duration-200';
-        }
+        icon.className = isCurrent
+          ? 'tab-icon material-symbols-outlined text-[22px] text-white scale-110 transition-all duration-150'
+          : 'tab-icon material-symbols-outlined text-[22px] text-white/60 hover:text-white scale-100 transition-all duration-150';
       }
       if (label) {
-        if (isCurrent) {
-          label.className = 'tab-label text-[10px] font-bold text-white transition-colors duration-200';
-        } else {
-          label.className = 'tab-label text-[10px] font-medium text-white/50 transition-colors duration-200';
-        }
+        label.className = isCurrent
+          ? 'tab-label text-[10px] font-bold text-white transition-colors duration-150'
+          : 'tab-label text-[10px] font-medium text-white/50 transition-colors duration-150';
       }
     });
 
-    const isCartActive = (targetBtn.getAttribute('data-tab') === 'cart');
     const badge = document.getElementById('cartBadge');
     if (badge) {
-      if (isCartActive) {
-        badge.className = 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-white text-[#f04e23] font-black text-[9px] shadow-sm flex items-center justify-center z-20';
-      } else {
-        badge.className = 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[9px] shadow-sm flex items-center justify-center z-20';
-      }
+      badge.className = (activeTab === 'cart')
+        ? 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-white text-[#f04e23] font-black text-[9px] shadow-sm flex items-center justify-center z-20'
+        : 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[9px] shadow-sm flex items-center justify-center z-20';
     }
   }
 
-  function highlightTemporaryTab(idx) {
-    if (!floatingNav) return;
-    floatingNav.querySelectorAll('.tabbtn').forEach((btn, i) => {
-      const isTarget = (i === idx);
-      const icon = btn.querySelector('.tab-icon');
-      const label = btn.querySelector('.tab-label');
-      if (icon) {
-        if (isTarget) {
-          icon.className = 'tab-icon material-symbols-outlined text-[22px] text-white scale-110 transition-all duration-100';
-        } else {
-          icon.className = 'tab-icon material-symbols-outlined text-[22px] text-white/50 scale-100 transition-all duration-100';
-        }
-      }
-      if (label) {
-        if (isTarget) {
-          label.className = 'tab-label text-[10px] font-bold text-white transition-colors duration-100';
-        } else {
-          label.className = 'tab-label text-[10px] font-medium text-white/50 transition-colors duration-100';
-        }
-      }
-    });
-
-    const targetBtn = floatingNav.querySelectorAll('.tabbtn')[idx];
-    const isCart = targetBtn && targetBtn.getAttribute('data-tab') === 'cart';
-    const badge = document.getElementById('cartBadge');
-    if (badge) {
-      if (isCart) {
-        badge.className = 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-white text-[#f04e23] font-black text-[9px] shadow-sm flex items-center justify-center z-20';
-      } else {
-        badge.className = 'absolute -top-1 -right-2 min-w-[16px] h-[16px] px-1 rounded-full bg-[#f04e23] text-white font-black text-[9px] shadow-sm flex items-center justify-center z-20';
-      }
-    }
+  function highlightTemporaryTab(tabNameOrIndex) {
+    const tabName = typeof tabNameOrIndex === 'number' ? (TABS_ORDER[tabNameOrIndex] || 'home') : tabNameOrIndex;
+    updateTabVisuals(tabName);
   }
 
   function paintTabs(activeTab){
@@ -459,107 +427,84 @@ tailwind.config = {
 
   if (floatingNav) {
     floatingNav.style.touchAction = 'none';
-    floatingNav.style.cursor = 'grab';
 
-    function getTabFromClientX(clientX) {
-      const buttons = Array.from(floatingNav.querySelectorAll('.tabbtn'));
-      if (!buttons.length) return { tab: 'home', index: 0, btn: null };
-
-      let closestIdx = 0;
-      let minDistance = Infinity;
-
-      for (let i = 0; i < buttons.length; i++) {
-        const btn = buttons[i];
-        const rect = btn.getBoundingClientRect();
-        if (clientX >= rect.left && clientX <= rect.right) {
-          closestIdx = i;
-          minDistance = 0;
-          break;
-        }
-        const center = rect.left + rect.width / 2;
-        const dist = Math.abs(clientX - center);
-        if (dist < minDistance) {
-          minDistance = dist;
-          closestIdx = i;
-        }
-      }
-
-      const btn = buttons[closestIdx];
-      const tab = btn ? btn.getAttribute('data-tab') : TABS_ORDER[closestIdx];
-      return { tab: tab || 'home', index: closestIdx, btn };
+    function getCurrentPillX() {
+      if (!navActivePill) return 0;
+      const match = navActivePill.style.transform.match(/translate3d\(([-0-9.]+)px/);
+      return match ? parseFloat(match[1]) : 0;
     }
 
-    // Drag-to-select engine with seamless Click / Tap compatibility
+    function getClosestTab(pillCenterX) {
+      const buttons = Array.from(floatingNav.querySelectorAll('.tabbtn'));
+      let closestTab = 'home';
+      let minDiff = Infinity;
+      buttons.forEach(btn => {
+        const center = btn.offsetLeft + btn.offsetWidth / 2;
+        const diff = Math.abs(pillCenterX - center);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestTab = btn.getAttribute('data-tab');
+        }
+      });
+      return closestTab;
+    }
+
     let isPointerDown = false;
     let isDragging = false;
     let startX = 0;
-    let startY = 0;
-    let navRect = null;
-    let lastHighlightedIdx = -1;
+    let startPillX = 0;
+    let currentPillX = 0;
+    let lastHighlightedTab = '';
+    let justDragged = false;
     let activePointerId = null;
 
-    const onPointerDown = (e) => {
+    floatingNav.addEventListener('pointerdown', (e) => {
       if (e.button !== undefined && e.button !== 0) return;
       isPointerDown = true;
       isDragging = false;
       startX = e.clientX;
-      startY = e.clientY;
-      navRect = floatingNav.getBoundingClientRect();
-      lastHighlightedIdx = -1;
+      startPillX = getCurrentPillX();
+      currentPillX = startPillX;
+      lastHighlightedTab = currentActiveTab;
       activePointerId = e.pointerId;
 
       try {
         floatingNav.setPointerCapture(e.pointerId);
       } catch(err) {}
-    };
+    });
 
-    const onPointerMove = (e) => {
-      if (!isPointerDown || !navRect) return;
-
+    floatingNav.addEventListener('pointermove', (e) => {
+      if (!isPointerDown) return;
       const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
 
-      // Initiate dragging once moved beyond small threshold (5px)
-      if (!isDragging && (Math.abs(dx) > 5 || Math.hypot(dx, dy) > 6)) {
+      if (!isDragging && Math.abs(dx) > 6) {
         isDragging = true;
-        floatingNav.style.cursor = 'grabbing';
-        if (navActivePill) {
-          navActivePill.style.boxShadow = '0 8px 24px rgba(240,78,35,0.6)';
-        }
+        if (navActivePill) navActivePill.style.transition = 'none';
       }
 
       if (isDragging) {
         if (e.cancelable) e.preventDefault();
-
-        const pillWidth = navActivePill ? (navActivePill.offsetWidth || 56) : 56;
-        const relX = e.clientX - navRect.left;
-        const minLeft = 6;
-        const maxLeft = Math.max(minLeft, navRect.width - pillWidth - 6);
-        const clampedX = Math.max(minLeft, Math.min(maxLeft, relX - pillWidth / 2));
+        const pillWidth = navActivePill ? navActivePill.offsetWidth : 56;
+        const minX = 6;
+        const maxX = Math.max(minX, floatingNav.offsetWidth - pillWidth - 6);
+        currentPillX = Math.max(minX, Math.min(maxX, startPillX + dx));
 
         if (navActivePill) {
-          navActivePill.style.transition = 'none';
-          navActivePill.style.transform = `translate3d(${Math.round(clampedX)}px, 0, 0)`;
+          navActivePill.style.transform = `translate3d(${Math.round(currentPillX)}px, 0, 0)`;
         }
 
-        const { tab, index } = getTabFromClientX(e.clientX);
-        if (index !== lastHighlightedIdx) {
-          lastHighlightedIdx = index;
-          highlightTemporaryTab(index);
-          if (navigator.vibrate) {
-            try { navigator.vibrate(8); } catch(err) {}
-          }
+        const closestTab = getClosestTab(currentPillX + pillWidth / 2);
+        if (closestTab !== lastHighlightedTab) {
+          lastHighlightedTab = closestTab;
+          updateTabVisuals(closestTab);
+          if (navigator.vibrate) try { navigator.vibrate(8); } catch(err){}
         }
       }
-    };
+    });
 
-    const onPointerEnd = (e) => {
+    const onPointerRelease = (e) => {
       if (!isPointerDown) return;
       isPointerDown = false;
-      floatingNav.style.cursor = 'grab';
-      if (navActivePill) {
-        navActivePill.style.boxShadow = '';
-      }
 
       if (activePointerId !== null) {
         try {
@@ -573,69 +518,18 @@ tailwind.config = {
       if (isDragging) {
         isDragging = false;
         justDragged = true;
-        setTimeout(() => { justDragged = false; }, 300);
+        setTimeout(() => { justDragged = false; }, 200);
 
-        // DRAG COMPLETED: Snap active pill to destination tab and navigate
-        const { tab } = getTabFromClientX(e.clientX);
-        if (tab && TABS_TO_HASH[tab]) {
-          handleTabSelect(tab);
-        } else {
-          positionActivePill(currentActiveTab, true);
-        }
-      } else {
-        // TAP / CLICK: Select the tapped option cleanly
-        const clickedBtn = e.target ? e.target.closest('.tabbtn') : null;
-        const tab = (clickedBtn && clickedBtn.getAttribute('data-tab')) || getTabFromClientX(e.clientX).tab;
-        if (tab && TABS_TO_HASH[tab]) {
-          handleTabSelect(tab);
-        }
+        const pillWidth = navActivePill ? navActivePill.offsetWidth : 56;
+        const targetTab = getClosestTab(currentPillX + pillWidth / 2);
+        handleTabSelect(targetTab);
       }
     };
 
-    const onPointerCancel = (e) => {
-      if (!isPointerDown) return;
-      isPointerDown = false;
-      isDragging = false;
-      floatingNav.style.cursor = 'grab';
-      if (navActivePill) {
-        navActivePill.style.boxShadow = '';
-      }
-      if (activePointerId !== null) {
-        try {
-          if (floatingNav.hasPointerCapture(activePointerId)) {
-            floatingNav.releasePointerCapture(activePointerId);
-          }
-        } catch(err) {}
-        activePointerId = null;
-      }
-      positionActivePill(currentActiveTab, true);
-    };
+    floatingNav.addEventListener('pointerup', onPointerRelease);
+    floatingNav.addEventListener('pointercancel', onPointerRelease);
 
-    floatingNav.addEventListener('pointerdown', onPointerDown);
-    floatingNav.addEventListener('pointermove', onPointerMove);
-    floatingNav.addEventListener('pointerup', onPointerEnd);
-    floatingNav.addEventListener('pointercancel', onPointerCancel);
-
-    window.addEventListener('pointerup', (e) => {
-      if (isPointerDown) onPointerEnd(e);
-    });
-    window.addEventListener('pointercancel', (e) => {
-      if (isPointerDown) onPointerCancel(e);
-    });
-
-    // Also support fallback touchmove for constrained mobile environments
-    floatingNav.addEventListener('touchmove', (e) => {
-      if (e.touches && e.touches.length > 0) {
-        onPointerMove({
-          clientX: e.touches[0].clientX,
-          clientY: e.touches[0].clientY,
-          cancelable: e.cancelable,
-          preventDefault: () => e.preventDefault()
-        });
-      }
-    }, { passive: false });
-
-    // Direct button click listeners for accessibility & instant tap
+    // Instant click / tap handler on buttons
     floatingNav.querySelectorAll('.tabbtn').forEach(btn => {
       const targetTab = btn.getAttribute('data-tab');
       btn.addEventListener('click', (e) => {
